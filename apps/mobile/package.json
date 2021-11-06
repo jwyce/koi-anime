@@ -12,25 +12,37 @@
 		"postinstall": "expo-yarn-workspaces postinstall"
 	},
 	"dependencies": {
+		"@koi/controller": "*",
+		"@react-native-async-storage/async-storage": "^1.15.11",
+		"@react-navigation/native": "^6.0.6",
+		"@reduxjs/toolkit": "^1.6.2",
 		"expo": "~42.0.0",
+		"expo-haptics": "~10.1.0",
+		"expo-splash-screen": "~0.11.2",
 		"expo-status-bar": "~1.0.4",
+		"expo-updates": "~0.8.1",
+		"lottie-react-native": "4.0.2",
+		"native-base": "^3.2.1",
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
+		"react-hook-form": "^7.19.0",
 		"react-native": "~0.63.4",
-		"react-native-web": "~0.13.12",
-		"@koi/controller": "*",
-		"expo-splash-screen": "~0.11.2",
-		"expo-updates": "~0.8.1",
 		"react-native-gesture-handler": "~1.10.2",
 		"react-native-reanimated": "~2.2.0",
+		"react-native-safe-area-context": "3.2.0",
 		"react-native-screens": "~3.4.0",
-		"react-native-unimodules": "0.14.10"
+		"react-native-svg": "12.1.1",
+		"react-native-svg-charts": "^5.4.0",
+		"react-native-unimodules": "0.14.10",
+		"react-native-web": "~0.13.12",
+		"styled-components": "^5.3.3",
+		"styled-system": "^5.1.5"
 	},
 	"devDependencies": {
 		"@babel/core": "~7.9.0",
-		"typescript": "^4.4.3",
 		"@types/react": "17.0.27",
-		"@types/react-native": "~0.63.4"
+		"@types/react-native": "~0.63.4",
+		"typescript": "^4.4.3"
 	},
 	"expo-yarn-workspaces": {
 		"symlinks": [
@@ -49,6 +61,7 @@
 			"expo-structured-headers",
 			"expo-updates-interface",
 			"expo-updates",
+			"expo-haptics",
 			"unimodules-app-loader",
 			"unimodules-task-manager-interface"
 		]
