@@ -1,0 +1,75 @@
+{
+	"name": "@koi/mobile",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"start": "react-native start",
+		"android": "react-native run-android",
+		"ios": "react-native run-ios",
+		"web": "expo start --web",
+		"eject": "expo eject",
+		"build": "echo 'Nothing to build'",
+		"postinstall": "expo-yarn-workspaces postinstall"
+	},
+	"dependencies": {
+		"expo": "~42.0.0",
+		"expo-status-bar": "~1.0.4",
+		"react": "17.0.2",
+		"react-dom": "17.0.2",
+		"react-native": "~0.63.4",
+		"react-native-web": "~0.13.12",
+		"@koi/controller": "*",
+		"expo-splash-screen": "~0.11.2",
+		"expo-updates": "~0.8.1",
+		"react-native-gesture-handler": "~1.10.2",
+		"react-native-reanimated": "~2.2.0",
+		"react-native-screens": "~3.4.0",
+		"react-native-unimodules": "0.14.10"
+	},
+	"devDependencies": {
+		"@babel/core": "~7.9.0",
+		"typescript": "^4.4.3",
+		"@types/react": "17.0.27",
+		"@types/react-native": "~0.63.4"
+	},
+	"expo-yarn-workspaces": {
+		"symlinks": [
+			"@unimodules/core",
+			"@unimodules/react-native-adapter",
+			"expo-application",
+			"expo-asset",
+			"expo-constants",
+			"expo-error-recovery",
+			"expo-file-system",
+			"expo-font",
+			"expo-image-loader",
+			"expo-keep-awake",
+			"expo-modules-core",
+			"expo-splash-screen",
+			"expo-structured-headers",
+			"expo-updates-interface",
+			"expo-updates",
+			"unimodules-app-loader",
+			"unimodules-task-manager-interface"
+		]
+	},
+	"react-native-unimodules": {
+		"android": {
+			"modulesPaths": [
+				"../../../../",
+				"../../../../packages"
+			],
+			"configuration": "api",
+			"target": "react-native"
+		},
+		"ios": {
+			"modules_paths": [
+				"../../../",
+				"../../../packages"
+			],
+			"flags": {
+				"inhibit_warnings": false
+			}
+		}
+	}
+}

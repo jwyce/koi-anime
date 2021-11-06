@@ -1,0 +1,21 @@
+{
+	"private": true,
+	"scripts": {
+		"start": "expo start",
+		"android": "expo start --android",
+		"ios": "expo start --ios",
+		"eject": "expo eject",
+		"postinstall": "expo-yarn-workspaces check-workspace-dependencies && yarn workspaces run build",
+		"app": "yarn workspace @expo/app expo start",
+		"build:web": "lerna run build --scope={@koi/controller,@koi/web}",
+		"build:server": "lerna run build --scope={@koi/controller,@koi/server}"
+	},
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"devDependencies": {
+		"expo-yarn-workspaces": "^1.5.0",
+		"lerna": "^4.0.0"
+	}
+}
