@@ -14,7 +14,9 @@
 	"dependencies": {
 		"@koi/controller": "*",
 		"@react-native-async-storage/async-storage": "^1.15.11",
+		"@react-navigation/bottom-tabs": "^6.0.9",
 		"@react-navigation/native": "^6.0.6",
+		"@react-navigation/native-stack": "^6.2.5",
 		"@reduxjs/toolkit": "^1.6.2",
 		"expo": "~42.0.0",
 		"expo-haptics": "~10.1.0",
@@ -40,6 +42,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "~7.9.0",
+		"@testing-library/react-native": "^8.0.0",
 		"@types/react": "17.0.27",
 		"@types/react-native": "~0.63.4",
 		"typescript": "^4.4.3"
