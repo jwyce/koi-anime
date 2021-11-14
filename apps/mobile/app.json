@@ -16,14 +16,14 @@
 		"assetBundlePatterns": ["../../**/*"],
 		"ios": {
 			"supportsTablet": true,
-			"bundleIdentifier": "koi.ios"
+			"bundleIdentifier": "com.koianime"
 		},
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/images/adaptive-icon.png",
 				"backgroundColor": "#FFFFFF"
 			},
-			"package": "koi.android"
+			"package": "com.koianime"
 		},
 		"web": {
 			"favicon": "./assets/images/favicon.png"

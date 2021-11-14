@@ -5,15 +5,12 @@ web-build
 .vscode/
 .expo/
 .next/
-.circleci/
-netlify.toml
 
 node_modules/
 build/
 temp/
 dist/
 
-ormconfig.*
 .env
 .env.*
 !.env.example

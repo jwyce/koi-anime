@@ -1,14 +1,19 @@
 {
 	"private": true,
 	"scripts": {
-		"start": "expo start",
-		"android": "expo start --android",
-		"ios": "expo start --ios",
-		"eject": "expo eject",
 		"postinstall": "expo-yarn-workspaces check-workspace-dependencies && yarn workspaces run build",
-		"app": "yarn workspace @expo/app expo start",
+		"app": "yarn workspace @koi/mobile expo start",
+		"web": "yarn workspace @koi/web start",
+		"server": "yarn workspace @koi/server start",
+		"publish:expo": "yarn workspace @koi/mobile expo publish",
 		"build:web": "lerna run build --scope={@koi/controller,@koi/web}",
-		"build:server": "lerna run build --scope={@koi/controller,@koi/server}"
+		"build:server": "lerna run build --scope={@koi/controller,@koi/server}",
+		"build:ios": "yarn workspace @koi/mobile expo build:ios",
+		"build:android": "yarn workspace @koi/mobile expo build:android",
+		"easbuild:configure": "yarn workspace @koi/mobile easbuild:configure",
+		"easbuild:all": "yarn workspace @koi/mobile easbuild:all",
+		"easbuild:ios": "yarn workspace @koi/mobile easbuild:ios",
+		"easbuild:android": "yarn workspace @koi/mobile easbuild:android"
 	},
 	"workspaces": [
 		"apps/*",

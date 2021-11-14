@@ -3,12 +3,16 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"start": "react-native start",
+		"start": "expo start",
 		"android": "react-native run-android",
 		"ios": "react-native run-ios",
-		"web": "expo start --web",
 		"eject": "expo eject",
-		"build": "echo 'Nothing to build'",
+		"build:ios": "expo build:ios",
+		"build:android": "expo build:android",
+		"easbuild:configure": "eas build:configure",
+		"easbuild:all": "eas build --platform all",
+		"easbuild:ios": "eas build --platform ios",
+		"easbuild:android": "eas build --platform android",
 		"postinstall": "expo-yarn-workspaces postinstall"
 	},
 	"dependencies": {

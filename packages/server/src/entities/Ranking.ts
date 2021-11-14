@@ -1,39 +1,32 @@
+import { ResourceType } from '../helpers/enums';
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
 	BaseEntity,
 	Column,
 	CreateDateColumn,
 	Entity,
-	PrimaryGeneratedColumn,
+	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class Ranking extends BaseEntity {
 	@Field(() => Int)
-	@PrimaryGeneratedColumn()
-	id!: number;
+	@PrimaryColumn()
+	userID: number;
+
+	@Field(() => Int)
+	@PrimaryColumn()
+	votedResourceID: number;
+
+	@Field(() => ResourceType)
+	@PrimaryColumn({ type: 'enum', enum: ResourceType })
+	resourceType: ResourceType;
 
 	@Field()
 	@Column({ unique: true })
-	username!: string;
-
-	@Field()
-	@Column({ unique: true })
-	email!: string;
-
-	@Column()
-	password!: string;
-
-	@Column()
-	isConfirmed: boolean;
-
-	@Column({ type: 'int', default: 0 })
-	failedAttempts: number;
-
-	@Column({ nullable: true })
-	lockoutEnd?: Date;
+	matchupKey: string;
 
 	@Field(() => String)
 	@CreateDateColumn()

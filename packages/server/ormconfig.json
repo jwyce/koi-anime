@@ -1,0 +1,13 @@
+{
+	"type": "postgres",
+	"host": "localhost",
+	"port": 5433,
+	"username": "postgres",
+	"password": "postgres",
+	"database": "koi-anime-dev",
+	"entities": ["dist/entities/*.js"],
+	"migrations": ["dist/migrations/*.js"],
+	"_prodDatabase": "koi-anime-prod",
+	"_devDatabase": "koi-anime-dev",
+	"_testDatabase": "koi-anime-test"
+}

@@ -1,33 +1,34 @@
 import nodemailer from 'nodemailer';
+import aws from 'aws-sdk';
 
-// async..await is not allowed in global scope, must use a wrapper
-export async function sendEmail(to: string, body: string) {
-	// Generate test SMTP service account from ethereal.email
-	// Only needed if you don't have a real mail account for testing
-	// let testAccount = await nodemailer.createTestAccount();
-	// console.log('testAccount', testAccount);
+const ses = new aws.SES({
+	region: 'us-east-2',
+});
 
-	// create reusable transporter object using the default SMTP transport
+// TODO: take ses account out of sandbox mode before deploying to prod
+export function sendEmail(to: string, subject: string, html: string) {
 	let transporter = nodemailer.createTransport({
-		host: 'smtp.ethereal.email',
-		port: 587,
-		secure: false, // true for 465, false for other ports
-		auth: {
-			user: 'znafztqrbmnursne@ethereal.email', // generated ethereal user
-			pass: 'sQVxQTrRQMF1J3cCKN', // generated ethereal password
-		},
+		SES: { ses, aws },
+		sendingRate: 1, // max 1 msg/s,
 	});
 
-	// send mail with defined transport object
-	let info = await transporter.sendMail({
-		from: '"Fred Foo 👻" <foo@example.com>', // sender address
-		to: to, // list of receivers
-		subject: 'Change password 🔑', // Subject line
-		html: body, // html body
+	transporter.once('idle', () => {
+		if (transporter.isIdle()) {
+			transporter.sendMail(
+				{
+					from: 'noreply@koianimelist.com', // sender address
+					to,
+					subject,
+					html,
+				},
+				(err, info) => {
+					if (info) {
+						console.log(info.envelope);
+						console.log(info.messageId);
+					}
+					if (err) console.error(err);
+				}
+			);
+		}
 	});
-
-	console.log('Message sent: %s', info.messageId);
-
-	// Preview only available when sending through an Ethereal account
-	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 }
