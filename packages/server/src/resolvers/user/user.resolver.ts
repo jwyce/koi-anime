@@ -1,42 +1,31 @@
 import argon2 from 'argon2';
-import { MyContext } from 'src/typings/MyContext';
 import {
 	Arg,
 	Ctx,
-	Field,
 	FieldResolver,
 	Mutation,
-	ObjectType,
 	Query,
 	Resolver,
 	Root,
+	UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { v4 } from 'uuid';
 
-import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from '../helpers/constants';
-import { User } from '../entities/User';
-import { sendEmail } from '../utils/sendEmail';
-import { validateRegister } from '../utils/validateRegister';
-import { UserInput } from './UserInput';
+import { registerSchema, resetPasswordSchema } from '@koi/controller';
 
-@ObjectType()
-class FieldError {
-	@Field()
-	field: string;
-
-	@Field()
-	message: string;
-}
-
-@ObjectType()
-class UserResponse {
-	@Field(() => [FieldError], { nullable: true })
-	errors?: FieldError[];
-
-	@Field(() => User, { nullable: true })
-	user?: User;
-}
+import { User } from '../../entities/User';
+import {
+	CONFIRM_USER_PREFIX,
+	COOKIE_NAME,
+	FORGET_PASSWORD_PREFIX,
+} from '../../helpers/constants';
+import { MyContext } from '../../typings/MyContext';
+import { rateLimit } from '../../utils/rateLimit';
+import { sendEmail } from '../../utils/sendEmail';
+import { validateSchema } from '../../utils/validateSchema';
+import { RegisterInput } from './RegisterInput';
+import { UserResponse } from './UserResponse';
 
 @Resolver(User)
 export class UserResolver {
@@ -55,17 +44,16 @@ export class UserResolver {
 	async changePassword(
 		@Arg('token') token: string,
 		@Arg('newPassword') newPassword: string,
+		@Arg('confirmPassword') confirmPassword: string,
 		@Ctx() { redis, req }: MyContext
 	): Promise<UserResponse> {
-		if (newPassword.length <= 2) {
-			return {
-				errors: [
-					{
-						field: 'newPassword',
-						message: 'length must be greater than 2',
-					},
-				],
-			};
+		const errors = await validateSchema(resetPasswordSchema, {
+			token,
+			newPassword,
+			confirmPassword,
+		});
+		if (errors) {
+			return { errors };
 		}
 
 		const userId = await redis.get(FORGET_PASSWORD_PREFIX + token);
@@ -107,6 +95,7 @@ export class UserResolver {
 	}
 
 	@Mutation(() => Boolean)
+	@UseMiddleware(rateLimit(10))
 	async forgotPassword(
 		@Arg('email') email: string,
 		@Ctx() { redis }: MyContext
@@ -127,6 +116,7 @@ export class UserResolver {
 
 		await sendEmail(
 			email,
+			'Reset Password Link 🔑',
 			`<a href="${process.env.CORS_ORIGIN}/change-password/${token}">reset password</a>`
 		);
 
@@ -135,7 +125,6 @@ export class UserResolver {
 
 	@Query(() => User, { nullable: true })
 	me(@Ctx() { req }: MyContext) {
-		//* you are not logged in
 		if (!req.session.userId) {
 			return null;
 		}
@@ -144,11 +133,12 @@ export class UserResolver {
 	}
 
 	@Mutation(() => UserResponse)
+	@UseMiddleware(rateLimit(10))
 	async register(
-		@Arg('options') options: UserInput,
-		@Ctx() { req }: MyContext
+		@Arg('options') options: RegisterInput,
+		@Ctx() { req, redis }: MyContext
 	): Promise<UserResponse> {
-		const errors = validateRegister(options);
+		const errors = await validateSchema(registerSchema, options);
 		if (errors) {
 			return { errors };
 		}
@@ -157,7 +147,6 @@ export class UserResolver {
 		let user;
 
 		try {
-			//* using TypeORM query builder
 			const result = await getConnection()
 				.createQueryBuilder()
 				.insert()
@@ -173,19 +162,6 @@ export class UserResolver {
 			user = result.raw[0];
 		} catch (error) {
 			console.log('err: ', error);
-
-			// duplicate username error
-			if (error.code === '23505') {
-				// || error.detail.includes('already exists')) {
-				return {
-					errors: [
-						{
-							field: 'username',
-							message: 'username already taken',
-						},
-					],
-				};
-			}
 		}
 
 		// store user id session
@@ -193,10 +169,25 @@ export class UserResolver {
 		// keep them logged in
 		req.session!.userId = user.id;
 
+		const token = v4();
+		await redis.set(
+			CONFIRM_USER_PREFIX + token,
+			user.id,
+			'ex',
+			1000 * 60 * 60 * 24 * 3 // 3 days
+		);
+
+		await sendEmail(
+			user.email,
+			'Confirm Email ✅',
+			`<a href="${process.env.CORS_ORIGIN}/confirm-email/${token}">confirm email</a>`
+		);
+
 		return { user };
 	}
 
 	@Mutation(() => UserResponse)
+	@UseMiddleware(rateLimit(20))
 	async login(
 		@Arg('usernameOrEmail') usernameOrEmail: string,
 		@Arg('password') password: string,

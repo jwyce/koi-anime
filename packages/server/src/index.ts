@@ -6,16 +6,14 @@ import connectRedis from 'connect-redis';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
-import Redis from 'ioredis';
 import path from 'path';
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 
-import { __prod__, COOKIE_NAME } from './helpers/constants';
-import { UserResolver } from './resolvers/user';
+import { __prod__, COOKIE_NAME, ONE_YEAR } from './helpers/constants';
 import { MyContext } from './typings/MyContext';
 import { registerTypeGraphQLEnums } from './helpers/enums';
-import { AnimeResolver } from './resolvers/anime';
+import { redis } from './redis/redis';
 
 const main = async () => {
 	const conn = await createConnection({
@@ -31,8 +29,8 @@ const main = async () => {
 	const app = express();
 
 	const RedisStore = connectRedis(session);
-	const redis = new Redis(process.env.REDIS_URL);
 
+	app.set('trust proxy', 1);
 	app.use(
 		cors({
 			origin: process.env.CORS_ORIGIN,
@@ -48,7 +46,7 @@ const main = async () => {
 				disableTouch: true,
 			}),
 			cookie: {
-				maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+				maxAge: 1000 * ONE_YEAR * 10, // 10 years in millis
 				httpOnly: true,
 				sameSite: 'lax', // csrf
 				secure: __prod__, // cookie only works in https
@@ -64,8 +62,8 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [UserResolver, AnimeResolver],
-			validate: false,
+			// resolvers: [UserResolver, AnimeResolver],
+			resolvers: [__dirname + '/**/*.resolver.{ts,js}'],
 		}),
 		context: ({ req, res }): MyContext => ({
 			req,
