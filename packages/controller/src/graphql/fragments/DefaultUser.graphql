@@ -1,0 +1,4 @@
+fragment DefaultUser on User {
+	id
+	username
+}

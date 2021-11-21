@@ -1,18 +1,27 @@
+import { NextSeo } from 'next-seo';
+
 import { Button } from '@chakra-ui/button';
 import { useColorMode } from '@chakra-ui/color-mode';
-import type { NextPage } from 'next';
 
+import { Layout } from '../components/Layout';
+import { withApollo } from '../utils/withApollo';
+
+import type { NextPage } from 'next';
 const Home: NextPage = () => {
 	const { colorMode, toggleColorMode } = useColorMode();
 
 	return (
-		<div>
+		<Layout>
+			<NextSeo
+				title="Home - Koi Anime"
+				description="A short description goes here."
+			/>
 			<div>hello world</div>
 			<Button colorScheme="orange" onClick={toggleColorMode}>
 				{colorMode === 'light' ? 'Dark' : 'Light'}
 			</Button>
-		</div>
+		</Layout>
 	);
 };
 
-export default Home;
+export default withApollo({ ssr: false })(Home);
