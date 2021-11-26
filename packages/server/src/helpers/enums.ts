@@ -1,5 +1,45 @@
 import { registerEnumType } from 'type-graphql';
 
+export enum ThemePreference {
+	DARK = 'dark',
+	LIGHT = 'light',
+}
+
+export enum ProfileIcon {
+	KOI = 'koi',
+	DRAGON = 'dragon',
+	DOG = 'dog',
+	FROG = 'frog',
+	FOX = 'fox',
+	SNAKE = 'snake',
+	RABBIT = 'rabbit',
+	CAT = 'cat',
+	MONKEY = 'monkey',
+	SEAHORSE = 'seahorse',
+	TIGER = 'tiger',
+	GOAT = 'goat',
+	ROOSTER = 'rooster',
+	PIG = 'pig',
+	RAT = 'rat',
+	TURTLE = 'turtle',
+}
+
+export enum ProfileColor {
+	REDORANGE = 'redorange',
+	PINK = 'pink',
+	TEAL = 'teal',
+	BLUE = 'blue',
+	SALMON = 'salmon',
+	PURPLE = 'purple',
+}
+
+export enum TitlePreference {
+	CANONICAL = 'canonical',
+	ROMANIZED = 'romanized',
+	ENGLISH = 'english',
+	JAPANESE = 'japanese',
+}
+
 export enum AnimeSubtype {
 	ONA = 'ona',
 	OVA = 'ova',
@@ -56,6 +96,30 @@ export enum ListStatus {
 }
 
 export const registerTypeGraphQLEnums = () => {
+	registerEnumType(ThemePreference, {
+		name: 'ThemePreference',
+	});
+
+	registerEnumType(ProfileIcon, {
+		name: 'ProfileIcon',
+	});
+
+	registerEnumType(TitlePreference, {
+		name: 'TitlePreference',
+	});
+
+	registerEnumType(ProfileColor, {
+		name: 'ProfileColor',
+		valuesConfig: {
+			REDORANGE: { description: '#ff6250' },
+			PINK: { description: '#EB79FA' },
+			TEAL: { description: '#00C7B4' },
+			BLUE: { description: '#869EFF' },
+			SALMON: { description: '#FF8691' },
+			PURPLE: { description: '#555B8C' },
+		},
+	});
+
 	registerEnumType(AnimeSubtype, {
 		name: 'AnimeSubtype',
 		valuesConfig: {

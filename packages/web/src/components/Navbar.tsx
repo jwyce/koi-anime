@@ -1,17 +1,33 @@
+import Image from 'next/image';
 import NextLink from 'next/link';
 import React from 'react';
+import { GiCirclingFish } from 'react-icons/gi';
+import { IoSettings, IoLogOut } from 'react-icons/io5';
 
-import { Box, Button, Flex, Heading, Link } from '@chakra-ui/react';
+import { useApolloClient } from '@apollo/client';
+import {
+	Avatar,
+	Box,
+	Button,
+	Flex,
+	Heading,
+	Link,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	Tooltip,
+} from '@chakra-ui/react';
+import { useLogoutMutation, useMeQuery } from '@koi/controller';
 
-import { useMeQuery } from '@koi/controller';
+import logo from '../assets/images/koi-icon.svg';
 import { isServer } from '../utils/isServer';
-// import { useApolloClient } from '@apollo/client';
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-	// const [logout, { loading: logoutLoading }] = useLogoutMutation();
-	// const apolloClient = useApolloClient();
+	const [logout] = useLogoutMutation();
+	const apolloClient = useApolloClient();
 	const { data, loading } = useMeQuery({ skip: isServer() }); // could remove if I want the request to be done server side
 	let body = null;
 
@@ -40,29 +56,47 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 						create post
 					</Button>
 				</NextLink>
-				<Box mr={2}>{data.me.username}</Box>
-				<Button
-					onClick={async () => {
-						// await logout();
-						// await apolloClient.resetStore();
-					}}
-					variant="link"
-					// isLoading={logoutLoading}
-				>
-					logout
-				</Button>
+				<Menu>
+					<Tooltip label={data.me.username}>
+						<MenuButton>
+							<Avatar
+								onClick={() => alert('hi')}
+								icon={<GiCirclingFish fontSize="1.5rem" />}
+								mr={2}
+								size="md"
+								bg="primary.medium"
+								color="white"
+							/>
+						</MenuButton>
+					</Tooltip>
+					<MenuList>
+						<MenuItem icon={<IoSettings size={24} />}>Settings</MenuItem>
+						<MenuItem
+							icon={<IoLogOut size={24} />}
+							onClick={async () => {
+								await logout();
+								await apolloClient.resetStore();
+							}}
+						>
+							Logout
+						</MenuItem>
+					</MenuList>
+				</Menu>
 			</Flex>
 		);
 	}
 
 	return (
-		<Flex position="sticky" top={0} zIndex={1} bg="#d5815a" p={4}>
-			<Flex flex={1} m="auto" align="center" maxW={800}>
+		<Flex position="sticky" top={0} zIndex={1} bg="primary.light" p={1}>
+			<Flex flex={1} m="auto" align="center" pl={5} pr={5}>
 				<NextLink href="/">
 					<Link>
-						<Heading as="h2" size="lg">
-							Koi Anime
-						</Heading>
+						<Flex flex={1} alignItems="center" justifyContent="flex-start">
+							<Image src={logo} alt="logo" height="40px" width="40px" />
+							<Heading as="h2" size="md" ml={2}>
+								Koi Anime
+							</Heading>
+						</Flex>
 					</Link>
 				</NextLink>
 				<Box ml={'auto'}>{body}</Box>

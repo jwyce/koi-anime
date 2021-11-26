@@ -6,7 +6,9 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"gen:theme-typings": "chakra-cli tokens src/theme/theme.ts",
+		"postinstall": "npm run gen:theme-typings"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.4.16",
@@ -24,9 +26,11 @@
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
 		"react-hook-form": "^7.19.0",
+		"react-icons": "^4.3.1",
 		"react-lottie": "^1.2.3"
 	},
 	"devDependencies": {
+		"@chakra-ui/cli": "^1.6.0",
 		"@testing-library/react": "^12.1.2",
 		"@types/node": "16.11.6",
 		"@types/react": "17.0.34",

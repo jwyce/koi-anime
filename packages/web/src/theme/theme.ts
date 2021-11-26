@@ -18,4 +18,23 @@ export const theme = extendTheme({
 			},
 		}),
 	},
+	colors: {
+		primary: {
+			light: '#FF8450',
+			medium: '#ff6250',
+			dark: '#891F00',
+		},
+		secondary: {
+			light: '#A4A7DE',
+			dark: '#555B8C',
+		},
+		status: {
+			success: '#00C7B4',
+			info: '#659FFF',
+			warning: '#EC9200',
+			error: '#EB79FA',
+		},
+	},
 });
+
+export default theme;
