@@ -2,7 +2,7 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import React from 'react';
 import { GiCirclingFish } from 'react-icons/gi';
-import { IoSettings, IoLogOut } from 'react-icons/io5';
+import { IoSettings, IoLogOut, IoLogIn } from 'react-icons/io5';
 
 import { useApolloClient } from '@apollo/client';
 import {
@@ -15,6 +15,7 @@ import {
 	Menu,
 	MenuButton,
 	MenuItem,
+	Spacer,
 	MenuList,
 	Tooltip,
 } from '@chakra-ui/react';
@@ -22,6 +23,7 @@ import { useLogoutMutation, useMeQuery } from '@koi/controller';
 
 import logo from '../assets/images/koi-icon.svg';
 import { isServer } from '../utils/isServer';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 interface NavbarProps {}
 
@@ -33,34 +35,52 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 
 	// data is loading
 	if (loading) {
-		body = <div>loading...</div>;
+		console.log('loading');
+		body = <Button isLoading={true}></Button>;
 	} else if (!data?.me) {
 		// user not logged in
+		console.log('user not logged in');
 		body = (
-			<>
-				<NextLink href="/login">
-					<Link mr={2}>login</Link>
-				</NextLink>
-
-				<NextLink href="/register">
-					<Link>register</Link>
-				</NextLink>
-			</>
+			<NextLink href="/login">
+				<Button leftIcon={<IoLogIn size={24} />}>Login</Button>
+			</NextLink>
 		);
 	} else {
 		// user is logged in
 		body = (
 			<Flex align="center">
-				<NextLink href="/create-post">
-					<Button mr={4} as={Link}>
-						create post
-					</Button>
-				</NextLink>
+				<Button>My Library</Button>
+				<Spacer mr={2} />
+				<Button>Vote</Button>
+				<Spacer mr={2} />
+				<Menu>
+					<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+						Browse
+					</MenuButton>
+					<MenuList>
+						<MenuItem>Anime</MenuItem>
+						<MenuItem>Manga</MenuItem>
+					</MenuList>
+				</Menu>
+				<Spacer mr={2} />
+				<Menu>
+					<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+						Rankings
+					</MenuButton>
+					<MenuList>
+						<MenuItem>Top Anime</MenuItem>
+						<MenuItem>Top Manga</MenuItem>
+						<MenuItem>Best Boy</MenuItem>
+						<MenuItem>Best Girl</MenuItem>
+						<MenuItem>Top Openings</MenuItem>
+						<MenuItem>Top Endings</MenuItem>
+					</MenuList>
+				</Menu>
+				<Spacer mr={2} />
 				<Menu>
 					<Tooltip label={data.me.username}>
 						<MenuButton>
 							<Avatar
-								onClick={() => alert('hi')}
 								icon={<GiCirclingFish fontSize="1.5rem" />}
 								mr={2}
 								size="md"
@@ -90,7 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 		<Flex position="sticky" top={0} zIndex={1} bg="primary.light" p={1}>
 			<Flex flex={1} m="auto" align="center" pl={5} pr={5}>
 				<NextLink href="/">
-					<Link>
+					<Link style={{ textDecoration: 'none' }}>
 						<Flex flex={1} alignItems="center" justifyContent="flex-start">
 							<Image src={logo} alt="logo" height="40px" width="40px" />
 							<Heading as="h2" size="md" ml={2}>

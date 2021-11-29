@@ -16,6 +16,38 @@ export const theme = extendTheme({
 				bg: mode('white', 'gray.800')(props),
 				lineHeight: 'base',
 			},
+			'&::selection': {
+				background: '#ff6250',
+				color: '#fff',
+			},
+			'&::-webkit-scrollbar': mode(
+				{},
+				{
+					width: '10px',
+					height: '10px',
+				}
+			)(props),
+			'&::-webkit-scrollbar-thumb': mode(
+				{},
+				{
+					borderRadius: '10px',
+					background: '#575757',
+				}
+			)(props),
+			'&::-webkit-scrollbar-thumb:hover': mode(
+				{},
+				{
+					borderRadius: '10px',
+					background: '#666',
+				}
+			)(props),
+			'&::-webkit-scrollbar-track': mode(
+				{},
+				{
+					borderRadius: '10px',
+					background: 'rgba(255, 255, 255, 0)',
+				}
+			)(props),
 		}),
 	},
 	colors: {

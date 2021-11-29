@@ -6,9 +6,7 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint",
-		"gen:theme-typings": "chakra-cli tokens src/theme/theme.ts",
-		"postinstall": "npm run gen:theme-typings"
+		"lint": "next lint"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.4.16",
@@ -17,7 +15,6 @@
 		"@emotion/react": "^11",
 		"@emotion/styled": "^11",
 		"@koi/controller": "*",
-		"@reduxjs/toolkit": "^1.6.2",
 		"@visx/visx": "^2.3.0",
 		"framer-motion": "^4",
 		"next": "12.0.3",

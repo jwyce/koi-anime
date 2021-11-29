@@ -5,7 +5,7 @@ import { Button } from '@chakra-ui/react';
 
 import { Layout } from '../components/Layout';
 import { HeartIcon } from '../components/styles/HeartIcon';
-import { withApollo } from '../utils/withApollo';
+import { withApollo } from '../stores/withApollo';
 
 import type { NextPage } from 'next';
 const Home: NextPage = () => {
@@ -21,6 +21,26 @@ const Home: NextPage = () => {
 			<HeartIcon rank={15} size={36} />
 			<HeartIcon rank={44} size={36} />
 			<HeartIcon rank={73} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
+			<HeartIcon rank={456} size={36} />
 			<HeartIcon rank={456} size={36} />
 			<Button colorScheme="orange" onClick={toggleColorMode}>
 				{colorMode === 'light' ? 'Dark' : 'Light'}

@@ -31,13 +31,13 @@ export const HeartIcon: React.FC<HeartIconProps> = ({ rank, size = 48 }) => {
 		>
 			<defs>
 				<linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="100%">
-					<stop offset="10%" stopColor="#ff8450" stopOpacity={1} />
-					<stop offset="18%" stopColor="#fb7761" stopOpacity={1} />
-					<stop offset="28%" stopColor="#f36c70" stopOpacity={1} />
-					<stop offset="36%" stopColor="#e6657e" stopOpacity={1} />
-					<stop offset="44%" stopColor="#d56189" stopOpacity={1} />
-					<stop offset="50%" stopColor="#bf5f92" stopOpacity={1} />
-					<stop offset="58%" stopColor="#a65f96" stopOpacity={1} />
+					<stop offset="15%" stopColor="#ff8450" stopOpacity={1} />
+					<stop offset="23%" stopColor="#fb7761" stopOpacity={1} />
+					<stop offset="32%" stopColor="#f36c70" stopOpacity={1} />
+					<stop offset="41%" stopColor="#e6657e" stopOpacity={1} />
+					<stop offset="49%" stopColor="#d56189" stopOpacity={1} />
+					<stop offset="55%" stopColor="#bf5f92" stopOpacity={1} />
+					<stop offset="63%" stopColor="#a65f96" stopOpacity={1} />
 					<stop offset="67%" stopColor="#8c5e96" stopOpacity={1} />
 					<stop offset="75%" stopColor="#6a5c8f" stopOpacity={1} />
 					<stop offset="84%" stopColor="#4c5881" stopOpacity={1} />
@@ -54,8 +54,8 @@ export const HeartIcon: React.FC<HeartIconProps> = ({ rank, size = 48 }) => {
 				y="50%"
 				fontSize="x-small"
 				fill="white"
-				dominant-baseline="middle"
-				text-anchor="middle"
+				dominantBaseline="middle"
+				textAnchor="middle"
 				fontWeight="bolder"
 			>
 				#{rank}
