@@ -1,7 +1,15 @@
-import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
+import {
+	ApolloClient,
+	InMemoryCache,
+	HttpLink,
+	from,
+	makeVar,
+} from '@apollo/client';
 import { withApollo as createWithApollo } from 'next-apollo';
 
 import { onError } from '@apollo/client/link/error';
+
+export const gqlErrors = makeVar<string[]>([]);
 
 const httpLink = new HttpLink({
 	uri: 'http://localhost:4000/graphql',
@@ -9,12 +17,27 @@ const httpLink = new HttpLink({
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-	if (graphQLErrors)
-		graphQLErrors.forEach(({ message, locations, path }) => {
-			console.log(
-				`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-			);
+	if (graphQLErrors) {
+		graphQLErrors.forEach((err) => {
+			console.log(err);
 		});
+
+		let errMsgs: string[] = [];
+		graphQLErrors.forEach((x): any => {
+			if (x.message.includes('Validation Error')) {
+				(x.extensions as any).exception.validationErrors.forEach(
+					(validationErr: any) => {
+						Object.values(validationErr.constraints).forEach((message: any) => {
+							errMsgs.push(message);
+						});
+					}
+				);
+			} else {
+				errMsgs.push(x.message);
+			}
+		});
+		gqlErrors(errMsgs);
+	}
 
 	if (networkError) console.log(`[Network error]: ${networkError}`);
 });

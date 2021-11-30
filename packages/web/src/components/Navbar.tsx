@@ -39,7 +39,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 		body = <Button isLoading={true}></Button>;
 	} else if (!data?.me) {
 		// user not logged in
-		console.log('user not logged in');
 		body = (
 			<NextLink href="/login">
 				<Button leftIcon={<IoLogIn size={24} />}>Login</Button>
@@ -113,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 					<Link style={{ textDecoration: 'none' }}>
 						<Flex flex={1} alignItems="center" justifyContent="flex-start">
 							<Image src={logo} alt="logo" height="40px" width="40px" />
-							<Heading as="h2" size="md" ml={2}>
+							<Heading as="h2" size="md" ml={2} color="white">
 								Koi Anime
 							</Heading>
 						</Flex>

@@ -25,26 +25,6 @@ export const registerSchema = yup.object().shape({
 });
 
 export const resetPasswordSchema = yup.object().shape({
-	password: yup.string().required('Old password is required'),
-	newPassword: yup
-		.string()
-		.required('New password is required')
-		.matches(
-			/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-			'Password too weak'
-		),
-	confirmPassword: yup
-		.string()
-		.notOneOf(
-			[yup.ref('password')],
-			'New password cannot be your previous password'
-		)
-		.oneOf([yup.ref('newPassword')], "Passwords don't match")
-		.required('Please confirm your password'),
-});
-
-export const forgotPasswordSchema = yup.object().shape({
-	token: yup.string().required(),
 	newPassword: yup
 		.string()
 		.required('Password is required')

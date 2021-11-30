@@ -1,6 +1,8 @@
 import { extendTheme, ThemeConfig } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
 
+import { components } from './components';
+
 const config: ThemeConfig = {
 	initialColorMode: 'light',
 	useSystemColorMode: true,
@@ -66,7 +68,11 @@ export const theme = extendTheme({
 			warning: '#EC9200',
 			error: '#EB79FA',
 		},
+		brand: {
+			100: mode('#ddd', '#444ace'),
+		},
 	},
+	components,
 });
 
 export default theme;

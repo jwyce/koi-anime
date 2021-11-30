@@ -14,29 +14,44 @@ import {
 	Input,
 	InputGroup,
 	InputRightElement,
-	Link,
+	Progress,
 	Stack,
+	Text,
 	useToast,
 } from '@chakra-ui/react';
-import { useLoginMutation, useToggle } from '@koi/controller';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import {
+	registerSchema,
+	useRegisterMutation,
+	useToggle,
+} from '@koi/controller';
 
 import logo from '../assets/images/koi-icon.svg';
 import { Layout } from '../components/Layout';
 import { Surface } from '../components/styles/Surface';
 import { withApollo } from '../stores/withApollo';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
+import { passwordStrength } from '../utils/passwordStrength';
 
 export const Login: React.FC<{}> = ({}) => {
 	const router = useRouter();
 	const toast = useToast();
-	const [login] = useLoginMutation();
+	const [register] = useRegisterMutation();
 	const [showPassword, toggleShowPassword] = useToggle(false);
 
-	const { control, handleSubmit } = useForm({
+	const {
+		control,
+		handleSubmit,
+		watch,
+		formState: { errors },
+	} = useForm({
 		defaultValues: {
-			usernameOrEmail: '',
+			username: '',
+			email: '',
 			password: '',
+			confirmPassword: '',
 		},
+		resolver: yupResolver(registerSchema as any),
 	});
 
 	useGQLErrorHandler((msg) => {
@@ -51,17 +66,18 @@ export const Login: React.FC<{}> = ({}) => {
 	});
 
 	const onSubmit = async (data: any) => {
-		const response = await login({ variables: data });
-		if (response.data?.login.errors) {
+		console.log(data);
+		const response = await register({ variables: { options: data } });
+		if (response.data?.register.errors) {
 			toast({
-				title: response.data?.login.errors[0].field,
+				title: response.data?.register.errors[0].field,
 				variant: 'left-accent',
-				description: response.data?.login.errors[0].message,
+				description: response.data?.register.errors[0].message,
 				status: 'error',
 				duration: 9000,
 				isClosable: true,
 			});
-		} else if (response.data?.login.user) {
+		} else if (response.data?.register.user) {
 			if (typeof router.query.next === 'string') {
 				router.push(router.query.next);
 			} else {
@@ -73,27 +89,41 @@ export const Login: React.FC<{}> = ({}) => {
 	return (
 		<Layout variant="small">
 			<NextSeo
-				title="Login - Koi Anime"
+				title="Register - Koi Anime"
 				description="A short description goes here."
 			/>
 			<Surface>
 				<HStack spacing="5px" justify="center" pb={2}>
 					<Image src={logo} alt="logo" height="75px" width="75px" />
-					<Heading as="h2">Log In</Heading>
+					<Heading as="h2">Register</Heading>
 				</HStack>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<Stack direction={['column']} spacing=".8em">
 						<Controller
-							name="usernameOrEmail"
+							name="username"
+							control={control}
+							render={({ field }) => (
+								<Input {...field} placeholder="Username" label="Username" />
+							)}
+						/>
+						{errors.username && (
+							<Text color="red.500">{errors.username?.message}</Text>
+						)}
+						<Controller
+							name="email"
 							control={control}
 							render={({ field }) => (
 								<Input
 									{...field}
-									placeholder="Username or email"
-									label="Username or Email"
+									placeholder="Email"
+									label="Email"
+									type="email"
 								/>
 							)}
 						/>
+						{errors.email && (
+							<Text color="red.500">{errors.email?.message}</Text>
+						)}
 						<Controller
 							name="password"
 							control={control}
@@ -126,23 +156,36 @@ export const Login: React.FC<{}> = ({}) => {
 								</InputGroup>
 							)}
 						/>
+						<Progress
+							value={passwordStrength(watch('password')).strength}
+							colorScheme={passwordStrength(watch('password')).color}
+							size="xs"
+						/>
+						{errors.password && (
+							<Text color="red.500">{errors.password?.message}</Text>
+						)}
+						<Controller
+							name="confirmPassword"
+							control={control}
+							render={({ field }) => (
+								<Input
+									{...field}
+									placeholder="Confirm password"
+									label="Confirm password"
+									type={showPassword ? 'text' : 'password'}
+								/>
+							)}
+						/>
+						{errors.confirmPassword && (
+							<Text color="red.500">{errors.confirmPassword?.message}</Text>
+						)}
 						<Button type="submit" colorScheme="teal">
-							Sign in
+							Create account
 						</Button>
-						<NextLink href="/register">
+						<NextLink href="/login">
 							<Button colorScheme="teal" variant="outline" size="sm">
-								Create account?
+								Sign in?
 							</Button>
-						</NextLink>
-						<NextLink href="/forgot-password">
-							<Link
-								color="teal.500"
-								textDecorationStyle="dashed"
-								textAlign="center"
-								fontSize="smaller"
-							>
-								Forgot password?
-							</Link>
 						</NextLink>
 					</Stack>
 				</form>
