@@ -33,7 +33,7 @@ import { withApollo } from '../stores/withApollo';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
 import { passwordStrength } from '../utils/passwordStrength';
 
-export const Login: React.FC<{}> = ({}) => {
+export const Register: React.FC<{}> = ({}) => {
 	const router = useRouter();
 	const toast = useToast();
 	const [register] = useRegisterMutation();
@@ -194,4 +194,4 @@ export const Login: React.FC<{}> = ({}) => {
 	);
 };
 
-export default withApollo({ ssr: false })(Login);
+export default withApollo({ ssr: false })(Register);

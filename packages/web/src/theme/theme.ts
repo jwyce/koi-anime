@@ -4,8 +4,7 @@ import { mode } from '@chakra-ui/theme-tools';
 import { components } from './components';
 
 const config: ThemeConfig = {
-	initialColorMode: 'light',
-	useSystemColorMode: true,
+	initialColorMode: 'dark',
 };
 
 export const theme = extendTheme({
@@ -67,9 +66,6 @@ export const theme = extendTheme({
 			info: '#659FFF',
 			warning: '#EC9200',
 			error: '#EB79FA',
-		},
-		brand: {
-			100: mode('#ddd', '#444ace'),
 		},
 	},
 	components,

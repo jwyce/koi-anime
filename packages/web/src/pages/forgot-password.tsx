@@ -20,7 +20,7 @@ import { Layout } from '../components/Layout';
 import { Surface } from '../components/styles/Surface';
 import { withApollo } from '../stores/withApollo';
 
-export const Login: React.FC<{}> = ({}) => {
+export const ForgotPassword: React.FC<{}> = ({}) => {
 	const router = useRouter();
 	const toast = useToast();
 	const [login] = useLoginMutation();
@@ -89,4 +89,4 @@ export const Login: React.FC<{}> = ({}) => {
 	);
 };
 
-export default withApollo({ ssr: false })(Login);
+export default withApollo({ ssr: false })(ForgotPassword);

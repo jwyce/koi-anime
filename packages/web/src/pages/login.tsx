@@ -18,7 +18,12 @@ import {
 	Stack,
 	useToast,
 } from '@chakra-ui/react';
-import { useLoginMutation, useToggle } from '@koi/controller';
+import {
+	useLoginMutation,
+	useToggle,
+	MeDocument,
+	MeQuery,
+} from '@koi/controller';
 
 import logo from '../assets/images/koi-icon.svg';
 import { Layout } from '../components/Layout';
@@ -51,7 +56,20 @@ export const Login: React.FC<{}> = ({}) => {
 	});
 
 	const onSubmit = async (data: any) => {
-		const response = await login({ variables: data });
+		const response = await login({
+			variables: data,
+			update: (store, { data }) => {
+				if (!data) {
+					return;
+				}
+				store.writeQuery<MeQuery>({
+					query: MeDocument,
+					data: {
+						me: data.login.user,
+					},
+				});
+			},
+		});
 		if (response.data?.login.errors) {
 			toast({
 				title: response.data?.login.errors[0].field,
