@@ -5,15 +5,17 @@ export type WrapperVariant = 'small' | 'regular' | 'full';
 
 interface WrapperProps {
 	variant?: WrapperVariant;
+	noMargin?: boolean;
 }
 
 export const Wrapper: React.FC<WrapperProps> = ({
 	children,
 	variant = 'regular',
+	noMargin = false,
 }) => {
 	return (
 		<Box
-			mt={8}
+			mt={noMargin ? 0 : 8}
 			mx="auto"
 			maxW={
 				variant === 'regular' ? '800px' : variant === 'full' ? 'none' : '400px'

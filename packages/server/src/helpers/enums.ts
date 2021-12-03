@@ -1,10 +1,5 @@
 import { registerEnumType } from 'type-graphql';
 
-export enum ThemePreference {
-	DARK = 'dark',
-	LIGHT = 'light',
-}
-
 export enum ProfileIcon {
 	KOI = 'koi',
 	DRAGON = 'dragon',
@@ -96,10 +91,6 @@ export enum ListStatus {
 }
 
 export const registerTypeGraphQLEnums = () => {
-	registerEnumType(ThemePreference, {
-		name: 'ThemePreference',
-	});
-
 	registerEnumType(ProfileIcon, {
 		name: 'ProfileIcon',
 	});

@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export enum AgeRating {
@@ -180,6 +182,40 @@ export type MutationRegisterArgs = {
   options: RegisterInput;
 };
 
+export enum ProfileColor {
+  /** #869EFF */
+  Blue = 'BLUE',
+  /** #EB79FA */
+  Pink = 'PINK',
+  /** #555B8C */
+  Purple = 'PURPLE',
+  /** #ff6250 */
+  Redorange = 'REDORANGE',
+  /** #FF8691 */
+  Salmon = 'SALMON',
+  /** #00C7B4 */
+  Teal = 'TEAL'
+}
+
+export enum ProfileIcon {
+  Cat = 'CAT',
+  Dog = 'DOG',
+  Dragon = 'DRAGON',
+  Fox = 'FOX',
+  Frog = 'FROG',
+  Goat = 'GOAT',
+  Koi = 'KOI',
+  Monkey = 'MONKEY',
+  Pig = 'PIG',
+  Rabbit = 'RABBIT',
+  Rat = 'RAT',
+  Rooster = 'ROOSTER',
+  Seahorse = 'SEAHORSE',
+  Snake = 'SNAKE',
+  Tiger = 'TIGER',
+  Turtle = 'TURTLE'
+}
+
 export type Query = {
   __typename?: 'Query';
   anime?: Maybe<Anime>;
@@ -235,11 +271,24 @@ export enum Status {
   Upcoming = 'UPCOMING'
 }
 
+export enum TitlePreference {
+  Canonical = 'CANONICAL',
+  English = 'ENGLISH',
+  Japanese = 'JAPANESE',
+  Romanized = 'ROMANIZED'
+}
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Int'];
+  isConfirmed: Scalars['Boolean'];
+  lockoutEnd: Scalars['DateTime'];
+  profileColor: ProfileColor;
+  profileIcon: ProfileIcon;
+  showNSFW: Scalars['Boolean'];
+  titlePreference: TitlePreference;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -252,9 +301,9 @@ export type UserResponse = {
 
 export type DefaultErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type DefaultUserFragment = { __typename?: 'User', id: number, username: string };
+export type DefaultUserFragment = { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, showNSFW: boolean };
 
-export type DefaultUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string } | null | undefined };
+export type DefaultUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, showNSFW: boolean } | null | undefined };
 
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
@@ -262,7 +311,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string } | null | undefined } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, showNSFW: boolean } | null | undefined } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -274,12 +323,12 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string } | null | undefined } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, showNSFW: boolean } | null | undefined } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string } | null | undefined };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, showNSFW: boolean } | null | undefined };
 
 export const DefaultErrorFragmentDoc = gql`
     fragment DefaultError on FieldError {
@@ -291,6 +340,11 @@ export const DefaultUserFragmentDoc = gql`
     fragment DefaultUser on User {
   id
   username
+  email
+  profileIcon
+  profileColor
+  titlePreference
+  showNSFW
 }
     `;
 export const DefaultUserResponseFragmentDoc = gql`

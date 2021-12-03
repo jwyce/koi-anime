@@ -5,13 +5,20 @@ import { Wrapper, WrapperVariant } from './Wrapper';
 
 interface LayoutProps {
 	variant?: WrapperVariant;
+	noMargin?: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, variant }) => {
+export const Layout: React.FC<LayoutProps> = ({
+	children,
+	variant,
+	noMargin,
+}) => {
 	return (
 		<>
 			<Navbar />
-			<Wrapper variant={variant}>{children}</Wrapper>
+			<Wrapper variant={variant} noMargin={noMargin}>
+				{children}
+			</Wrapper>
 		</>
 	);
 };

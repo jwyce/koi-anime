@@ -1,9 +1,4 @@
-import {
-	ProfileColor,
-	ProfileIcon,
-	ThemePreference,
-	TitlePreference,
-} from '../helpers/enums';
+import { ProfileColor, ProfileIcon, TitlePreference } from '../helpers/enums';
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
 	BaseEntity,
@@ -31,14 +26,6 @@ export class User extends BaseEntity {
 
 	@Column()
 	password!: string;
-
-	@Field(() => ThemePreference)
-	@Column({
-		type: 'enum',
-		enum: ThemePreference,
-		default: ThemePreference.DARK,
-	})
-	theme: ThemePreference;
 
 	@Field(() => ProfileIcon)
 	@Column({
