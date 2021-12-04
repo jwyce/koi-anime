@@ -10,9 +10,7 @@ import { User } from '../../entities/User';
 @ValidatorConstraint({ async: true })
 export class IsUsernameTakenConstraint implements ValidatorConstraintInterface {
 	validate(username: string) {
-		console.log('MADE IT');
 		return User.findOne({ where: { username } }).then((user) => {
-			console.log(user);
 			if (user) return false;
 			return true;
 		});

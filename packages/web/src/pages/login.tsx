@@ -10,10 +10,6 @@ import {
 	Button,
 	Heading,
 	HStack,
-	IconButton,
-	Input,
-	InputGroup,
-	InputRightElement,
 	Link,
 	Stack,
 	useToast,
@@ -30,6 +26,7 @@ import { Layout } from '../components/Layout';
 import { Surface } from '../components/styles/Surface';
 import { withApollo } from '../stores/withApollo';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
+import { InputField } from '../components/InputField';
 
 export const Login: React.FC<{}> = ({}) => {
 	const router = useRouter();
@@ -105,43 +102,27 @@ export const Login: React.FC<{}> = ({}) => {
 							name="usernameOrEmail"
 							control={control}
 							render={({ field }) => (
-								<Input
-									{...field}
-									placeholder="Username or email"
-									label="Username or Email"
-								/>
+								<InputField field={field} label="Username or email" />
 							)}
 						/>
 						<Controller
 							name="password"
 							control={control}
 							render={({ field }) => (
-								<InputGroup size="md">
-									<Input
-										{...field}
-										placeholder="Password"
-										label="Password"
-										pr="4.5rem"
-										type={showPassword ? 'text' : 'password'}
-									/>
-									<InputRightElement width="3rem">
-										<IconButton
-											h="3rem"
-											size="lg"
-											aria-label="show password"
-											variant="ghost"
-											isRound
-											onClick={toggleShowPassword}
-											icon={
-												showPassword ? (
-													<AiFillEyeInvisible size={24} />
-												) : (
-													<AiFillEye size={24} />
-												)
-											}
-										/>
-									</InputRightElement>
-								</InputGroup>
+								<InputField
+									field={field}
+									label="Password"
+									size="md"
+									type={showPassword ? 'text' : 'password'}
+									endAdornment={
+										showPassword ? (
+											<AiFillEyeInvisible size={24} />
+										) : (
+											<AiFillEye size={24} />
+										)
+									}
+									actionCallback={toggleShowPassword}
+								/>
 							)}
 						/>
 						<Button type="submit" colorScheme="teal">

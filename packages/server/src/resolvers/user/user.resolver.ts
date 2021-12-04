@@ -20,8 +20,11 @@ import {
 	COOKIE_NAME,
 	FORGET_PASSWORD_PREFIX,
 } from '../../helpers/constants';
+import { isAccountLocked } from '../../middleware/isAccountLocked';
+import { rateLimit } from '../../middleware/rateLimit';
 import { MyContext } from '../../typings/MyContext';
-import { rateLimit } from '../../utils/rateLimit';
+import { accountLockout } from '../../utils/accountLockout';
+import { randomUserProfileTheme } from '../../utils/randomUserProfileTheme';
 import { sendEmail } from '../../utils/sendEmail';
 import { validateSchema } from '../../utils/validateSchema';
 import { RegisterInput } from './RegisterInput';
@@ -48,7 +51,6 @@ export class UserResolver {
 		@Ctx() { redis, req }: MyContext
 	): Promise<UserResponse> {
 		const errors = await validateSchema(resetPasswordSchema, {
-			token,
 			newPassword,
 			confirmPassword,
 		});
@@ -147,6 +149,7 @@ export class UserResolver {
 		let user;
 
 		try {
+			const { profileColor, profileIcon } = randomUserProfileTheme();
 			const result = await getConnection()
 				.createQueryBuilder()
 				.insert()
@@ -155,6 +158,8 @@ export class UserResolver {
 					username: options.username,
 					email: options.email,
 					password: hashedPassword,
+					profileColor,
+					profileIcon,
 				})
 				.returning('*')
 				.execute();
@@ -188,6 +193,7 @@ export class UserResolver {
 
 	@Mutation(() => UserResponse)
 	@UseMiddleware(rateLimit(20))
+	@UseMiddleware(isAccountLocked)
 	async login(
 		@Arg('usernameOrEmail') usernameOrEmail: string,
 		@Arg('password') password: string,
@@ -213,6 +219,16 @@ export class UserResolver {
 		const valid = await argon2.verify(user.password, password);
 
 		if (!valid) {
+			const accountLockoutInfo = accountLockout(++user.failedAttempts);
+			if (accountLockoutInfo) {
+				user.lockoutEnd = accountLockoutInfo.lockout.toDate();
+			}
+
+			user.save();
+
+			if (accountLockoutInfo) {
+				throw new Error(accountLockoutInfo.message);
+			}
 			return {
 				errors: [
 					{

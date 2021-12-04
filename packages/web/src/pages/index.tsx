@@ -127,15 +127,15 @@ const Home: NextPage = () => {
 					</Text>
 					<Wrap>
 						<WrapItem>
-							<Link href="https://jwyce.github.io/portfolio/">
-								<Button
-									leftIcon={<AiFillGithub fontSize={24} />}
-									colorScheme="teal"
-									variant="solid"
-								>
-									Project repo
-								</Button>
-							</Link>
+							<Button
+								leftIcon={<AiFillGithub fontSize={24} />}
+								colorScheme="teal"
+								onClick={() =>
+									window.open('https://jwyce.github.io/portfolio/', '_blank')
+								}
+							>
+								Project repo
+							</Button>
 						</WrapItem>
 						<WrapItem>
 							<Button
@@ -149,6 +149,7 @@ const Home: NextPage = () => {
 							<Button
 								leftIcon={<FeedbackIcon fontSize={24} />}
 								colorScheme="teal"
+								onClick={() => window.open('mailto:wycejared@gmail.com')}
 							>
 								Send feedback
 							</Button>

@@ -62,7 +62,6 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			// resolvers: [UserResolver, AnimeResolver],
 			resolvers: [__dirname + '/**/*.resolver.{ts,js}'],
 		}),
 		context: ({ req, res }): MyContext => ({

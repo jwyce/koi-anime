@@ -10,13 +10,8 @@ import {
 	Button,
 	Heading,
 	HStack,
-	IconButton,
-	Input,
-	InputGroup,
-	InputRightElement,
 	Progress,
 	Stack,
-	Text,
 	useToast,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -32,6 +27,8 @@ import { Surface } from '../components/styles/Surface';
 import { withApollo } from '../stores/withApollo';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
 import { passwordStrength } from '../utils/passwordStrength';
+import { InputField } from '../components/InputField';
+import { FormError } from '../components/FormError';
 
 export const Register: React.FC<{}> = ({}) => {
 	const router = useRouter();
@@ -103,57 +100,46 @@ export const Register: React.FC<{}> = ({}) => {
 							name="username"
 							control={control}
 							render={({ field }) => (
-								<Input {...field} placeholder="Username" label="Username" />
+								<InputField
+									field={field}
+									label="Username"
+									errorField={errors.username}
+								/>
 							)}
 						/>
-						{errors.username && (
-							<Text color="red.500">{errors.username?.message}</Text>
-						)}
+						<FormError field={errors.username} />
 						<Controller
 							name="email"
 							control={control}
 							render={({ field }) => (
-								<Input
-									{...field}
-									placeholder="Email"
+								<InputField
+									field={field}
 									label="Email"
+									errorField={errors.email}
 									type="email"
 								/>
 							)}
 						/>
-						{errors.email && (
-							<Text color="red.500">{errors.email?.message}</Text>
-						)}
+						<FormError field={errors.email} />
 						<Controller
 							name="password"
 							control={control}
 							render={({ field }) => (
-								<InputGroup size="md">
-									<Input
-										{...field}
-										placeholder="Password"
-										label="Password"
-										pr="4.5rem"
-										type={showPassword ? 'text' : 'password'}
-									/>
-									<InputRightElement width="3rem">
-										<IconButton
-											h="3rem"
-											size="lg"
-											aria-label="show password"
-											variant="ghost"
-											isRound
-											onClick={toggleShowPassword}
-											icon={
-												showPassword ? (
-													<AiFillEyeInvisible size={24} />
-												) : (
-													<AiFillEye size={24} />
-												)
-											}
-										/>
-									</InputRightElement>
-								</InputGroup>
+								<InputField
+									field={field}
+									label="Password"
+									size="md"
+									type={showPassword ? 'text' : 'password'}
+									errorField={errors.password}
+									endAdornment={
+										showPassword ? (
+											<AiFillEyeInvisible size={24} />
+										) : (
+											<AiFillEye size={24} />
+										)
+									}
+									actionCallback={toggleShowPassword}
+								/>
 							)}
 						/>
 						<Progress
@@ -161,24 +147,20 @@ export const Register: React.FC<{}> = ({}) => {
 							colorScheme={passwordStrength(watch('password')).color}
 							size="xs"
 						/>
-						{errors.password && (
-							<Text color="red.500">{errors.password?.message}</Text>
-						)}
+						<FormError field={errors.password} />
 						<Controller
 							name="confirmPassword"
 							control={control}
 							render={({ field }) => (
-								<Input
-									{...field}
-									placeholder="Confirm password"
+								<InputField
+									field={field}
 									label="Confirm password"
 									type={showPassword ? 'text' : 'password'}
+									errorField={errors.confirmPassword}
 								/>
 							)}
 						/>
-						{errors.confirmPassword && (
-							<Text color="red.500">{errors.confirmPassword?.message}</Text>
-						)}
+						<FormError field={errors.confirmPassword} />
 						<Button type="submit" colorScheme="teal">
 							Create account
 						</Button>
