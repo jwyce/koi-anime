@@ -13,17 +13,18 @@ import {
 	Stack,
 	useToast,
 } from '@chakra-ui/react';
-import { useLoginMutation } from '@koi/controller';
+import { useForgotPasswordMutation } from '@koi/controller';
 
 import logo from '../assets/images/koi-icon.svg';
-import { Layout } from '../components/Layout';
-import { Surface } from '../components/styles/Surface';
+import { Layout } from '../components/Layout/Layout';
+import { Surface } from '../components/UI/Surface';
 import { withApollo } from '../stores/withApollo';
 
-export const ForgotPassword: React.FC<{}> = ({}) => {
+import { NextPage } from 'next';
+export const ForgotPassword: NextPage = ({}) => {
 	const router = useRouter();
 	const toast = useToast();
-	const [login] = useLoginMutation();
+	const [sendReset] = useForgotPasswordMutation();
 
 	const { control, handleSubmit } = useForm({
 		defaultValues: {
@@ -32,10 +33,10 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
 	});
 
 	const onSubmit = async (data: any) => {
-		const response = await login({ variables: data });
+		const response = await sendReset({ variables: data });
 		if (response.data) {
 			toast({
-				title: 'hi',
+				title: 'Password Reset Sent',
 				variant: 'left-accent',
 				description:
 					'if an account with that email exists, we sent you a reset link',
@@ -43,7 +44,7 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
 				duration: 9000,
 				isClosable: true,
 			});
-			router.push('/');
+			router.push('/login');
 		}
 	};
 

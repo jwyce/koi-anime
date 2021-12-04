@@ -22,12 +22,12 @@ import appStore from '../assets/images/app-store-badge.svg';
 import googlePlay from '../assets/images/google-play-badge.svg';
 import logo from '../assets/images/koi-icon.svg';
 import hero from '../assets/images/stacked-steps-haikei.svg';
-import { Layout } from '../components/Layout';
-import { FeedbackIcon } from '../components/styles/CustomIcons';
+import { Layout } from '../components/Layout/Layout';
+import { FeedbackIcon } from '../components/UI/CustomIcons';
+import { HeartIcon } from '../components/UI/HeartIcon';
 import { withApollo } from '../stores/withApollo';
 
 import type { NextPage } from 'next';
-import { HeartIcon } from '../components/styles/HeartIcon';
 const Home: NextPage = () => {
 	const { colorMode } = useColorMode();
 

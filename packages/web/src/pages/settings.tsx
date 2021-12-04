@@ -1,23 +1,28 @@
 import { NextSeo } from 'next-seo';
 import React from 'react';
-import { GiCirclingFish } from 'react-icons/gi';
 
 import { Avatar, Heading, HStack, Spacer, useToast } from '@chakra-ui/react';
-import { useMeQuery } from '@koi/controller';
+import { useMeQuery, useSendConfirmationMutation } from '@koi/controller';
 
 import { ChangePassword } from '../components/Account/ChangePassword';
 import { DeleteAccount } from '../components/Account/DeleteAccount';
 import { Preferences } from '../components/Account/Preferences';
-import { Layout } from '../components/Layout';
-import { Loader } from '../components/styles/Loader';
+import { Layout } from '../components/Layout/Layout';
+import { Loader } from '../components/UI/Loader';
 import { withApollo } from '../stores/withApollo';
 import { isServer } from '../utils/isServer';
+import { profileColor, profileIcon } from '../utils/profilePreferences';
 
-export const Settings: React.FC<{}> = ({}) => {
+import { NextPage } from 'next';
+import { useIsAuth } from '../utils/hooks/useIsAuth';
+export const Settings: NextPage = ({}) => {
+	useIsAuth();
+
 	const { data, loading } = useMeQuery({ skip: isServer() });
+	const [sendConfirmation] = useSendConfirmationMutation();
 	const toast = useToast();
 
-	if (loading || !data)
+	if (loading || !data || !data.me)
 		return (
 			<Layout>
 				<Loader size="xl" />
@@ -32,9 +37,9 @@ export const Settings: React.FC<{}> = ({}) => {
 			/>
 			<HStack spacing={10}>
 				<Avatar
-					icon={<GiCirclingFish fontSize="3.5rem" />}
+					icon={profileIcon(data.me!.profileIcon, '3.5rem')!}
 					size="xl"
-					bg="primary.medium"
+					bg={profileColor(data.me!.profileColor)!}
 					color="white"
 				/>
 				<Heading as="h2" fontSize="3xl">
@@ -43,11 +48,12 @@ export const Settings: React.FC<{}> = ({}) => {
 			</HStack>
 
 			<Spacer mt={10} />
-			<Preferences me={data.me} />
+			<Preferences me={data.me!} />
 
 			<Spacer mt={10} />
 			<ChangePassword
-				sendConfirmationCallback={() => {
+				me={data.me!}
+				sendConfirmationCallback={async () => {
 					toast({
 						title: 'Confirmation Sent',
 						variant: 'left-accent',
@@ -57,6 +63,7 @@ export const Settings: React.FC<{}> = ({}) => {
 						duration: 9000,
 						isClosable: true,
 					});
+					await sendConfirmation({ variables: { email: data.me!.email } });
 				}}
 			/>
 

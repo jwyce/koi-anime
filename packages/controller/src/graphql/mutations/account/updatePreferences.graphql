@@ -1,0 +1,5 @@
+mutation UpdatePreferences($options: PreferencesInput!) {
+	updatePreferences(options: $options) {
+		...DefaultUserResponse
+	}
+}

@@ -7,10 +7,11 @@ import { AiFillHome } from 'react-icons/ai';
 import { Button, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 
 import logo from '../assets/images/koi-icon.svg';
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/Layout/Layout';
 import { withApollo } from '../stores/withApollo';
 
-export const FourOhFour: React.FC<{}> = ({}) => {
+import type { NextPage } from 'next';
+export const FourOhFour: NextPage = ({}) => {
 	return (
 		<Layout variant="small">
 			<NextSeo

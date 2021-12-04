@@ -16,21 +16,24 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
+	MeQuery,
+	MeDocument,
 	registerSchema,
 	useRegisterMutation,
 	useToggle,
 } from '@koi/controller';
 
 import logo from '../assets/images/koi-icon.svg';
-import { Layout } from '../components/Layout';
-import { Surface } from '../components/styles/Surface';
+import { Layout } from '../components/Layout/Layout';
+import { Surface } from '../components/UI/Surface';
 import { withApollo } from '../stores/withApollo';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
 import { passwordStrength } from '../utils/passwordStrength';
-import { InputField } from '../components/InputField';
-import { FormError } from '../components/FormError';
+import { InputField } from '../components/Form/InputField';
+import { FormError } from '../components/Form/FormError';
 
-export const Register: React.FC<{}> = ({}) => {
+import { NextPage } from 'next';
+export const Register: NextPage = ({}) => {
 	const router = useRouter();
 	const toast = useToast();
 	const [register] = useRegisterMutation();
@@ -63,8 +66,20 @@ export const Register: React.FC<{}> = ({}) => {
 	});
 
 	const onSubmit = async (data: any) => {
-		console.log(data);
-		const response = await register({ variables: { options: data } });
+		const response = await register({
+			variables: { options: data },
+			update: (store, { data }) => {
+				if (!data) {
+					return;
+				}
+				store.writeQuery<MeQuery>({
+					query: MeDocument,
+					data: {
+						me: data.register.user,
+					},
+				});
+			},
+		});
 		if (response.data?.register.errors) {
 			toast({
 				title: response.data?.register.errors[0].field,

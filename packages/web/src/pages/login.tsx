@@ -1,3 +1,4 @@
+import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
 import NextLink from 'next/link';
@@ -15,20 +16,20 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import {
-	useLoginMutation,
-	useToggle,
 	MeDocument,
 	MeQuery,
+	useLoginMutation,
+	useToggle,
 } from '@koi/controller';
 
 import logo from '../assets/images/koi-icon.svg';
-import { Layout } from '../components/Layout';
-import { Surface } from '../components/styles/Surface';
+import { InputField } from '../components/Form/InputField';
+import { Layout } from '../components/Layout/Layout';
+import { Surface } from '../components/UI/Surface';
 import { withApollo } from '../stores/withApollo';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
-import { InputField } from '../components/InputField';
 
-export const Login: React.FC<{}> = ({}) => {
+export const Login: NextPage = ({}) => {
 	const router = useRouter();
 	const toast = useToast();
 	const [login] = useLoginMutation();

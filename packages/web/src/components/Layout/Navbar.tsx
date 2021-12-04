@@ -2,7 +2,6 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { GiCirclingFish } from 'react-icons/gi';
 import { IoLogIn, IoLogOut, IoSettings } from 'react-icons/io5';
 
 import { useApolloClient } from '@apollo/client';
@@ -23,13 +22,14 @@ import {
 } from '@chakra-ui/react';
 import { useLogoutMutation, useMeQuery } from '@koi/controller';
 
-import logo from '../assets/images/koi-icon.svg';
-import { isServer } from '../utils/isServer';
+import logo from '../../assets/images/koi-icon.svg';
+import { isServer } from '../../utils/isServer';
+import { profileIcon, profileColor } from '../../utils/profilePreferences';
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-	const [logout, { loading: logoutLoading }] = useLogoutMutation();
+	const [logout] = useLogoutMutation();
 	const apolloClient = useApolloClient();
 	const router = useRouter();
 	const { data, loading } = useMeQuery({ skip: isServer() }); // could remove if I want the request to be done server side
@@ -81,10 +81,10 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 					<Tooltip label={data.me.username}>
 						<MenuButton>
 							<Avatar
-								icon={<GiCirclingFish fontSize="1.5rem" />}
-								mr={2}
+								icon={profileIcon(data.me!.profileIcon, '1.5rem')!}
 								size="md"
-								bg="primary.medium"
+								mr={2}
+								bg={profileColor(data.me!.profileColor)!}
 								color="white"
 							/>
 						</MenuButton>
@@ -98,7 +98,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 						</MenuItem>
 						<MenuItem
 							icon={<IoLogOut size={24} />}
-							isLoading={logoutLoading}
 							onClick={async () => {
 								await logout();
 								await apolloClient.resetStore();

@@ -3,6 +3,7 @@ import {
 	Arg,
 	Ctx,
 	FieldResolver,
+	Int,
 	Mutation,
 	Query,
 	Resolver,
@@ -21,6 +22,7 @@ import {
 	FORGET_PASSWORD_PREFIX,
 } from '../../helpers/constants';
 import { isAccountLocked } from '../../middleware/isAccountLocked';
+import { isAuth } from '../../middleware/isAuth';
 import { rateLimit } from '../../middleware/rateLimit';
 import { MyContext } from '../../typings/MyContext';
 import { accountLockout } from '../../utils/accountLockout';
@@ -29,6 +31,7 @@ import { sendEmail } from '../../utils/sendEmail';
 import { validateSchema } from '../../utils/validateSchema';
 import { RegisterInput } from './RegisterInput';
 import { UserResponse } from './UserResponse';
+import { PreferencesInput } from './PreferencesInput';
 
 @Resolver(User)
 export class UserResolver {
@@ -43,8 +46,61 @@ export class UserResolver {
 		return '';
 	}
 
+	@Query(() => [User])
+	users() {
+		return User.find();
+	}
+
+	@Query(() => User)
+	user(@Arg('id', () => Int) id: number) {
+		return User.findOne(id);
+	}
+
+	@Mutation(() => Boolean)
+	@UseMiddleware(isAuth)
+	async confirmEmail(
+		@Arg('token') token: string,
+		@Ctx() { redis }: MyContext
+	): Promise<boolean> {
+		const userId = await redis.get(CONFIRM_USER_PREFIX + token);
+		if (!userId) {
+			return false;
+		}
+
+		await User.update({ id: parseInt(userId, 10) }, { isConfirmed: true });
+		await redis.del(CONFIRM_USER_PREFIX + token);
+
+		return true;
+	}
+
 	@Mutation(() => UserResponse)
+	@UseMiddleware(isAuth)
 	async changePassword(
+		@Arg('newPassword') newPassword: string,
+		@Arg('confirmPassword') confirmPassword: string,
+		@Ctx() { req }: MyContext
+	): Promise<UserResponse> {
+		const errors = await validateSchema(resetPasswordSchema, {
+			newPassword,
+			confirmPassword,
+		});
+		if (errors) {
+			return { errors };
+		}
+
+		const user = await User.findOne(req.session.userId);
+		if (user) {
+			user.password = await argon2.hash(newPassword);
+
+			// login user after change password
+			req.session.userId = user.id;
+		}
+
+		return { user };
+	}
+
+	@Mutation(() => UserResponse)
+	async resetPassword(
 		@Arg('token') token: string,
 		@Arg('newPassword') newPassword: string,
 		@Arg('confirmPassword') confirmPassword: string,
@@ -116,11 +172,38 @@ export class UserResolver {
 			1000 * 60 * 60 * 24 * 3 // 3 days
 		);
 
-		await sendEmail(
+		sendEmail(
 			email,
 			'Reset Password Link 🔑',
-			`<a href="${process.env.CORS_ORIGIN}/change-password/${token}">reset password</a>`
+			`<a href="${process.env.CORS_ORIGIN}/reset-password/${token}">reset password</a>`
 		);
+
+		return true;
+	}
+
+	@Mutation(() => Boolean)
+	@UseMiddleware(rateLimit(10))
+	async sendConfirmation(
+		@Ctx() { redis }: MyContext,
+		@Arg('email') email: string
+	) {
+		const user = await User.findOne({ email });
+
+		if (user) {
+			const token = v4();
+			await redis.set(
+				CONFIRM_USER_PREFIX + token,
+				user.id,
+				'ex',
+				1000 * 60 * 60 * 24 * 3 // 3 days
+			);
+
+			sendEmail(
+				user.email,
+				'Confirm Email ✅',
+				`<a href="${process.env.CORS_ORIGIN}/confirm-email/${token}">confirm email</a>`
+			);
+		}
 
 		return true;
 	}
@@ -132,6 +215,29 @@ export class UserResolver {
 		}
 
 		return User.findOne(req.session.userId);
+	}
+
+	@Mutation(() => UserResponse)
+	@UseMiddleware(isAuth)
+	async updatePreferences(
+		@Arg('options') options: PreferencesInput,
+		@Ctx() { req }: MyContext
+	): Promise<UserResponse> {
+		const user = await User.findOne(req.session.userId);
+
+		await User.update(
+			{ id: user?.id },
+			{
+				username: options.username,
+				email: options.email,
+				titlePreference: options.titlePreference,
+				profileColor: options.profileColor,
+				profileIcon: options.profileIcon,
+				showNSFW: options.showNSFW,
+			}
+		);
+
+		return { user };
 	}
 
 	@Mutation(() => UserResponse)
@@ -182,7 +288,7 @@ export class UserResolver {
 			1000 * 60 * 60 * 24 * 3 // 3 days
 		);
 
-		await sendEmail(
+		sendEmail(
 			user.email,
 			'Confirm Email ✅',
 			`<a href="${process.env.CORS_ORIGIN}/confirm-email/${token}">confirm email</a>`
@@ -240,6 +346,8 @@ export class UserResolver {
 		}
 
 		req.session!.userId = user.id;
+		user.failedAttempts = 0;
+		user.save();
 
 		return {
 			user,
@@ -258,6 +366,29 @@ export class UserResolver {
 					return;
 				}
 				resolve(true);
+			})
+		);
+	}
+
+	@Mutation(() => Boolean)
+	deleteAccount(@Ctx() { req, res }: MyContext) {
+		return new Promise((resolve) =>
+			req.session.destroy((err) => {
+				res.clearCookie(COOKIE_NAME);
+
+				if (err) {
+					console.log(err);
+					resolve(false);
+					return;
+				}
+
+				User.delete(req.session.userId)
+					.then(() => resolve(true))
+					.catch((err) => {
+						console.log(err);
+						resolve(false);
+						return;
+					});
 			})
 		);
 	}

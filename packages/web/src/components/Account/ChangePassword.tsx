@@ -6,12 +6,15 @@ import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { SimpleGrid, Stack } from '@chakra-ui/layout';
 import { Heading, Spacer } from '@chakra-ui/react';
+import { DefaultUserFragment } from '@koi/controller';
 
 interface ChangePasswordProps {
+	me: DefaultUserFragment;
 	sendConfirmationCallback: () => void;
 }
 
 export const ChangePassword: React.FC<ChangePasswordProps> = ({
+	me,
 	sendConfirmationCallback,
 }) => {
 	return (
@@ -23,13 +26,20 @@ export const ChangePassword: React.FC<ChangePasswordProps> = ({
 			<Spacer mt={5} />
 
 			<Stack spacing="5">
-				<Alert status="warning" variant="left-accent">
-					<AlertIcon />
-					Seems your email is not confirmed.{' '}
-					<Button ml={5} onClick={sendConfirmationCallback}>
-						Send Confirmation
-					</Button>
-				</Alert>
+				{me.isConfirmed ? (
+					<Alert status="success" variant="left-accent">
+						<AlertIcon />
+						Your email is verified 🎉
+					</Alert>
+				) : (
+					<Alert status="warning" variant="left-accent">
+						<AlertIcon />
+						Seems your email is not confirmed
+						<Button ml={5} onClick={sendConfirmationCallback}>
+							Resend Confirmation
+						</Button>
+					</Alert>
+				)}
 				<FormControl>
 					<SimpleGrid columns={2} spacing={10}>
 						<FormLabel htmlFor="email-alerts" mb="0" whiteSpace="nowrap">

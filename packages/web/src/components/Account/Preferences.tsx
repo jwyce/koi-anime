@@ -30,13 +30,13 @@ import {
 } from '@koi/controller';
 
 interface PreferencesProps {
-	me: DefaultUserFragment | undefined | null;
+	me: DefaultUserFragment;
 }
 
 export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 	const { colorMode, toggleColorMode } = useColorMode();
-	const [color, setColor] = useState<string>('');
-	const [icon, setIcon] = useState<string>('');
+	const [color, setColor] = useState<string>(me.profileColor!.toLowerCase());
+	const [icon, setIcon] = useState<string>(me.profileIcon!.toLowerCase());
 
 	const titlePrefList = Object.values(TitlePreference).map((value) => ({
 		text: value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(),
@@ -72,7 +72,7 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 						<FormLabel htmlFor="email-alerts" mb="0" whiteSpace="nowrap">
 							Username
 						</FormLabel>
-						<Input defaultValue={me?.username} />
+						<Input defaultValue={me.username} />
 					</SimpleGrid>
 				</FormControl>
 				<FormControl>
@@ -80,7 +80,7 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 						<FormLabel htmlFor="email-alerts" mb="0" whiteSpace="nowrap">
 							Email
 						</FormLabel>
-						<Input defaultValue={me?.email} />
+						<Input defaultValue={me.email} />
 					</SimpleGrid>
 				</FormControl>
 				<FormControl>
@@ -88,7 +88,7 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 						<FormLabel htmlFor="email-alerts" mb="0" whiteSpace="nowrap">
 							Title Preference
 						</FormLabel>
-						<Select>
+						<Select defaultValue={me.titlePreference.toLowerCase()}>
 							{titlePrefList.map((x, idx) => (
 								<option key={idx} value={x.value}>
 									{x.text}
@@ -174,9 +174,14 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 				<FormControl>
 					<SimpleGrid columns={2} spacing={10}>
 						<FormLabel htmlFor="email-alerts" mb="0">
-							Show Adult Content
+							Show Adult Content 😏
 						</FormLabel>
-						<Switch id="nsfw" colorScheme="teal" size="lg" />
+						<Switch
+							id="nsfw"
+							colorScheme="teal"
+							size="lg"
+							defaultChecked={me.showNSFW}
+						/>
 					</SimpleGrid>
 				</FormControl>
 			</Stack>

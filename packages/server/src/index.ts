@@ -14,6 +14,11 @@ import { __prod__, COOKIE_NAME, ONE_YEAR } from './helpers/constants';
 import { MyContext } from './typings/MyContext';
 import { registerTypeGraphQLEnums } from './helpers/enums';
 import { redis } from './redis/redis';
+import {
+	fieldExtensionsEstimator,
+	getComplexity,
+	simpleEstimator,
+} from 'graphql-query-complexity';
 
 const main = async () => {
 	const conn = await createConnection({
@@ -59,16 +64,49 @@ const main = async () => {
 	);
 
 	registerTypeGraphQLEnums();
+	const schema = await buildSchema({
+		resolvers: [__dirname + '/**/*.resolver.{ts,js}'],
+	});
 
 	const apolloServer = new ApolloServer({
-		schema: await buildSchema({
-			resolvers: [__dirname + '/**/*.resolver.{ts,js}'],
-		}),
+		schema,
 		context: ({ req, res }): MyContext => ({
 			req,
 			res,
 			redis,
 		}),
+		plugins: [
+			{
+				requestDidStart: () => ({
+					didResolveOperation({ request, document }) {
+						/**
+						 * This provides GraphQL query analysis to be able to react on complex queries to your GraphQL server.
+						 * This can be used to protect your GraphQL servers against resource exhaustion and DoS attacks.
+						 * More documentation can be found at https://github.com/ivome/graphql-query-complexity.
+						 */
+						const complexity = getComplexity({
+							schema,
+							operationName: request.operationName,
+							query: document,
+							variables: request.variables,
+							estimators: [
+								fieldExtensionsEstimator(),
+								simpleEstimator({ defaultComplexity: 1 }),
+							],
+						});
+
+						if (complexity > 250) {
+							throw new Error(
+								`Sorry, too complicated query! ${complexity} is over 250 that is the max allowed complexity.`
+							);
+						}
+
+						// here we can e.g. subtract the complexity point from hourly API calls limit.
+						console.log('Used query complexity points:', complexity);
+					},
+				}),
+			},
+		],
 	});
 
 	app.get('/', (_req, res) => {

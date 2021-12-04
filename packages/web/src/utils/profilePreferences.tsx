@@ -37,7 +37,7 @@ export const profileColor = (color: string) => {
 };
 
 // TODO: find / create custom icons?
-export const profileIcon = (icon: string, size: number) => {
+export const profileIcon = (icon: string, size: number | string) => {
 	switch (icon.toUpperCase()) {
 		case ProfileIcon.Koi:
 			return <GiCirclingFish fontSize={size} />;
