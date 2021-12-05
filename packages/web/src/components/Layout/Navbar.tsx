@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 			<Flex align="center">
 				<Button>My Library</Button>
 				<Spacer mr={2} />
-				<Button>Vote</Button>
+				<Button>Rate</Button>
 				<Spacer mr={2} />
 				<Menu>
 					<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>

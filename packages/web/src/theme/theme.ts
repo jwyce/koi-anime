@@ -53,9 +53,9 @@ export const theme = extendTheme({
 	},
 	colors: {
 		primary: {
-			light: '#FF8450',
-			medium: '#ff6250',
-			dark: '#891F00',
+			light: '#fa7268',
+			main: '#FF8450',
+			dark: '#ff6250',
 		},
 		secondary: {
 			light: '#A4A7DE',

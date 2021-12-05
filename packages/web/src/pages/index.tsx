@@ -108,7 +108,7 @@ const Home: NextPage = () => {
 									src={googlePlay}
 									alt="google play"
 									width="220em"
-									height="85em"
+									height="80em"
 								/>
 							</WrapItem>
 						</Wrap>

@@ -27,9 +27,11 @@ import { InputField } from '../components/Form/InputField';
 import { Layout } from '../components/Layout/Layout';
 import { Surface } from '../components/UI/Surface';
 import { withApollo } from '../stores/withApollo';
+import { useAlreadyAuth } from '../utils/hooks/useAlreadyAuth';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
 
 export const Login: NextPage = ({}) => {
+	useAlreadyAuth();
 	const router = useRouter();
 	const toast = useToast();
 	const [login] = useLoginMutation();

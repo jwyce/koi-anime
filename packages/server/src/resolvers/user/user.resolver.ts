@@ -235,6 +235,7 @@ export class UserResolver {
 			}
 			if (options.email) {
 				user.email = options.email;
+				user.isConfirmed = false;
 			}
 
 			user.save();

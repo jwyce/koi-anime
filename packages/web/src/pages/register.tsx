@@ -1,3 +1,4 @@
+import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
 import NextLink from 'next/link';
@@ -16,24 +17,25 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
-	MeQuery,
 	MeDocument,
+	MeQuery,
 	registerSchema,
 	useRegisterMutation,
 	useToggle,
 } from '@koi/controller';
 
 import logo from '../assets/images/koi-icon.svg';
+import { FormError } from '../components/Form/FormError';
+import { InputField } from '../components/Form/InputField';
 import { Layout } from '../components/Layout/Layout';
 import { Surface } from '../components/UI/Surface';
 import { withApollo } from '../stores/withApollo';
+import { useAlreadyAuth } from '../utils/hooks/useAlreadyAuth';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
 import { passwordStrength } from '../utils/passwordStrength';
-import { InputField } from '../components/Form/InputField';
-import { FormError } from '../components/Form/FormError';
 
-import { NextPage } from 'next';
 export const Register: NextPage = ({}) => {
+	useAlreadyAuth();
 	const router = useRouter();
 	const toast = useToast();
 	const [register] = useRegisterMutation();
