@@ -49,7 +49,6 @@ export const ResetPassword: NextPage = ({}) => {
 	});
 
 	const onSubmit = async (data: any) => {
-		console.log('made it');
 		const response = await resetPassword({
 			variables: {
 				token: typeof router.query.token === 'string' ? router.query.token : '',

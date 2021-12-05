@@ -209,12 +209,12 @@ export type MutationUpdatePreferencesArgs = {
 };
 
 export type PreferencesInput = {
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   profileColor: ProfileColor;
   profileIcon: ProfileIcon;
   showNSFW: Scalars['Boolean'];
   titlePreference: TitlePreference;
-  username: Scalars['String'];
+  username?: Maybe<Scalars['String']>;
 };
 
 export enum ProfileColor {

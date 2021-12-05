@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 
+import { useApolloClient } from '@apollo/client';
 import { Button, Heading, Spacer, Text } from '@chakra-ui/react';
+import { useDeleteAccountMutation } from '@koi/controller';
+
 import { ConfirmDialog } from '../Form/ConfirmDialog';
 
 export const DeleteAccount: React.FC<{}> = ({}) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [deleteAccount] = useDeleteAccountMutation();
+	const apolloClient = useApolloClient();
+
 	return (
 		<>
 			<Heading as="h2" fontSize="3xl">
 				Danger Zone
 			</Heading>
 			<Spacer mt={5} />
-			<Text fontSize="xs" color="red.400">
+			<Text fontSize="xs" color="red.500">
 				Danger Zone! Deleting your account is irreversible.
 			</Text>
 			<Button
@@ -32,7 +38,10 @@ export const DeleteAccount: React.FC<{}> = ({}) => {
 				body="Are you sure? You can't undo this action afterwards."
 				actionName="Delete"
 				actionColor="red"
-				actionCallback={() => alert('deleted')}
+				actionCallback={async () => {
+					await deleteAccount();
+					await apolloClient.resetStore();
+				}}
 			/>
 		</>
 	);

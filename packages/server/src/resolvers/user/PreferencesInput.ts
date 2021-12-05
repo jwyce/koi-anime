@@ -10,13 +10,13 @@ import { IsUsernameTaken } from '../validators/IsUsernameTaken';
 
 @InputType()
 export class PreferencesInput {
-	@Field()
+	@Field({ nullable: true })
 	@IsUsernameTaken({ message: 'username already taken' })
-	username: string;
+	username?: string;
 
-	@Field()
+	@Field({ nullable: true })
 	@IsEmailAlreadyExist({ message: 'email already in use' })
-	email: string;
+	email?: string;
 
 	@Field(() => TitlePreference)
 	titlePreference: TitlePreference;

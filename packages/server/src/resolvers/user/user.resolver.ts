@@ -90,10 +90,10 @@ export class UserResolver {
 
 		const user = await User.findOne(req.session.userId);
 		if (user) {
-			user.password = await argon2.hash(newPassword);
-
-			// login user after change password
-			req.session.userId = user.id;
+			await User.update(
+				{ id: user.id },
+				{ password: await argon2.hash(newPassword) }
+			);
 		}
 
 		return { user };
@@ -224,18 +224,21 @@ export class UserResolver {
 		@Ctx() { req }: MyContext
 	): Promise<UserResponse> {
 		const user = await User.findOne(req.session.userId);
+		if (user) {
+			user.titlePreference = options.titlePreference;
+			user.profileColor = options.profileColor;
+			user.profileIcon = options.profileIcon;
+			user.showNSFW = options.showNSFW;
 
-		await User.update(
-			{ id: user?.id },
-			{
-				username: options.username,
-				email: options.email,
-				titlePreference: options.titlePreference,
-				profileColor: options.profileColor,
-				profileIcon: options.profileIcon,
-				showNSFW: options.showNSFW,
+			if (options.username) {
+				user.username = options.username;
 			}
-		);
+			if (options.email) {
+				user.email = options.email;
+			}
+
+			user.save();
+		}
 
 		return { user };
 	}
@@ -372,7 +375,8 @@ export class UserResolver {
 
 	@Mutation(() => Boolean)
 	deleteAccount(@Ctx() { req, res }: MyContext) {
-		return new Promise((resolve) =>
+		return new Promise((resolve) => {
+			const userId = req.session.userId;
 			req.session.destroy((err) => {
 				res.clearCookie(COOKIE_NAME);
 
@@ -382,14 +386,14 @@ export class UserResolver {
 					return;
 				}
 
-				User.delete(req.session.userId)
+				User.delete(userId)
 					.then(() => resolve(true))
 					.catch((err) => {
 						console.log(err);
 						resolve(false);
 						return;
 					});
-			})
-		);
+			});
+		});
 	}
 }
