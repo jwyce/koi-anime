@@ -7,8 +7,8 @@
 		"icon": "./assets/images/icon.png",
 		"splash": {
 			"image": "./assets/images/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
+			"resizeMode": "cover",
+			"backgroundColor": "#002140ff"
 		},
 		"updates": {
 			"fallbackToCacheTimeout": 0
@@ -21,7 +21,7 @@
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/images/adaptive-icon.png",
-				"backgroundColor": "#FFFFFF"
+				"backgroundColor": "#002140ff"
 			},
 			"package": "com.koianime"
 		},

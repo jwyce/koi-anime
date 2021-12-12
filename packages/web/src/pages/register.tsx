@@ -150,9 +150,9 @@ export const Register: NextPage = ({}) => {
 									errorField={errors.password}
 									endAdornment={
 										showPassword ? (
-											<AiFillEyeInvisible size={24} />
-										) : (
 											<AiFillEye size={24} />
+										) : (
+											<AiFillEyeInvisible size={24} />
 										)
 									}
 									actionCallback={toggleShowPassword}

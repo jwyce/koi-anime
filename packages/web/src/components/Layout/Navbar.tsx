@@ -63,19 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 					</MenuList>
 				</Menu>
 				<Spacer mr={2} />
-				<Menu>
-					<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-						Rankings
-					</MenuButton>
-					<MenuList>
-						<MenuItem>Top Anime</MenuItem>
-						<MenuItem>Top Manga</MenuItem>
-						<MenuItem>Best Boy</MenuItem>
-						<MenuItem>Best Girl</MenuItem>
-						<MenuItem>Top Openings</MenuItem>
-						<MenuItem>Top Endings</MenuItem>
-					</MenuList>
-				</Menu>
+				<Button>Rankings</Button>
 				<Spacer mr={2} />
 				<Menu>
 					<Tooltip label={data.me.username}>

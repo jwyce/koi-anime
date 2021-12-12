@@ -105,9 +105,9 @@ export const ResetPassword: NextPage = ({}) => {
 									errorField={errors.newPassword}
 									endAdornment={
 										showPassword ? (
-											<AiFillEyeInvisible size={24} />
-										) : (
 											<AiFillEye size={24} />
+										) : (
+											<AiFillEyeInvisible size={24} />
 										)
 									}
 									actionCallback={toggleShowPassword}

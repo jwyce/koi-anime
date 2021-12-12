@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 interface InputFieldProps {
-	field: ControllerRenderProps<any>;
+	field: ControllerRenderProps<any, any>;
 	type?: string;
 	endAdornment?: ReactElement<any, string | JSXElementConstructor<any>>;
 	actionCallback?: () => void;

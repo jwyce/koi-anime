@@ -2,22 +2,14 @@ import { extendTheme } from 'native-base';
 
 export const theme = extendTheme({
 	colors: {
-		// Add new color
 		primary: {
-			50: '#E3F2F9',
-			100: '#C5E4F3',
-			200: '#A2D4EC',
-			300: '#7AC1E4',
-			400: '#47A9DA',
-			500: '#0088CC',
-			600: '#007AB8',
-			700: '#006BA1',
-			800: '#005885',
-			900: '#003F5E',
-		},
-		// Redefinig only one shade, rest of the color will remain same.
-		amber: {
-			400: '#d97706',
+			300: '#fa9e68',
+			400: '#fa8368',
+			500: '#fa7268',
+			600: '#e85c66',
+			700: '#d54664',
+			800: '#b0235f',
+			900: '#5f0c48',
 		},
 	},
 	config: {

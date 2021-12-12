@@ -1,4 +1,5 @@
 import { NextSeo } from 'next-seo';
+import NextLink from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { AiFillGithub } from 'react-icons/ai';
@@ -17,19 +18,32 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
+import { useMeQuery } from '@koi/controller';
 
 import appStore from '../assets/images/app-store-badge.svg';
 import googlePlay from '../assets/images/google-play-badge.svg';
 import logo from '../assets/images/koi-icon.svg';
+import remram from '../assets/images/remram.png';
 import hero from '../assets/images/stacked-steps-haikei.svg';
 import { Layout } from '../components/Layout/Layout';
 import { FeedbackIcon } from '../components/UI/CustomIcons';
-import { HeartIcon } from '../components/UI/HeartIcon';
+import { Loader } from '../components/UI/Loader';
 import { withApollo } from '../stores/withApollo';
+import { isServer } from '../utils/isServer';
 
 import type { NextPage } from 'next';
+import { IoLogIn, IoSearch } from 'react-icons/io5';
 const Home: NextPage = () => {
 	const { colorMode } = useColorMode();
+	const { data, loading } = useMeQuery({ skip: isServer() }); // could remove if I want the request to be done server side
+
+	if (loading) {
+		return (
+			<Layout>
+				<Loader size="xl" />
+			</Layout>
+		);
+	}
 
 	return (
 		<Layout variant="full" noMargin={true}>
@@ -49,8 +63,8 @@ const Home: NextPage = () => {
 							v0.0.1
 						</Heading>
 						<Text fontSize="lg" color="white">
-							Simple and complete testing utilities that encourage good testing
-							practices
+							Simple anime and manga tracker with a unique and accurate rating
+							system
 						</Text>
 					</Stack>
 				</HStack>
@@ -89,9 +103,11 @@ const Home: NextPage = () => {
 			</section>
 
 			<Stack spacing="10">
-				<HStack align="center">
+				<HStack align="center" justify="center">
 					<Stack align="center" p={5}>
-						<Text fontSize="larger">description + download</Text>
+						<Text fontSize="2xl" fontWeight="bolder">
+							Download the app
+						</Text>
 						<Wrap>
 							<WrapItem>
 								<Link href="https://jwyce.github.io/portfolio/">
@@ -112,12 +128,22 @@ const Home: NextPage = () => {
 								/>
 							</WrapItem>
 						</Wrap>
+						{data?.me ? (
+							<Button size="lg" leftIcon={<IoSearch size={24} />}>
+								Browse anime
+							</Button>
+						) : (
+							<NextLink href="/register">
+								<Button size="lg" leftIcon={<IoLogIn size={24} />}>
+									Create account
+								</Button>
+							</NextLink>
+						)}
 					</Stack>
+					<Image src={remram} alt="remram" height="700em" width="700em" />
 				</HStack>
 
-				<HeartIcon rank={4} size={36} />
-
-				<Stack align="center" p={5}>
+				<Stack align="center">
 					<Text fontSize="2xl" fontWeight="bolder">
 						Contact
 					</Text>
@@ -134,7 +160,7 @@ const Home: NextPage = () => {
 									window.open('https://jwyce.github.io/portfolio/', '_blank')
 								}
 							>
-								Project repo
+								GitHub Project
 							</Button>
 						</WrapItem>
 						<WrapItem>
@@ -170,6 +196,14 @@ const Home: NextPage = () => {
 								<Avatar
 									name="Jared Wyce"
 									src="https://avatars.githubusercontent.com/u/16946573?v=4"
+								/>
+							</Link>
+						</WrapItem>
+						<WrapItem>
+							<Link href="https://www.fiverr.com/mapo_tofus/draw-custom-anime-character-fanart-or-original-cell-shaded?source=order_page_summary_gig_link_image&funnel=1ed251445acb1047d3c44d5b32957dd3k">
+								<Avatar
+									name="mapo_tofus"
+									src="https://fiverr-res.cloudinary.com/t_profile_thumb,q_auto,f_auto/attachments/profile/photo/2d376e3ed64d52de6fb650c133cbba0e-1614885466046/cb62f6ae-e6b6-482e-a3b2-8fc662358665.png"
 								/>
 							</Link>
 						</WrapItem>
