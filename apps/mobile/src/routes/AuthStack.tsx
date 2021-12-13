@@ -26,7 +26,13 @@ export const AuthStack: React.FC<{}> = ({}) => {
 					header: (props) => <Header {...props} />,
 				}}
 			/>
-			<Stack.Screen name="Register" component={Register} />
+			<Stack.Screen
+				name="Register"
+				component={Register}
+				options={{
+					header: (props) => <Header {...props} />,
+				}}
+			/>
 		</Stack.Navigator>
 	);
 };

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-type User = null | { username: string };
+import { DefaultUserFragment } from '@koi/controller';
 
 export const AuthContext = React.createContext<{
-	user: User;
-	login: () => void;
+	user: DefaultUserFragment | null;
+	login: (user: DefaultUserFragment) => void;
 	logout: () => void;
 }>({
 	user: null,
@@ -15,16 +14,15 @@ export const AuthContext = React.createContext<{
 interface AuthProviderProps {}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-	const [user, setUser] = useState<User>(null);
+	const [user, setUser] = useState<DefaultUserFragment | null>(null);
 
 	return (
 		<AuthContext.Provider
 			value={{
 				user,
-				login: () => {
-					const fakeUser = { username: 'bob' };
-					setUser(fakeUser);
-					AsyncStorage.setItem('user', JSON.stringify(fakeUser));
+				login: (user) => {
+					setUser(user);
+					AsyncStorage.setItem('user', JSON.stringify(user));
 				},
 				logout: () => {
 					setUser(null);

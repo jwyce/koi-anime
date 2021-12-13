@@ -23,20 +23,26 @@ const styles = StyleSheet.create({
 
 const slides = [
 	{
+		title: 'Welcome',
+		description:
+			'The name koi(こい) can be written as both 鯉 meaning carp and 恋 meaning love',
+		image: require('../../../assets/images/onboarding1.png'),
+	},
+	{
 		title: 'Browse Content',
-		description: 'Find your favorite anime and manga',
-		image: require('../../../assets/images/remram.png'),
+		description: 'Explore new anime and manga',
+		image: require('../../../assets/images/onboarding1.png'),
 	},
 	{
 		title: 'Track Progress',
 		description: 'Keep track of your episode / chapter progress',
-		image: require('../../../assets/images/remram.png'),
+		image: require('../../../assets/images/onboarding2.png'),
 	},
 	{
-		title: "Find out what's Best",
+		title: 'Most Loved?',
 		description:
 			'Vote for your favorite anime, manga, character, or song in random matchups',
-		image: require('../../../assets/images/remram.png'),
+		image: require('../../../assets/images/onboarding3.png'),
 	},
 ];
 

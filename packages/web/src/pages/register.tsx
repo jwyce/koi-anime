@@ -19,6 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
 	MeDocument,
 	MeQuery,
+	passwordStrength,
 	registerSchema,
 	useRegisterMutation,
 	useToggle,
@@ -32,13 +33,12 @@ import { Surface } from '../components/UI/Surface';
 import { withApollo } from '../stores/withApollo';
 import { useAlreadyAuth } from '../utils/hooks/useAlreadyAuth';
 import { useGQLErrorHandler } from '../utils/hooks/useGQLErrorHandler';
-import { passwordStrength } from '../utils/passwordStrength';
 
 export const Register: NextPage = ({}) => {
 	useAlreadyAuth();
 	const router = useRouter();
 	const toast = useToast();
-	const [register] = useRegisterMutation();
+	const [register, { loading }] = useRegisterMutation();
 	const [showPassword, toggleShowPassword] = useToggle(false);
 
 	const {
@@ -178,7 +178,7 @@ export const Register: NextPage = ({}) => {
 							)}
 						/>
 						<FormError field={errors.confirmPassword} />
-						<Button type="submit" colorScheme="teal">
+						<Button type="submit" colorScheme="teal" isLoading={loading}>
 							Create account
 						</Button>
 						<NextLink href="/login">

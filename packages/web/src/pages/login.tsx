@@ -34,7 +34,7 @@ export const Login: NextPage = ({}) => {
 	useAlreadyAuth();
 	const router = useRouter();
 	const toast = useToast();
-	const [login] = useLoginMutation();
+	const [login, { loading }] = useLoginMutation();
 	const [showPassword, toggleShowPassword] = useToggle(false);
 
 	const { control, handleSubmit } = useForm({
@@ -128,7 +128,7 @@ export const Login: NextPage = ({}) => {
 								/>
 							)}
 						/>
-						<Button type="submit" colorScheme="teal">
+						<Button type="submit" colorScheme="teal" isLoading={loading}>
 							Sign in
 						</Button>
 						<NextLink href="/register">

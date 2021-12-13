@@ -200,7 +200,7 @@ const Home: NextPage = () => {
 							</Link>
 						</WrapItem>
 						<WrapItem>
-							<Link href="https://www.fiverr.com/mapo_tofus/draw-custom-anime-character-fanart-or-original-cell-shaded?source=order_page_summary_gig_link_image&funnel=1ed251445acb1047d3c44d5b32957dd3k">
+							<Link href="https://www.fiverr.com/mapo_tofus">
 								<Avatar
 									name="mapo_tofus"
 									src="https://fiverr-res.cloudinary.com/t_profile_thumb,q_auto,f_auto/attachments/profile/photo/2d376e3ed64d52de6fb650c133cbba0e-1614885466046/cb62f6ae-e6b6-482e-a3b2-8fc662358665.png"

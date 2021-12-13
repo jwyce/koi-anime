@@ -17,6 +17,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import {
 	resetPasswordSchema,
+	passwordStrength,
 	useResetPasswordMutation,
 	useToggle,
 } from '@koi/controller';
@@ -27,7 +28,6 @@ import { InputField } from '../../components/Form/InputField';
 import { Layout } from '../../components/Layout/Layout';
 import { Surface } from '../../components/UI/Surface';
 import { withApollo } from '../../stores/withApollo';
-import { passwordStrength } from '../../utils/passwordStrength';
 
 export const ResetPassword: NextPage = ({}) => {
 	const router = useRouter();

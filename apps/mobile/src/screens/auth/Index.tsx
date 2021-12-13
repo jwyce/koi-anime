@@ -42,24 +42,6 @@ export const Index: React.FC<AuthNavProps<'Index'>> = ({ navigation }) => {
 					<Heading fontSize="3xl">Koi Anime List</Heading>
 				</Stack>
 
-				{/* <PagerView style={{ flex: 1 }} initialPage={0}>
-					<View key="1">
-						<Image
-							source={require('../../../assets/images/remram.png')}
-							alt="welcome"
-							size="80"
-						/>
-						<Text>page 1</Text>
-					</View>
-					<View key="2">
-						<Image
-							source={require('../../../assets/images/remram.png')}
-							alt="welcome"
-							size="80"
-						/>
-						<Text>page 2</Text>
-					</View>
-				</PagerView> */}
 				<Onboarding />
 
 				<Box mb={20}>
@@ -77,7 +59,7 @@ export const Index: React.FC<AuthNavProps<'Index'>> = ({ navigation }) => {
 							h="12"
 							w="50%"
 							_text={{ fontSize: 'lg' }}
-							onPress={() => navigation.navigate('Login')}
+							onPress={() => navigation.navigate('Register')}
 						>
 							Sign up
 						</Button>

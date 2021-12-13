@@ -1,5 +1,6 @@
 export const add = (a: number, b: number) => a + b;
 export * from './utils/sleep';
+export * from './utils/passwordStrength';
 export * from './utils/toErrorMap';
 export * from './utils/yupSchemas';
 export * from './generated/graphql';

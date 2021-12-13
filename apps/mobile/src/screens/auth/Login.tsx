@@ -2,8 +2,7 @@ import {
 	Box,
 	Button,
 	Heading,
-	Icon,
-	Input,
+	KeyboardAvoidingView,
 	ScrollView,
 	Stack,
 	useColorModeValue,
@@ -15,13 +14,13 @@ import { appBackgroundColor } from '../../utils/appBackgroundColor';
 import { useLoginMutation, useToggle } from '@koi/controller';
 import { Controller, useForm } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
 import BottomSheet, { BottomSheetHandle } from '@gorhom/bottom-sheet';
+import { InputField } from '../../components/form/InputField';
 
 export const Login: React.FC<AuthNavProps<'Login'>> = ({}) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ['99%'], []);
-	const [login] = useLoginMutation();
+	const [login, { loading }] = useLoginMutation();
 	const [showPassword, toggleShowPassword] = useToggle(false);
 
 	const { control, handleSubmit } = useForm({
@@ -35,69 +34,50 @@ export const Login: React.FC<AuthNavProps<'Login'>> = ({}) => {
 	return (
 		<Box px={5} minH="100%" background={appBackgroundColor()}>
 			<ScrollView>
-				<Heading fontSize="4xl">Log in</Heading>
-				<Stack space={5} mt={10}>
-					<Controller
-						name="usernameOrEmail"
-						control={control}
-						render={({ field }) => (
-							<Input
-								autoCapitalize="none"
-								placeholder="Username or Email"
-								onChangeText={field.onChange}
-								size="2xl"
-								p={3}
-							/>
-						)}
-					/>
-					<Controller
-						name="password"
-						control={control}
-						render={({ field }) => (
-							<Input
-								autoCapitalize="none"
-								placeholder="Password"
-								onChangeText={field.onChange}
-								size="2xl"
-								type={showPassword ? 'text' : 'password'}
-								p={3}
-								InputLeftElement={
-									<Icon
-										as={<Ionicons name="lock-closed" />}
-										size={5}
-										ml="2"
-										color="muted.400"
-									/>
-								}
-								InputRightElement={
-									<TouchableOpacity onPress={toggleShowPassword}>
-										<Icon
-											as={<Ionicons name={showPassword ? 'eye' : 'eye-off'} />}
-											size={6}
-											mr="2"
-											color="muted.400"
-										/>
-									</TouchableOpacity>
-								}
-							/>
-						)}
-					/>
-					<Button
-						colorScheme="teal"
-						h={12}
-						_text={{ fontSize: 'lg' }}
-						onPress={handleSubmit(onSubmit)}
-					>
-						Sign in
-					</Button>
-					<Button
-						colorScheme="teal"
-						variant="outline"
-						onPress={() => bottomSheetRef.current?.expand()}
-					>
-						Forgot password?
-					</Button>
-				</Stack>
+				<KeyboardAvoidingView>
+					<Heading fontSize="4xl">Log in</Heading>
+					<Stack space={5} mt={10}>
+						<Controller
+							name="usernameOrEmail"
+							control={control}
+							render={({ field }) => (
+								<InputField field={field} label="Username or email" />
+							)}
+						/>
+						<Controller
+							name="password"
+							control={control}
+							render={({ field }) => (
+								<InputField
+									field={field}
+									label="Password"
+									type={showPassword ? 'text' : 'password'}
+									startAdornment={<Ionicons name="lock-closed" />}
+									endAdornment={
+										<Ionicons name={showPassword ? 'eye' : 'eye-off'} />
+									}
+									actionCallback={toggleShowPassword}
+								/>
+							)}
+						/>
+						<Button
+							colorScheme="teal"
+							h={12}
+							_text={{ fontSize: 'lg' }}
+							onPress={handleSubmit(onSubmit)}
+							isLoading={loading}
+						>
+							Sign in
+						</Button>
+						<Button
+							colorScheme="teal"
+							variant="outline"
+							onPress={() => bottomSheetRef.current?.expand()}
+						>
+							Forgot password?
+						</Button>
+					</Stack>
+				</KeyboardAvoidingView>
 			</ScrollView>
 			<BottomSheet
 				ref={bottomSheetRef}
