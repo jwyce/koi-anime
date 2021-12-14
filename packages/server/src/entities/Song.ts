@@ -17,10 +17,6 @@ export class Song extends BaseEntity {
 	id!: number;
 
 	@Field(() => Int)
-	@Column({ type: 'int', unique: true })
-	apiID!: number;
-
-	@Field(() => Int)
 	@Column({ type: 'int' })
 	animeID!: number;
 
