@@ -1,0 +1,7 @@
+query SongsForAnime($id: Int!) {
+	songsForAnime(id: $id) {
+		name
+		artist
+		songType
+	}
+}

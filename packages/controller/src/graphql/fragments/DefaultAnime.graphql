@@ -1,0 +1,17 @@
+fragment DefaultAnime on Anime {
+	id
+	apiID
+	slug
+	subtype
+	synopsis
+	englishTitle
+	romajiTitle
+	japaneseTitle
+	canonicalTitle
+	startDate
+	endDate
+	tba
+	ageRating
+	status
+	posterLinkSmall
+}

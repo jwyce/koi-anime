@@ -8,7 +8,7 @@ interface LoaderProps {
 
 export const Loader: React.FC<LoaderProps> = ({ size }) => {
 	return (
-		<Center h="100%">
+		<Center height="100%">
 			<Spinner size={size} color="#ff6250" />
 		</Center>
 	);

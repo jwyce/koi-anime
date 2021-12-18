@@ -1,0 +1,9 @@
+query SearchManga($limit: Int!, $cursor: Int!, $filter: String) {
+	kitsuSearchManga(limit: $limit, cursor: $cursor, filter: $filter) {
+		items {
+			...DefaultManga
+		}
+		hasMore
+		total
+	}
+}

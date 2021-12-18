@@ -15,6 +15,7 @@ export class Character extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
+	//**   media id
 	@Field(() => Int)
 	@Column({ type: 'int', unique: true })
 	malID!: number;

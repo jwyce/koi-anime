@@ -58,8 +58,12 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 						Browse
 					</MenuButton>
 					<MenuList>
-						<MenuItem>Anime</MenuItem>
-						<MenuItem>Manga</MenuItem>
+						<MenuItem onClick={() => router.push('/browse/anime')}>
+							Anime
+						</MenuItem>
+						<MenuItem onClick={() => router.push('/browse/manga')}>
+							Manga
+						</MenuItem>
 					</MenuList>
 				</Menu>
 				<Spacer mr={2} />
@@ -100,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 	}
 
 	return (
-		<Flex position="sticky" top={0} zIndex={1} bg="primary.light" p={1}>
+		<Flex position="sticky" top={0} zIndex={9999} bg="primary.light" p={1}>
 			<Flex flex={1} m="auto" align="center" pl={5} pr={5}>
 				<NextLink href="/">
 					<Link style={{ textDecoration: 'none' }}>

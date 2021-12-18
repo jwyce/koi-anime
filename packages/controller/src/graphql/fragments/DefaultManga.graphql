@@ -1,0 +1,16 @@
+fragment DefaultManga on Manga {
+	id
+	apiID
+	subtype
+	synopsis
+	englishTitle
+	romajiTitle
+	japaneseTitle
+	canonicalTitle
+	startDate
+	endDate
+	tba
+	ageRating
+	status
+	posterLinkSmall
+}

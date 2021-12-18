@@ -44,26 +44,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const client = new ApolloClient({
 	link: from([errorLink, httpLink]),
-	cache: new InMemoryCache({
-		typePolicies: {
-			Query: {
-				fields: {
-					// posts: {
-					// 	keyArgs: [],
-					// 	merge(
-					// 		existing: PaginatedPosts | undefined,
-					// 		incoming: PaginatedPosts
-					// 	): PaginatedPosts {
-					// 		return {
-					// 			...incoming,
-					// 			posts: [...(existing?.posts || []), ...incoming.posts],
-					// 		};
-					// 	},
-					// },
-				},
-			},
-		},
-	}),
+	cache: new InMemoryCache(),
 });
 
 export const withApollo = createWithApollo(client);

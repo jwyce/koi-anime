@@ -1,0 +1,10 @@
+query AnimeCharacters($id: Int!) {
+	charactersForAnime(id: $id) {
+		englishName
+		japaneseName
+		canonicalName
+		gender
+		description
+		imageOriginal
+	}
+}

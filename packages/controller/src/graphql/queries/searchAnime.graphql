@@ -1,0 +1,9 @@
+query SearchAnime($limit: Int!, $cursor: Int!, $filter: String) {
+	kitsuSearchAnime(limit: $limit, cursor: $cursor, filter: $filter) {
+		items {
+			...DefaultAnime
+		}
+		hasMore
+		total
+	}
+}

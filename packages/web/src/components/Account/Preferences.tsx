@@ -16,7 +16,6 @@ import {
 	Select,
 	SimpleGrid,
 	Stack,
-	Switch,
 	Text,
 	useColorMode,
 	useToast,
@@ -43,7 +42,7 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 
 	const [color, setColor] = useState<string>(me.profileColor!.toLowerCase());
 	const [icon, setIcon] = useState<string>(me.profileIcon!.toLowerCase());
-	const [nsfw, setNSFW] = useState<boolean>(me.showNSFW);
+	// const [nsfw, setNSFW] = useState<boolean>(me.showNSFW);
 
 	const { control, handleSubmit } = useForm({
 		defaultValues: {
@@ -64,7 +63,8 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 						data.titlePreference.toUpperCase() as TitlePreference,
 					profileColor: color.toUpperCase() as ProfileColor,
 					profileIcon: icon.toUpperCase() as ProfileIcon,
-					showNSFW: nsfw,
+					showNSFW: false,
+					// showNSFW: nsfw,
 				},
 			},
 		});
@@ -255,7 +255,7 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 							</Menu>
 						</SimpleGrid>
 					</FormControl>
-					<FormControl>
+					{/* <FormControl>
 						<SimpleGrid columns={2} spacing={10}>
 							<FormLabel htmlFor="email-alerts" mb="0">
 								Show Adult Content 😏
@@ -268,7 +268,7 @@ export const Preferences: React.FC<PreferencesProps> = ({ me }) => {
 								onChange={(e) => setNSFW(e.target.checked)}
 							/>
 						</SimpleGrid>
-					</FormControl>
+					</FormControl> */}
 				</Stack>
 				<Button type="submit" size="lg" width="100%" colorScheme="teal" mt={5}>
 					Update Profile

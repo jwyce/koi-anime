@@ -1,0 +1,10 @@
+query Anime($slug: String!, $apiID: Int!) {
+	anime(slug: $slug, apiID: $apiID) {
+		...DefaultAnime
+		ageRatingGuide
+		posterLinkOriginal
+		coverLinkOriginal
+		studios
+		youtubeVideoId
+	}
+}
