@@ -68,6 +68,7 @@ const main = async () => {
 		resolvers: [__dirname + '/**/*.resolver.{ts,js}'],
 	});
 
+	// TODO: write data loaders for rank and songs
 	const apolloServer = new ApolloServer({
 		schema,
 		context: ({ req, res }): MyContext => ({

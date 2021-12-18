@@ -1,6 +1,7 @@
 fragment DefaultManga on Manga {
 	id
 	apiID
+	slug
 	subtype
 	synopsis
 	englishTitle

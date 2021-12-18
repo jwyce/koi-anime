@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import _ from 'lodash';
 import {
 	AgeRating,
@@ -23,8 +24,12 @@ export const apiAnimeFactory = (apiData: any) => {
 		japaneseTitle: (a.attributes.titles.ja_jp as string) ?? '',
 		canonicalTitle: (a.attributes.canonicalTitle as string) ?? '',
 		slug: a.attributes.slug as string,
-		startDate: (a.attributes.startDate as Date) ?? Date.now(),
-		endDate: (a.attributes.endDate as Date) ?? Date.now(),
+		startDate: a.attributes.startDate
+			? dayjs(a.attributes.startDate).toDate()
+			: dayjs('1000-1-1').toDate(),
+		endDate: a.attributes.endDate
+			? dayjs(a.attributes.endDate).toDate()
+			: dayjs('1000-1-1').toDate(),
 		tba: a.attributes.tba ?? '',
 		ageRating:
 			(a.attributes.ageRating?.toLowerCase() as AgeRating) ?? AgeRating.G,

@@ -4,6 +4,6 @@ query SearchAnime($limit: Int!, $cursor: Int!, $filter: String) {
 			...DefaultAnime
 		}
 		hasMore
-		total
+		nextCursor
 	}
 }

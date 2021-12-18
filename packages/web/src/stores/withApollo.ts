@@ -8,6 +8,10 @@ import {
 import { withApollo as createWithApollo } from 'next-apollo';
 
 import { onError } from '@apollo/client/link/error';
+import {
+	PaginatedAnimeResponse,
+	PaginatedMangaResponse,
+} from '@koi/controller';
 
 export const gqlErrors = makeVar<string[]>([]);
 
@@ -44,7 +48,38 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const client = new ApolloClient({
 	link: from([errorLink, httpLink]),
-	cache: new InMemoryCache(),
+	cache: new InMemoryCache({
+		typePolicies: {
+			Query: {
+				fields: {
+					kitsuSearchAnime: {
+						keyArgs: [],
+						merge(
+							existing: PaginatedAnimeResponse | undefined,
+							incoming: PaginatedAnimeResponse
+						): PaginatedAnimeResponse {
+							return {
+								...incoming,
+								items: [...(existing?.items || []), ...incoming.items],
+							};
+						},
+					},
+					kitsuSearchManga: {
+						keyArgs: [],
+						merge(
+							existing: PaginatedMangaResponse | undefined,
+							incoming: PaginatedMangaResponse
+						): PaginatedMangaResponse {
+							return {
+								...incoming,
+								items: [...(existing?.items || []), ...incoming.items],
+							};
+						},
+					},
+				},
+			},
+		},
+	}),
 });
 
 export const withApollo = createWithApollo(client);

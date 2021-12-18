@@ -12,7 +12,7 @@ export const PaginatedResponse = <TItem>(TItemClass: ClassType<TItem>) => {
 		items: TItem[];
 
 		@Field(() => Int)
-		total: number;
+		nextCursor: number;
 
 		@Field()
 		hasMore: boolean;

@@ -4,7 +4,7 @@ import NextLink from 'next/link';
 import React from 'react';
 import { AiFillHome } from 'react-icons/ai';
 
-import { Button, Heading, HStack, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 
 import logo from '../assets/images/koi-icon.svg';
 import { Layout } from '../components/Layout/Layout';
@@ -18,25 +18,27 @@ export const FourOhFour: NextPage = ({}) => {
 				title="404 - Koi Anime"
 				description="A short description goes here."
 			/>
-			<Stack align="center">
-				<HStack justify="center">
-					<Heading as="h1" fontSize="10em" pr={3}>
-						4
-					</Heading>
-					<Image src={logo} alt="logo" height="120em" width="120em" />
-					<Heading as="h1" fontSize="10em">
-						4
-					</Heading>
-				</HStack>
-				<Text fontSize="sm" opacity={0.6}>
-					Sorry the requested page unfortunately couldn't be found.
-				</Text>
-				<NextLink href="/">
-					<Button leftIcon={<AiFillHome size={24} />} colorScheme="teal">
-						Go home
-					</Button>
-				</NextLink>
-			</Stack>
+			<Box h="80%" display="flex" alignItems="center" justifyContent="center">
+				<Stack align="center" justify="center">
+					<HStack justify="center">
+						<Heading as="h1" fontSize="10em" pr={3}>
+							4
+						</Heading>
+						<Image src={logo} alt="logo" height="120em" width="120em" />
+						<Heading as="h1" fontSize="10em">
+							4
+						</Heading>
+					</HStack>
+					<Text fontSize="sm" opacity={0.6}>
+						Sorry the requested page unfortunately couldn't be found.
+					</Text>
+					<NextLink href="/">
+						<Button leftIcon={<AiFillHome size={24} />} colorScheme="teal">
+							Go home
+						</Button>
+					</NextLink>
+				</Stack>
+			</Box>
 		</Layout>
 	);
 };

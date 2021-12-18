@@ -17,7 +17,7 @@ export class MangaResolver {
 		@Arg('limit', () => Int) limit: number,
 		@Arg('cursor', () => Int) cursor: number,
 		@Arg('filter', () => String, { nullable: true }) filter: string | null
-	) {
+	): Promise<PaginatedMangaResponse> {
 		try {
 			const response = await axios.get('https://kitsu.io/api/edge/manga/', {
 				params: {
@@ -38,7 +38,7 @@ export class MangaResolver {
 
 				return {
 					items: mangaRes,
-					total: response.data.meta.count,
+					nextCursor: cursor + limit,
 					hasMore: cursor + limit <= response.data.meta.count,
 				};
 			}
@@ -46,6 +46,6 @@ export class MangaResolver {
 			console.error(error);
 		}
 		// TODO: error handling
-		return { items: [], total: 0, hasMore: false };
+		return { items: [], nextCursor: 0, hasMore: false };
 	}
 }

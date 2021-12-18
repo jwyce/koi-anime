@@ -36,7 +36,7 @@ export type Anime = {
   coverLinkOriginal: Scalars['String'];
   coverLinkSmall: Scalars['String'];
   createdAt: Scalars['String'];
-  endDate: Scalars['String'];
+  endDate: Scalars['DateTime'];
   englishTitle: Scalars['String'];
   episodeCount: Scalars['Int'];
   id: Scalars['Int'];
@@ -46,7 +46,7 @@ export type Anime = {
   posterLinkSmall: Scalars['String'];
   romajiTitle: Scalars['String'];
   slug: Scalars['String'];
-  startDate: Scalars['String'];
+  startDate: Scalars['DateTime'];
   status: Status;
   studios: Array<Scalars['String']>;
   subtype: AnimeSubtype;
@@ -121,7 +121,7 @@ export type Manga = {
   coverLinkOriginal: Scalars['String'];
   coverLinkSmall: Scalars['String'];
   createdAt: Scalars['String'];
-  endDate: Scalars['String'];
+  endDate: Scalars['DateTime'];
   englishTitle: Scalars['String'];
   id: Scalars['Int'];
   japaneseTitle: Scalars['String'];
@@ -130,7 +130,7 @@ export type Manga = {
   romajiTitle: Scalars['String'];
   serialization: Scalars['String'];
   slug: Scalars['String'];
-  startDate: Scalars['String'];
+  startDate: Scalars['DateTime'];
   status: Status;
   subtype: MangaSubtype;
   synopsis: Scalars['String'];
@@ -212,14 +212,14 @@ export type PaginatedAnimeResponse = {
   __typename?: 'PaginatedAnimeResponse';
   hasMore: Scalars['Boolean'];
   items: Array<Anime>;
-  total: Scalars['Int'];
+  nextCursor: Scalars['Int'];
 };
 
 export type PaginatedMangaResponse = {
   __typename?: 'PaginatedMangaResponse';
   hasMore: Scalars['Boolean'];
   items: Array<Manga>;
-  total: Scalars['Int'];
+  nextCursor: Scalars['Int'];
 };
 
 export type PreferencesInput = {
@@ -388,11 +388,11 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type DefaultAnimeFragment = { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: string, endDate: string, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
+export type DefaultAnimeFragment = { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
 
 export type DefaultErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type DefaultMangaFragment = { __typename?: 'Manga', id: number, apiID: number, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: string, endDate: string, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
+export type DefaultMangaFragment = { __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
 
 export type DefaultUserFragment = { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean };
 
@@ -474,7 +474,7 @@ export type AnimeQueryVariables = Exact<{
 }>;
 
 
-export type AnimeQuery = { __typename?: 'Query', anime?: { __typename?: 'Anime', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, studios: Array<string>, youtubeVideoId: string, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: string, endDate: string, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined };
+export type AnimeQuery = { __typename?: 'Query', anime?: { __typename?: 'Anime', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, studios: Array<string>, youtubeVideoId: string, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined };
 
 export type AnimeCharactersQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -502,7 +502,7 @@ export type SearchAnimeQueryVariables = Exact<{
 }>;
 
 
-export type SearchAnimeQuery = { __typename?: 'Query', kitsuSearchAnime: { __typename?: 'PaginatedAnimeResponse', hasMore: boolean, total: number, items: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: string, endDate: string, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
+export type SearchAnimeQuery = { __typename?: 'Query', kitsuSearchAnime: { __typename?: 'PaginatedAnimeResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
 
 export type SearchMangaQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -511,7 +511,7 @@ export type SearchMangaQueryVariables = Exact<{
 }>;
 
 
-export type SearchMangaQuery = { __typename?: 'Query', kitsuSearchManga: { __typename?: 'PaginatedMangaResponse', hasMore: boolean, total: number, items: Array<{ __typename?: 'Manga', id: number, apiID: number, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: string, endDate: string, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
+export type SearchMangaQuery = { __typename?: 'Query', kitsuSearchManga: { __typename?: 'PaginatedMangaResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
 
 export const DefaultAnimeFragmentDoc = gql`
     fragment DefaultAnime on Anime {
@@ -536,6 +536,7 @@ export const DefaultMangaFragmentDoc = gql`
     fragment DefaultManga on Manga {
   id
   apiID
+  slug
   subtype
   synopsis
   englishTitle
@@ -1064,7 +1065,7 @@ export const SearchAnimeDocument = gql`
       ...DefaultAnime
     }
     hasMore
-    total
+    nextCursor
   }
 }
     ${DefaultAnimeFragmentDoc}`;
@@ -1105,7 +1106,7 @@ export const SearchMangaDocument = gql`
       ...DefaultManga
     }
     hasMore
-    total
+    nextCursor
   }
 }
     ${DefaultMangaFragmentDoc}`;

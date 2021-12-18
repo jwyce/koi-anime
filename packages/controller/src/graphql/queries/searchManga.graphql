@@ -4,6 +4,6 @@ query SearchManga($limit: Int!, $cursor: Int!, $filter: String) {
 			...DefaultManga
 		}
 		hasMore
-		total
+		nextCursor
 	}
 }

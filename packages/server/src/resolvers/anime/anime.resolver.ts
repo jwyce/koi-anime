@@ -212,8 +212,8 @@ export class AnimeResolver {
 				});
 
 				return {
-					items: animeRes as Anime[],
-					total: response.data.meta.count,
+					items: animeRes,
+					nextCursor: cursor + limit,
 					hasMore: cursor + limit <= response.data.meta.count,
 				};
 			}
@@ -221,6 +221,6 @@ export class AnimeResolver {
 			console.error(error);
 		}
 		// TODO: error handling
-		return { items: [], total: 0, hasMore: false };
+		return { items: [], nextCursor: 0, hasMore: false };
 	}
 }

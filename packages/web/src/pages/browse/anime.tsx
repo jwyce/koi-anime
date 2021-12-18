@@ -1,5 +1,4 @@
-import NextLink from 'next/link';
-// import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 import React, { useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import { Waypoint } from 'react-waypoint';
@@ -8,7 +7,6 @@ import {
 	Box,
 	Grid,
 	Heading,
-	Image,
 	Input,
 	InputGroup,
 	InputLeftElement,
@@ -23,8 +21,8 @@ import { withApollo } from '../../stores/withApollo';
 import { isServer } from '../../utils/isServer';
 
 import type { NextPage } from 'next';
+import { Poster } from '../../components/Media/Poster';
 export const BrowseAnime: NextPage = ({}) => {
-	// const router = useRouter();
 	const [searchStr, setSearchStr] = useState('');
 	const { data, loading, refetch, fetchMore, variables } = useSearchAnimeQuery({
 		variables: {
@@ -44,15 +42,21 @@ export const BrowseAnime: NextPage = ({}) => {
 	);
 
 	if (loading) {
-		<Layout>
-			<Loader size="xl" />
-		</Layout>;
+		return (
+			<Layout>
+				<Loader size="xl" />
+			</Layout>
+		);
 	}
 
 	console.log(data?.kitsuSearchAnime);
 
 	return (
 		<Layout variant="full">
+			<NextSeo
+				title="Browse Anime - Koi Anime"
+				description="A short description goes here."
+			/>
 			<Stack alignItems="center">
 				<Box w={1000}>
 					<Box textAlign="left" w="100%">
@@ -78,68 +82,41 @@ export const BrowseAnime: NextPage = ({}) => {
 					{!data ? (
 						<Loader size="xl" />
 					) : (
-						<Grid templateColumns="repeat(5, 1fr)" gap={3}>
-							{data.kitsuSearchAnime.items.map((x, i) => (
-								<React.Fragment key={x.id}>
-									<NextLink href={`/anime/${x.slug}`}>
-										<a>
-											<Image
-												src={x.posterLinkSmall}
-												alt={x.canonicalTitle}
-												w={200}
-												borderRadius={6}
-												fallback={<Skeleton h={80} w={200} />}
-											/>
-										</a>
-									</NextLink>
-									{i === data.kitsuSearchAnime.items.length - 2 && (
-										<Waypoint
-											onEnter={() => {
-												console.log('fetching more...');
-												if (data.kitsuSearchAnime.hasMore) {
-													console.log({
-														limit: variables?.limit ?? 0,
-														cursor:
-															(variables?.cursor ?? 0) +
-															(variables?.limit ?? 0) +
-															1,
-													});
-													fetchMore({
-														variables: {
-															limit: variables?.limit ?? 0,
-															cursor:
-																(variables?.cursor ?? 0) +
-																(variables?.limit ?? 0) +
-																1,
-														},
-														updateQuery: (
-															previousResult,
-															{ fetchMoreResult }
-														) => {
-															const newEntries =
-																fetchMoreResult?.kitsuSearchAnime.items!;
-															return {
-																kitsuSearchAnime: {
-																	items: [
-																		...previousResult.kitsuSearchAnime.items,
-																		...newEntries,
-																	],
-																	hasMore:
-																		fetchMoreResult?.kitsuSearchAnime.hasMore!,
-																	total:
-																		fetchMoreResult?.kitsuSearchAnime.total!,
-																},
-															};
-														},
-													});
-												}
-											}}
-										/>
-									)}
-								</React.Fragment>
-								// <Box key={idx}>{x.canonicalTitle}</Box>
-							))}
-						</Grid>
+						<Box pb={5}>
+							<Grid templateColumns="repeat(5, 1fr)" gap={3}>
+								{data.kitsuSearchAnime.items.map((x) => (
+									<Poster
+										key={x.id}
+										url={`/anime/${x.slug}?id=${x.apiID}`}
+										title={x.canonicalTitle}
+										status={x.status}
+										posterSrc={x.posterLinkSmall}
+										synopsis={x.synopsis}
+										date={x.startDate.substring(0, x.startDate.indexOf('-'))}
+									/>
+								))}
+							</Grid>
+							{data.kitsuSearchAnime.hasMore && (
+								<>
+									<Grid templateColumns="repeat(5, 1fr)" gap={3} pt={3}>
+										{[...Array(5)].map((_x, i) => (
+											<Skeleton key={i} h="64" w={190} borderRadius={6} />
+										))}
+									</Grid>
+									<Waypoint
+										onEnter={() => {
+											console.log('fetching more...');
+											fetchMore({
+												variables: {
+													limit: variables?.limit ?? 0,
+													cursor: data.kitsuSearchAnime.nextCursor,
+												},
+											});
+										}}
+									/>
+								</>
+							)}
+						</Box>
 					)}
 				</Box>
 			</Stack>

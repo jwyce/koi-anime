@@ -48,11 +48,11 @@ export class Anime extends BaseEntity {
 	@Column()
 	slug: string;
 
-	@Field(() => String)
+	@Field(() => Date)
 	@Column({ nullable: true })
 	startDate?: Date;
 
-	@Field(() => String)
+	@Field(() => Date)
 	@Column({ nullable: true })
 	endDate?: Date;
 
