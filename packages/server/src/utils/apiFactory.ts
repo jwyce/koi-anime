@@ -19,7 +19,8 @@ export const apiAnimeFactory = (apiData: any) => {
 		apiID: a.id as number,
 		subtype: (subtype?.toLowerCase() as AnimeSubtype) ?? AnimeSubtype.TV,
 		synopsis: (a.attributes.synopsis as string) ?? '',
-		englishTitle: (a.attributes.titles.en as string) ?? '',
+		englishTitle:
+			((a.attributes.titles.en as string) || a.attributes.titles.en_us) ?? '',
 		romajiTitle: (a.attributes.titles.en_jp as string) ?? '',
 		japaneseTitle: (a.attributes.titles.ja_jp as string) ?? '',
 		canonicalTitle: (a.attributes.canonicalTitle as string) ?? '',
@@ -127,7 +128,8 @@ export const apiMangaFactory = (apiData: any) => {
 			(a.attributes.subtype?.toLowerCase() as MangaSubtype) ??
 			MangaSubtype.MANGA,
 		synopsis: (a.attributes.synopsis as string) ?? '',
-		englishTitle: (a.attributes.titles.en as string) ?? '',
+		englishTitle:
+			((a.attributes.titles.en as string) || a.attributes.titles.en_us) ?? '',
 		romajiTitle: (a.attributes.titles.en_jp as string) ?? '',
 		japaneseTitle: (a.attributes.titles.ja_jp as string) ?? '',
 		canonicalTitle: (a.attributes.canonicalTitle as string) ?? '',

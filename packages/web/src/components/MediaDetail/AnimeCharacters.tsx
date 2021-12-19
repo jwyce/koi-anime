@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, Stack, Text, Image } from '@chakra-ui/react';
+import { Box, Grid, Heading, Text } from '@chakra-ui/react';
 import { useAnimeCharactersQuery } from '@koi/controller';
 import React from 'react';
 import { isServer } from '../../utils/isServer';
@@ -35,6 +35,11 @@ export const AnimeCharacters: React.FC<AnimeCharactersProps> = ({ id }) => {
 					))}
 				</Grid>
 			)}
+			<>
+				{data?.charactersForAnime.length === 0 && (
+					<Text color="gray.500">Looks like there are no characters :(</Text>
+				)}
+			</>
 		</Box>
 	);
 };

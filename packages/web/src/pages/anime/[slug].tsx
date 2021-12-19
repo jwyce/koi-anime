@@ -15,6 +15,7 @@ import { withApollo } from '../../stores/withApollo';
 import { isServer } from '../../utils/isServer';
 
 import type { NextPage } from 'next';
+import { AnimeSongs } from '../../components/MediaDetail/AnimeSongs';
 export const AnimeDetail: NextPage = ({}) => {
 	const router = useRouter();
 	const { slug, id } = router.query;
@@ -50,6 +51,7 @@ export const AnimeDetail: NextPage = ({}) => {
 					fit="cover"
 					h={350}
 					w="100%"
+					fallbackSrc="https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png"
 				/>
 			</Box>
 			<Box w={1200} display="flex" mx="auto">
@@ -67,8 +69,10 @@ export const AnimeDetail: NextPage = ({}) => {
 					/>
 					<Spacer mt={3} />
 					<AnimeCharacters id={data.anime?.id ?? 0} />
+					<Spacer mt={6} />
+					<AnimeSongs songs={data.anime?.songs!} />
 				</Box>
-				<Box flex={1} h="100%">
+				<Box flex={1} h="100%" pos="sticky" top={16}>
 					<MediaDetails
 						type="anime"
 						enName={data.anime?.englishTitle!}
@@ -81,7 +85,9 @@ export const AnimeDetail: NextPage = ({}) => {
 						rating={data.anime?.ageRating!}
 						ratingGuide={data.anime?.ageRatingGuide!}
 						studios={data.anime?.studios!}
-						songs={data.anime?.songs!}
+						startDate={data.anime?.startDate}
+						endDate={data.anime?.endDate}
+						tba={data.anime?.tba}
 						youtubeVideoId={data.anime?.youtubeVideoId}
 					/>
 				</Box>

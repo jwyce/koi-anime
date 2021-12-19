@@ -10,19 +10,14 @@ import {
 	Text,
 	useDisclosure,
 } from '@chakra-ui/react';
-import {
-	AgeRating,
-	AnimeSubtype,
-	DefaultSongFragment,
-	MangaSubtype,
-	SongType,
-	Status,
-} from '@koi/controller';
+import { AgeRating, AnimeSubtype, MangaSubtype, Status } from '@koi/controller';
 
 import ytLogo from '../../assets/images/youtube-icon.svg';
 import { YoutubePreview } from './YoutubePreview';
 import { MediaSubtypes } from './MediaSubtypes';
 import { PosterStatus } from '../Media/PosterStatus';
+import dayjs from 'dayjs';
+import { seasonFromDate } from '../../utils/seasonFromDate';
 
 interface MediaDetailsProps {
 	type: 'anime' | 'manga' | 'character';
@@ -38,7 +33,6 @@ interface MediaDetailsProps {
 	chapters?: number;
 	volumes?: number;
 	gender?: string;
-	songs?: DefaultSongFragment[];
 	studios?: string[];
 	serialization?: string;
 	rating?: AgeRating;
@@ -61,7 +55,6 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 	chapters,
 	volumes,
 	gender,
-	songs,
 	studios,
 	serialization,
 	rating,
@@ -153,6 +146,44 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 								<Text fontSize="smaller">
 									{rating} – {ratingGuide}
 								</Text>
+								{tba && tba !== '' ? (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Expected
+										</Text>
+										<Text fontSize="smaller">{tba}</Text>
+									</>
+								) : (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Aired
+										</Text>
+										<Text fontSize="smaller">
+											{dayjs(startDate).format('MMM D, YYYY')}
+											{!dayjs(endDate).isSame('1000-01-01') &&
+											!dayjs(endDate).isSame(dayjs(startDate))
+												? ` – ${dayjs(endDate).format('MMM D, YYYY')}`
+												: ''}
+										</Text>
+										<Text fontSize="smaller" fontWeight="bold">
+											Season
+										</Text>
+										<Text fontSize="smaller">
+											{startDate
+												? `${seasonFromDate(startDate)} ${dayjs(
+														startDate
+												  ).year()}`
+												: ''}
+											{endDate &&
+											!dayjs(endDate).isSame('1000-01-01') &&
+											!dayjs(endDate).isSame(dayjs(startDate))
+												? ` – ${seasonFromDate(endDate)} ${dayjs(
+														endDate
+												  ).year()}`
+												: ''}
+										</Text>
+									</>
+								)}
 							</>
 						)}
 						{type === 'anime' && (
@@ -163,10 +194,14 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 								<Text fontSize="smaller">
 									<MediaSubtypes type="anime" subtype={subtype} />
 								</Text>
-								<Text fontSize="smaller" fontWeight="bold">
-									Episodes
-								</Text>
-								<Text fontSize="smaller">{episodes}</Text>
+								{episodes !== undefined && episodes > 0 && (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Episodes
+										</Text>
+										<Text fontSize="smaller">{episodes}</Text>
+									</>
+								)}
 								{studios && studios.length > 0 && (
 									<>
 										<Text fontSize="smaller" fontWeight="bold">
@@ -175,36 +210,6 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 										<Text fontSize="smaller">{studios?.join(', ')}</Text>
 									</>
 								)}
-								{songs &&
-									songs.filter((x) => x.songType === SongType.Op).length >
-										0 && (
-										<>
-											<Text fontSize="smaller" fontWeight="bold">
-												Opening Themes
-											</Text>
-											<Text fontSize="smaller">
-												{songs
-													?.filter((x) => x.songType === SongType.Op)
-													.map((x) => `${x.name} by ${x.artist}`)
-													.join(', ')}
-											</Text>
-										</>
-									)}
-								{songs &&
-									songs.filter((x) => x.songType === SongType.Ed).length >
-										0 && (
-										<>
-											<Text fontSize="smaller" fontWeight="bold">
-												Ending Themes
-											</Text>
-											<Text fontSize="smaller">
-												{songs
-													?.filter((x) => x.songType === SongType.Ed)
-													.map((x) => `${x.name} by ${x.artist}`)
-													.join(', ')}
-											</Text>
-										</>
-									)}
 							</>
 						)}
 					</SimpleGrid>

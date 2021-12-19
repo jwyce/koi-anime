@@ -24,6 +24,7 @@ import {
 	apiSongFactory,
 } from '../../utils/apiFactory';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
+const malScraper = require('mal-scraper');
 
 const PaginatedAnimeResponse = PaginatedResponse(Anime);
 type PaginatedAnimeResponse = InstanceType<typeof PaginatedAnimeResponse>;
@@ -60,26 +61,18 @@ export class AnimeResolver {
 			if (response.status === 200) {
 				const animeData = response.data.data;
 				newAnime = apiAnimeFactory(animeData);
-				const type = animeData.attributes.subtype.toString().toUpperCase();
 				axiosRetry(axios, {
 					retries: 3,
 					retryDelay: axiosRetry.exponentialDelay,
 				});
 
-				const jikanResponse = await axios.get(
-					'https://api.jikan.moe/v3/search/anime/',
-					{
-						params: {
-							page: 1,
-							type,
-							q: animeData.attributes.titles.en,
-						},
-					}
-				);
-				if (jikanResponse.status === 200) {
-					const malId = jikanResponse.data.results[0].mal_id;
+				const searchName =
+					animeData.attributes.titles.en || animeData.attributes.titles.en_us;
+				const malData = await malScraper.getInfoFromName(searchName);
+
+				if (malData) {
 					const jikanAnimeRes = await axios.get(
-						`https://api.jikan.moe/v3/anime/${malId}`
+						`https://api.jikan.moe/v3/anime/${malData.id}`
 					);
 					if (jikanAnimeRes.status === 200) {
 						newAnime.studios = jikanAnimeRes.data.studios.map(
