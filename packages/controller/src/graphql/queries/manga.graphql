@@ -1,0 +1,11 @@
+query Manga($slug: String!, $apiID: Int) {
+	manga(slug: $slug, apiID: $apiID) {
+		...DefaultManga
+		ageRatingGuide
+		posterLinkOriginal
+		coverLinkOriginal
+		serialization
+		volumeCount
+		chapterCount
+	}
+}

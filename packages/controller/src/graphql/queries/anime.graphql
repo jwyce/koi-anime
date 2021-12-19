@@ -1,4 +1,4 @@
-query Anime($slug: String!, $apiID: Int!) {
+query Anime($slug: String!, $apiID: Int) {
 	anime(slug: $slug, apiID: $apiID) {
 		...DefaultAnime
 		ageRatingGuide
@@ -7,5 +7,8 @@ query Anime($slug: String!, $apiID: Int!) {
 		studios
 		episodeCount
 		youtubeVideoId
+		songs {
+			...DefaultSong
+		}
 	}
 }

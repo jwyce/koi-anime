@@ -8,4 +8,9 @@ export class CharacterResolver {
 	charactersForAnime(@Arg('id', () => Int) id: number) {
 		return Character.find({ where: { animeID: id } });
 	}
+
+	@Query(() => [Character])
+	character(@Arg('slug') slug: string) {
+		return Character.find({ slug });
+	}
 }

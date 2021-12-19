@@ -1,0 +1,12 @@
+query Character($slug: String!) {
+	character(slug: $slug) {
+		id
+		slug
+		englishName
+		japaneseName
+		canonicalName
+		gender
+		description
+		imageOriginal
+	}
+}

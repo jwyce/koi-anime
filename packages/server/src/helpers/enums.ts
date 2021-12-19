@@ -134,7 +134,7 @@ export const registerTypeGraphQLEnums = () => {
 	});
 
 	registerEnumType(SongType, {
-		name: 'Status',
+		name: 'SongType',
 		valuesConfig: {
 			OP: { description: 'Anime Opening' },
 			ED: { description: 'Anime Ending' },

@@ -1,10 +1,10 @@
 query AnimeCharacters($id: Int!) {
 	charactersForAnime(id: $id) {
+		id
+		slug
 		englishName
 		japaneseName
 		canonicalName
-		gender
-		description
 		imageOriginal
 	}
 }

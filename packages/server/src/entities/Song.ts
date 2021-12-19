@@ -40,7 +40,7 @@ export class Song extends BaseEntity {
 	@Column()
 	slug: string;
 
-	@Field()
+	@Field(() => SongType)
 	@Column({ type: 'enum', enum: SongType, default: SongType.OP })
 	songType: SongType;
 

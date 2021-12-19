@@ -21,7 +21,7 @@ export class Character extends BaseEntity {
 	malID!: number;
 
 	@Field(() => Int)
-	@Column({ type: 'int', unique: true })
+	@Column({ type: 'int' })
 	apiID!: number;
 
 	@Field(() => Int)

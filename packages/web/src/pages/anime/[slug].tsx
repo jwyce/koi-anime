@@ -53,7 +53,7 @@ export const AnimeDetail: NextPage = ({}) => {
 				/>
 			</Box>
 			<Box w={1200} display="flex" mx="auto">
-				<Box flex={0.6} h="100%" pos="relative">
+				<Box flex={0.6} h="100%" pos="sticky" mt="-24" top="24">
 					<PosterListControl
 						posterSrc={data.anime?.posterLinkOriginal}
 						rank={5}
@@ -81,6 +81,7 @@ export const AnimeDetail: NextPage = ({}) => {
 						rating={data.anime?.ageRating!}
 						ratingGuide={data.anime?.ageRatingGuide!}
 						studios={data.anime?.studios!}
+						songs={data.anime?.songs!}
 						youtubeVideoId={data.anime?.youtubeVideoId}
 					/>
 				</Box>

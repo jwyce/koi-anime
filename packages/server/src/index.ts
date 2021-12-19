@@ -19,6 +19,7 @@ import {
 	getComplexity,
 	simpleEstimator,
 } from 'graphql-query-complexity';
+import { createSongsLoader } from './loaders/createAnimeSongLoader';
 
 const main = async () => {
 	const conn = await createConnection({
@@ -68,13 +69,14 @@ const main = async () => {
 		resolvers: [__dirname + '/**/*.resolver.{ts,js}'],
 	});
 
-	// TODO: write data loaders for rank and songs
+	// TODO: write data loader(s) for rank
 	const apolloServer = new ApolloServer({
 		schema,
 		context: ({ req, res }): MyContext => ({
 			req,
 			res,
 			redis,
+			songsLoader: createSongsLoader(),
 		}),
 		plugins: [
 			{

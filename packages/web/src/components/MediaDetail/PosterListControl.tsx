@@ -12,7 +12,7 @@ export const PosterListControl: React.FC<PosterListControlProps> = ({
 	posterSrc,
 }) => {
 	return (
-		<Stack pos="absolute" top={-100}>
+		<Stack>
 			<Image src={posterSrc} alt="poster" borderRadius={6} />
 			{rank < 1000 && (
 				<Box pos="absolute" top={-1} right={1}>

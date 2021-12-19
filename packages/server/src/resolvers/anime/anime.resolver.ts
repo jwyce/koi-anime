@@ -1,7 +1,17 @@
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import dayjs from 'dayjs';
 import _ from 'lodash';
-import { Arg, Int, Query, Resolver } from 'type-graphql';
+import { MyContext } from 'src/typings/MyContext';
+import {
+	Arg,
+	Ctx,
+	FieldResolver,
+	Int,
+	Query,
+	Resolver,
+	Root,
+} from 'type-graphql';
 import { getConnection } from 'typeorm';
 
 import { Anime } from '../../entities/Anime';
@@ -20,10 +30,16 @@ type PaginatedAnimeResponse = InstanceType<typeof PaginatedAnimeResponse>;
 
 @Resolver(Anime)
 export class AnimeResolver {
+	@FieldResolver(() => [Song])
+	async songs(@Root() anime: Anime, @Ctx() { songsLoader }: MyContext) {
+		const songs = await songsLoader.load(anime.id);
+		return songs ?? [];
+	}
+
 	@Query(() => Anime, { nullable: true })
 	async anime(
 		@Arg('slug') slug: string,
-		@Arg('apiID', () => Int) apiID: number
+		@Arg('apiID', () => Int, { nullable: true }) apiID?: number
 	): Promise<Anime | null> {
 		const existingAnime = await Anime.findOne({ where: { slug } });
 		if (
@@ -44,14 +60,19 @@ export class AnimeResolver {
 			if (response.status === 200) {
 				const animeData = response.data.data;
 				newAnime = apiAnimeFactory(animeData);
+				const type = animeData.attributes.subtype.toString().toUpperCase();
+				axiosRetry(axios, {
+					retries: 3,
+					retryDelay: axiosRetry.exponentialDelay,
+				});
 
 				const jikanResponse = await axios.get(
 					'https://api.jikan.moe/v3/search/anime/',
 					{
 						params: {
-							q: animeData.attributes.titles.en,
 							page: 1,
-							type: animeData.attributes.subtype,
+							type,
+							q: animeData.attributes.titles.en,
 						},
 					}
 				);
@@ -131,7 +152,11 @@ export class AnimeResolver {
 			existingAnime.status !== Status.FINISHED
 		) {
 			// update anime fields
-			return newAnime as Anime;
+			const animeResult = await Anime.update(existingAnime.id, {
+				...newAnime,
+				id: existingAnime.id,
+			});
+			return animeResult.raw[0] as Anime;
 		} else if (!existingAnime && newAnime) {
 			const connection = getConnection();
 			const queryRunner = connection.createQueryRunner();

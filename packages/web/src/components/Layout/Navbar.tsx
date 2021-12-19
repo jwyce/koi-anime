@@ -58,11 +58,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 						Browse
 					</MenuButton>
 					<MenuList>
-						<MenuItem onClick={() => router.push('/browse/anime')}>
-							Anime
+						<MenuItem>
+							<NextLink href="/browse/anime">
+								<a style={{ width: '100%' }}>Anime</a>
+							</NextLink>
 						</MenuItem>
-						<MenuItem onClick={() => router.push('/browse/manga')}>
-							Manga
+						<MenuItem>
+							<NextLink href="/browse/manga">
+								<a style={{ width: '100%' }}>Manga</a>
+							</NextLink>
 						</MenuItem>
 					</MenuList>
 				</Menu>
@@ -107,14 +111,16 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 		<Flex position="sticky" top={0} zIndex={9999} bg="primary.light" p={1}>
 			<Flex flex={1} m="auto" align="center" pl={5} pr={5}>
 				<NextLink href="/">
-					<Link style={{ textDecoration: 'none' }}>
-						<Flex flex={1} alignItems="center" justifyContent="flex-start">
-							<Image src={logo} alt="logo" height="40px" width="40px" />
-							<Heading as="h2" size="md" ml={2} color="white">
-								Koi Anime
-							</Heading>
-						</Flex>
-					</Link>
+					<a>
+						<Link style={{ textDecoration: 'none' }}>
+							<Flex flex={1} alignItems="center" justifyContent="flex-start">
+								<Image src={logo} alt="logo" height="40px" width="40px" />
+								<Heading as="h2" size="md" ml={2} color="white">
+									Koi Anime
+								</Heading>
+							</Flex>
+						</Link>
+					</a>
 				</NextLink>
 				<Box ml={'auto'}>{body}</Box>
 			</Flex>

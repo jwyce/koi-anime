@@ -37,6 +37,7 @@
 		"argon2": "^0.27.1",
 		"aws-sdk": "^2.1028.0",
 		"axios": "^0.24.0",
+		"axios-retry": "^3.2.4",
 		"class-validator": "^0.13.1",
 		"connect-redis": "^5.0.0",
 		"cors": "^2.8.5",

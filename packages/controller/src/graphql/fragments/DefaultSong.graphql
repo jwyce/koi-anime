@@ -1,0 +1,5 @@
+fragment DefaultSong on Song {
+	name
+	artist
+	songType
+}

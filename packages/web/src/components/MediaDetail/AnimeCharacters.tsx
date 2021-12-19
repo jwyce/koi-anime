@@ -3,6 +3,7 @@ import { useAnimeCharactersQuery } from '@koi/controller';
 import React from 'react';
 import { isServer } from '../../utils/isServer';
 import { Layout } from '../Layout/Layout';
+import { CharacterMug } from '../Media/CharacterMug';
 import { Loader } from '../UI/Loader';
 
 interface AnimeCharactersProps {
@@ -25,17 +26,12 @@ export const AnimeCharacters: React.FC<AnimeCharactersProps> = ({ id }) => {
 			) : (
 				<Grid templateColumns="repeat(5, 1fr)" gap={3}>
 					{data.charactersForAnime.map((x, i) => (
-						<Stack
+						<CharacterMug
 							key={i}
-							bg="gray.700"
-							borderRadius={6}
-							alignItems="center"
-							pb={1}
-						>
-							<Image src={x.imageOriginal} alt="char" />
-
-							<Text fontSize="xx-small">{x.canonicalName}</Text>
-						</Stack>
+							url={`/anime/character/${x.slug}?id=${x.id}`}
+							name={x.canonicalName}
+							imageSrc={x.imageOriginal}
+						/>
 					))}
 				</Grid>
 			)}

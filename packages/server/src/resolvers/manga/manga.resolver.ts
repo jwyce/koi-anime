@@ -1,17 +1,75 @@
 import axios from 'axios';
+import dayjs from 'dayjs';
+import { Status } from '../../helpers/enums';
 import { Arg, Int, Query, Resolver } from 'type-graphql';
 
 import { Manga } from '../../entities/Manga';
 import { apiMangaFactory } from '../../utils/apiFactory';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
+import { getConnection } from 'typeorm';
 
 const PaginatedMangaResponse = PaginatedResponse(Manga);
 type PaginatedMangaResponse = InstanceType<typeof PaginatedMangaResponse>;
 
-//TODO: add resolver to get manga detail
-
 @Resolver()
 export class MangaResolver {
+	@Query(() => Manga, { nullable: true })
+	async manga(
+		@Arg('slug') slug: string,
+		@Arg('apiID', () => Int, { nullable: true }) apiID?: number
+	): Promise<Manga | null> {
+		const existingManga = await Manga.findOne({ where: { slug } });
+		if (
+			existingManga &&
+			existingManga.updatedAt > dayjs().subtract(7, 'day').toDate()
+		) {
+			return existingManga;
+		}
+
+		let newManga;
+		try {
+			const response = await axios.get(
+				`https://kitsu.io/api/edge/manga/${apiID}`
+			);
+
+			if (response.status === 200) {
+				const mangaData = response.data.data;
+				newManga = apiMangaFactory(mangaData);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+
+		if (
+			existingManga &&
+			existingManga.updatedAt < dayjs().subtract(7, 'day').toDate() &&
+			existingManga.status !== Status.FINISHED
+		) {
+			const mangaResult = await Manga.update(existingManga.id, {
+				...newManga,
+				id: existingManga.id,
+			});
+			return mangaResult.raw[0] as Manga;
+		} else if (!existingManga && newManga) {
+			try {
+				const mangaResult = await getConnection()
+					.createQueryBuilder()
+					.insert()
+					.into(Manga)
+					.values(newManga)
+					.returning('*')
+					.execute();
+
+				return mangaResult.raw[0] as Manga;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		//TODO: add error handling
+		return null;
+	}
+
 	@Query(() => PaginatedMangaResponse)
 	async kitsuSearchManga(
 		@Arg('limit', () => Int) limit: number,

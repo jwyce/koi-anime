@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import NextLink from 'next/link';
-// import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import { Box, Image, Skeleton } from '@chakra-ui/react';
@@ -27,7 +26,6 @@ export const Poster: React.FC<PosterProps> = ({
 	status,
 	url,
 }) => {
-	// const router = useRouter();
 	const [hovering, setHovering] = useState(false);
 
 	return (

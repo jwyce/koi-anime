@@ -10,7 +10,14 @@ import {
 	Text,
 	useDisclosure,
 } from '@chakra-ui/react';
-import { AgeRating, AnimeSubtype, MangaSubtype, Status } from '@koi/controller';
+import {
+	AgeRating,
+	AnimeSubtype,
+	DefaultSongFragment,
+	MangaSubtype,
+	SongType,
+	Status,
+} from '@koi/controller';
 
 import ytLogo from '../../assets/images/youtube-icon.svg';
 import { YoutubePreview } from './YoutubePreview';
@@ -31,6 +38,7 @@ interface MediaDetailsProps {
 	chapters?: number;
 	volumes?: number;
 	gender?: string;
+	songs?: DefaultSongFragment[];
 	studios?: string[];
 	serialization?: string;
 	rating?: AgeRating;
@@ -53,6 +61,7 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 	chapters,
 	volumes,
 	gender,
+	songs,
 	studios,
 	serialization,
 	rating,
@@ -158,10 +167,44 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 									Episodes
 								</Text>
 								<Text fontSize="smaller">{episodes}</Text>
-								<Text fontSize="smaller" fontWeight="bold">
-									Studios
-								</Text>
-								<Text fontSize="smaller">{studios?.join(',')}</Text>
+								{studios && studios.length > 0 && (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Studios
+										</Text>
+										<Text fontSize="smaller">{studios?.join(', ')}</Text>
+									</>
+								)}
+								{songs &&
+									songs.filter((x) => x.songType === SongType.Op).length >
+										0 && (
+										<>
+											<Text fontSize="smaller" fontWeight="bold">
+												Opening Themes
+											</Text>
+											<Text fontSize="smaller">
+												{songs
+													?.filter((x) => x.songType === SongType.Op)
+													.map((x) => `${x.name} by ${x.artist}`)
+													.join(', ')}
+											</Text>
+										</>
+									)}
+								{songs &&
+									songs.filter((x) => x.songType === SongType.Ed).length >
+										0 && (
+										<>
+											<Text fontSize="smaller" fontWeight="bold">
+												Ending Themes
+											</Text>
+											<Text fontSize="smaller">
+												{songs
+													?.filter((x) => x.songType === SongType.Ed)
+													.map((x) => `${x.name} by ${x.artist}`)
+													.join(', ')}
+											</Text>
+										</>
+									)}
 							</>
 						)}
 					</SimpleGrid>
