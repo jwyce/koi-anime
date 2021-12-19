@@ -7,15 +7,17 @@ interface HeartIconProps {
 
 const GetSVGBackground = (rank: number) => {
 	if (rank > 100) {
-		return '#616161';
-	} else if (rank <= 10) {
+		return '#7c7c7c';
+	} else if (rank <= 5) {
 		return 'url(#rainbow)';
+	} else if (rank <= 10) {
+		return 'url(#shiny)';
 	} else if (rank <= 25) {
 		return '#ff8450';
 	} else if (rank <= 50) {
 		return '#e6657e';
 	} else if (rank <= 100) {
-		return '#4c5881';
+		return '#8c5e96';
 	}
 
 	return '#000';
@@ -31,6 +33,16 @@ export const HeartIcon: React.FC<HeartIconProps> = ({ rank, size = 48 }) => {
 		>
 			<defs>
 				<linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="10%" stopColor="#ff0000" stopOpacity={1} />
+					<stop offset="25%" stopColor="#ff9a00" stopOpacity={1} />
+					<stop offset="35%" stopColor="#dedb21" stopOpacity={1} />
+					<stop offset="45%" stopColor="#4adc62" stopOpacity={1} />
+					<stop offset="55%" stopColor="#3f63da" stopOpacity={1} />
+					<stop offset="65%" stopColor="#c10cf8" stopOpacity={1} />
+					<stop offset="75%" stopColor="#fb0781" stopOpacity={1} />
+					<stop offset="90%" stopColor="#ff0000" stopOpacity={1} />
+				</linearGradient>
+				<linearGradient id="shiny" x1="0%" y1="0%" x2="100%" y2="100%">
 					<stop offset="15%" stopColor="#ff8450" stopOpacity={1} />
 					<stop offset="23%" stopColor="#fb7761" stopOpacity={1} />
 					<stop offset="32%" stopColor="#f36c70" stopOpacity={1} />

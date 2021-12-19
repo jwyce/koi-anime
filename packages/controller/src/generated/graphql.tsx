@@ -474,7 +474,7 @@ export type AnimeQueryVariables = Exact<{
 }>;
 
 
-export type AnimeQuery = { __typename?: 'Query', anime?: { __typename?: 'Anime', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, studios: Array<string>, youtubeVideoId: string, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined };
+export type AnimeQuery = { __typename?: 'Query', anime?: { __typename?: 'Anime', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, studios: Array<string>, episodeCount: number, youtubeVideoId: string, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined };
 
 export type AnimeCharactersQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -914,6 +914,7 @@ export const AnimeDocument = gql`
     posterLinkOriginal
     coverLinkOriginal
     studios
+    episodeCount
     youtubeVideoId
   }
 }

@@ -21,7 +21,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
 				variant === 'regular' ? '800px' : variant === 'full' ? 'none' : '400px'
 			}
 			w="100%"
-			h="calc(100vh - 88px)"
+			minH="calc(100vh - 88px)"
 		>
 			{children}
 		</Box>

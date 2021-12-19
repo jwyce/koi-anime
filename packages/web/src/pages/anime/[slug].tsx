@@ -1,26 +1,20 @@
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import {
-	Box,
-	Heading,
-	Image,
-	Stack,
-	Text,
-	Wrap,
-	WrapItem,
-} from '@chakra-ui/react';
+import { Box, Image, Spacer } from '@chakra-ui/react';
 import { useAnimeQuery } from '@koi/controller';
 
 import { Layout } from '../../components/Layout/Layout';
+import { AnimeCharacters } from '../../components/MediaDetail/AnimeCharacters';
+import { MediaDescription } from '../../components/MediaDetail/MediaDescription';
+import { MediaDetails } from '../../components/MediaDetail/MediaDetails';
+import { PosterListControl } from '../../components/MediaDetail/PosterListControl';
 import { Loader } from '../../components/UI/Loader';
 import { withApollo } from '../../stores/withApollo';
 import { isServer } from '../../utils/isServer';
 
 import type { NextPage } from 'next';
-import dayjs from 'dayjs';
-import { HeartIcon } from '../../components/UI/HeartIcon';
-import { NextSeo } from 'next-seo';
 export const AnimeDetail: NextPage = ({}) => {
 	const router = useRouter();
 	const { slug, id } = router.query;
@@ -60,34 +54,35 @@ export const AnimeDetail: NextPage = ({}) => {
 			</Box>
 			<Box w={1200} display="flex" mx="auto">
 				<Box flex={0.6} h="100%" pos="relative">
-					<Stack pos="absolute" top={-100}>
-						<Image
-							src={data?.anime?.posterLinkOriginal}
-							alt="poster"
-							borderRadius={6}
-						/>
-						<Box pos="absolute" top={-1} right={1}>
-							<HeartIcon rank={8} size={36} />
-						</Box>
-					</Stack>
+					<PosterListControl
+						posterSrc={data.anime?.posterLinkOriginal}
+						rank={5}
+					/>
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>
-					<Wrap align="flex-end">
-						<WrapItem>
-							<Heading fontSize="3xl">{data.anime?.englishTitle}</Heading>
-						</WrapItem>
-						<WrapItem>
-							<Text fontSize="lg" color="gray.500" fontWeight="bold">
-								{dayjs(data.anime?.startDate).format('YYYY')}
-							</Text>
-						</WrapItem>
-					</Wrap>
-					{data.anime?.synopsis.split('\n').map((x, i) => (
-						<>{x === '' ? <br /> : <Text key={i}>{x}</Text>}</>
-					))}
+					<MediaDescription
+						title={data.anime?.englishTitle!}
+						date={data.anime?.startDate!}
+						description={data.anime?.synopsis!}
+					/>
+					<Spacer mt={3} />
+					<AnimeCharacters id={data.anime?.id ?? 0} />
 				</Box>
-				<Box flex={1} bg="blueviolet" h="100%">
-					3
+				<Box flex={1} h="100%">
+					<MediaDetails
+						type="anime"
+						enName={data.anime?.englishTitle!}
+						jpName={data.anime?.japaneseTitle!}
+						enjpName={data.anime?.romajiTitle!}
+						canonName={data.anime?.canonicalTitle!}
+						status={data.anime?.status!}
+						subtype={data.anime?.subtype!}
+						episodes={data.anime?.episodeCount!}
+						rating={data.anime?.ageRating!}
+						ratingGuide={data.anime?.ageRatingGuide!}
+						studios={data.anime?.studios!}
+						youtubeVideoId={data.anime?.youtubeVideoId}
+					/>
 				</Box>
 			</Box>
 		</Layout>

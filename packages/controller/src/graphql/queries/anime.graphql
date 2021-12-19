@@ -5,6 +5,7 @@ query Anime($slug: String!, $apiID: Int!) {
 		posterLinkOriginal
 		coverLinkOriginal
 		studios
+		episodeCount
 		youtubeVideoId
 	}
 }
