@@ -2,9 +2,6 @@ import dayjs from 'dayjs';
 
 export const seasonFromDate = (date: Date) => {
 	const d = dayjs(date).hour(5);
-	console.log(d);
-	console.log(d.isAfter(dayjs(new Date(d.year() - 1, 11, 1))));
-	console.log(d.isBefore(dayjs(new Date(d.year(), 2, 1))));
 
 	if (
 		d.isAfter(dayjs(new Date(d.year() - 1, 11, 1))) &&

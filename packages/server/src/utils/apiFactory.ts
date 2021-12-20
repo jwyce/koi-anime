@@ -71,8 +71,26 @@ export const apiSongFactory = (song: string, songType: SongType) => {
 export const apiCharacterFactory = (apiData: any, mediaID: number) => {
 	const c = apiData;
 
-	const femaleIndicators = ['she', 'her', 'hers', 'herself'];
-	const maleIndicators = ['he', 'him', 'his', 'himself'];
+	const femaleIndicators = [
+		'she',
+		'her',
+		'hers',
+		'herself',
+		'woman',
+		'girl',
+		'female',
+		'lady',
+	];
+	const maleIndicators = [
+		'he',
+		'him',
+		'his',
+		'himself',
+		'man',
+		'boy',
+		'male',
+		'guy',
+	];
 	const otherIndicators = [
 		'they',
 		'their',
@@ -90,18 +108,24 @@ export const apiCharacterFactory = (apiData: any, mediaID: number) => {
 		?.toLowerCase()
 		.split(' ')
 		.forEach((word: any) => {
-			femaleCount += femaleIndicators.includes(word) ? 1 : 0;
-			maleCount += maleIndicators.includes(word) ? 1 : 0;
-			otherCount += otherIndicators.includes(word) ? 1 : 0;
+			const wordNoSpecialChars = word.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+			femaleCount += femaleIndicators.includes(wordNoSpecialChars) ? 1 : 0;
+			maleCount += maleIndicators.includes(wordNoSpecialChars) ? 1 : 0;
+			otherCount += otherIndicators.includes(wordNoSpecialChars) ? 1 : 0;
 		});
 
 	let countMap = [
+		{ gender: 'other', count: otherCount },
 		{ gender: 'female', count: femaleCount },
 		{ gender: 'male', count: maleCount },
-		{ gender: 'other', count: otherCount },
 	];
 
 	countMap = _.orderBy(countMap, ['count'], ['desc']);
+	let genderShouldBeOther = countMap.every((x) => x.count === 0);
+
+	if (c.slug === 'zepile') {
+		console.log('hi');
+	}
 
 	return {
 		id: 0,
@@ -113,7 +137,7 @@ export const apiCharacterFactory = (apiData: any, mediaID: number) => {
 		japaneseName: c.names.localized.ja_jp ?? '',
 		canonicalName: c.names.canonical ?? '',
 		slug: c.slug ?? '',
-		gender: countMap[0].gender,
+		gender: genderShouldBeOther ? 'other' : countMap[0].gender,
 		description: c.description?.en ?? '',
 		imageOriginal: c.image?.original?.url ?? '',
 	};

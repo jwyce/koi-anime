@@ -97,7 +97,7 @@ export class AnimeResolver {
               searchAnimeByTitle(first: 2, title: $slug) {
                 nodes {
                   slug
-                  characters (first:100) {
+                  characters (first:200) {
                     nodes{
                       id
                       role
@@ -174,7 +174,7 @@ export class AnimeResolver {
 					x.animeAPIID = anime.apiID;
 				});
 				characters = _.uniqBy(characters, 'apiID').filter(
-					(x) => x.description !== '' && x.imageOriginal !== ''
+					(x) => x.imageOriginal !== ''
 				);
 
 				await connection

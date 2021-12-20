@@ -25,8 +25,8 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ songs }) => {
 			<SimpleGrid columns={2} spacing={2} mt={3}>
 				{songs
 					.filter((x) => x.songType === SongType.Op)
-					.map((x) => (
-						<Box borderRadius={3} bg="gray.700" p={2}>
+					.map((x, i) => (
+						<Box borderRadius={3} bg="gray.900" p={2} key={`${x.name}-${i}`}>
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
 									<Text fontWeight="bold">{x.name}</Text>
@@ -48,8 +48,8 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ songs }) => {
 			<SimpleGrid columns={2} spacing={2} mt={3}>
 				{songs
 					.filter((x) => x.songType === SongType.Ed)
-					.map((x) => (
-						<Box borderRadius={3} bg="gray.700" p={2}>
+					.map((x, i) => (
+						<Box borderRadius={3} bg="gray.900" p={2} key={`${x.name}-${i}`}>
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
 									<Text fontWeight="bold">{x.name}</Text>

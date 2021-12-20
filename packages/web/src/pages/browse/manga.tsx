@@ -49,8 +49,6 @@ export const BrowseAnime: NextPage = ({}) => {
 		);
 	}
 
-	console.log(data?.kitsuSearchManga);
-
 	return (
 		<Layout variant="full">
 			<NextSeo
@@ -87,7 +85,7 @@ export const BrowseAnime: NextPage = ({}) => {
 								{data.kitsuSearchManga.items.map((x) => (
 									<Poster
 										key={x.id}
-										url={`/manga/${x.slug}`}
+										url={`/manga/${x.slug}?id=${x.apiID}`}
 										title={x.canonicalTitle}
 										status={x.status}
 										posterSrc={x.posterLinkSmall}

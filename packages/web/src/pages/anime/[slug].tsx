@@ -20,7 +20,6 @@ export const AnimeDetail: NextPage = ({}) => {
 	const router = useRouter();
 	const { slug, id } = router.query;
 	const apiID = typeof id === 'string' ? parseInt(id) : -1;
-	console.log(slug, id);
 
 	const { data, loading } = useAnimeQuery({
 		variables: { slug: slug as string, apiID },
@@ -34,9 +33,6 @@ export const AnimeDetail: NextPage = ({}) => {
 			</Layout>
 		);
 	}
-
-	console.log(data?.anime);
-	console.log('synopsis', data?.anime?.synopsis.split('\n'));
 
 	return (
 		<Layout variant="full">

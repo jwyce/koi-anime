@@ -6,7 +6,7 @@ import { Button, Heading, Text, Wrap, WrapItem } from '@chakra-ui/react';
 
 interface MediaDescriptionProps {
 	title: string;
-	date: Date | string;
+	date?: Date | string;
 	description: string;
 }
 
@@ -46,23 +46,29 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 				<WrapItem>
 					<Heading fontSize="3xl">{title}</Heading>
 				</WrapItem>
-				<WrapItem>
-					<Text fontSize="lg" color="gray.500" fontWeight="bold">
-						{dayjs(date).format('YYYY')}
-					</Text>
-				</WrapItem>
+				{date && (
+					<WrapItem>
+						<Text fontSize="lg" color="gray.500" fontWeight="bold">
+							{dayjs(date).format('YYYY')}
+						</Text>
+					</WrapItem>
+				)}
 			</Wrap>
 			{state === 'hidden' && (
 				<>
 					{description.split('\n').map((x, i) => (
-						<>{x === '' ? <br /> : <Text key={i}>{x}</Text>}</>
+						<React.Fragment key={i}>
+							{x === '' ? <br /> : <Text>{x}</Text>}
+						</React.Fragment>
 					))}
 				</>
 			)}
 			{state === 'read-less' && (
 				<>
 					{description.split('\n').map((x, i) => (
-						<>{x === '' ? <br /> : <Text key={i}>{x}</Text>}</>
+						<React.Fragment key={i}>
+							{x === '' ? <br /> : <Text>{x}</Text>}
+						</React.Fragment>
 					))}
 					<Button
 						colorScheme="teal"
@@ -78,7 +84,9 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 			{state === 'read-more' && (
 				<>
 					{clippedDesc.map((x, i) => (
-						<>{x === '' ? <br /> : <Text key={i}>{x}</Text>}</>
+						<React.Fragment key={i}>
+							{x === '' ? <br /> : <Text>{x}</Text>}
+						</React.Fragment>
 					))}
 					<Button
 						colorScheme="teal"

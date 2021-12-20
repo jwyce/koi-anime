@@ -56,7 +56,6 @@ export const ResetPassword: NextPage = ({}) => {
 			},
 		});
 
-		console.log('response', response);
 		if (response.data?.resetPassword.errors) {
 			toast({
 				title: response.data?.resetPassword.errors[0].field,

@@ -49,8 +49,6 @@ export const BrowseAnime: NextPage = ({}) => {
 		);
 	}
 
-	console.log(data?.kitsuSearchAnime);
-
 	return (
 		<Layout variant="full">
 			<NextSeo

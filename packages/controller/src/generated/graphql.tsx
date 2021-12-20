@@ -269,7 +269,7 @@ export enum ProfileIcon {
 export type Query = {
   __typename?: 'Query';
   anime?: Maybe<Anime>;
-  character: Array<Character>;
+  character: Character;
   charactersForAnime: Array<Character>;
   kitsuSearchAnime: PaginatedAnimeResponse;
   kitsuSearchManga: PaginatedMangaResponse;
@@ -518,7 +518,7 @@ export type CharacterQueryVariables = Exact<{
 }>;
 
 
-export type CharacterQuery = { __typename?: 'Query', character: Array<{ __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string }> };
+export type CharacterQuery = { __typename?: 'Query', character: { __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string } };
 
 export type MangaQueryVariables = Exact<{
   slug: Scalars['String'];

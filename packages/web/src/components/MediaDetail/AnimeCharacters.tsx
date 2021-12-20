@@ -25,10 +25,10 @@ export const AnimeCharacters: React.FC<AnimeCharactersProps> = ({ id }) => {
 				</Layout>
 			) : (
 				<Grid templateColumns="repeat(5, 1fr)" gap={3}>
-					{data.charactersForAnime.map((x, i) => (
+					{data.charactersForAnime.map((x) => (
 						<CharacterMug
-							key={i}
-							url={`/anime/character/${x.slug}?id=${x.id}`}
+							key={x.slug}
+							url={`/anime/character/${x.slug}`}
 							name={x.canonicalName}
 							imageSrc={x.imageOriginal}
 						/>

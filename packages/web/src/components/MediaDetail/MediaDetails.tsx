@@ -144,7 +144,7 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 									Rating
 								</Text>
 								<Text fontSize="smaller">
-									{rating} – {ratingGuide}
+									{rating} {ratingGuide === '' ? '' : ` – ${ratingGuide}`}
 								</Text>
 								{tba && tba !== '' ? (
 									<>
@@ -210,6 +210,50 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 										<Text fontSize="smaller">{studios?.join(', ')}</Text>
 									</>
 								)}
+							</>
+						)}
+						{type === 'manga' && (
+							<>
+								<Text fontSize="smaller" fontWeight="bold">
+									Type
+								</Text>
+								<Text fontSize="smaller">
+									<MediaSubtypes type="manga" subtype={subtype} />
+								</Text>
+								{volumes !== undefined && volumes > 0 && (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Volumes
+										</Text>
+										<Text fontSize="smaller">{volumes}</Text>
+									</>
+								)}
+								{chapters !== undefined && chapters > 0 && (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Chapters
+										</Text>
+										<Text fontSize="smaller">{chapters}</Text>
+									</>
+								)}
+								{serialization && serialization !== '' && (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Serialization
+										</Text>
+										<Text fontSize="smaller">{serialization}</Text>
+									</>
+								)}
+							</>
+						)}
+						{type === 'character' && (
+							<>
+								<Text fontSize="smaller" fontWeight="bold">
+									Gender
+								</Text>
+								<Text fontSize="smaller">
+									<MediaSubtypes type="character" subtype={gender} />
+								</Text>
 							</>
 						)}
 					</SimpleGrid>

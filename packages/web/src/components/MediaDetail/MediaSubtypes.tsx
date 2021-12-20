@@ -4,7 +4,7 @@ import React from 'react';
 
 interface MediaSubtypesProps {
 	type: 'anime' | 'manga' | 'character';
-	subtype: AnimeSubtype | MangaSubtype | 'male' | 'female' | undefined;
+	subtype: AnimeSubtype | MangaSubtype | string | undefined;
 }
 
 export const MediaSubtypes: React.FC<MediaSubtypesProps> = ({
