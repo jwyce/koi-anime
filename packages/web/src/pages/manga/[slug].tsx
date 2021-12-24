@@ -16,11 +16,10 @@ import { isServer } from '../../utils/isServer';
 import type { NextPage } from 'next';
 export const MangaDetail: NextPage = ({}) => {
 	const router = useRouter();
-	const { slug, id } = router.query;
-	const apiID = typeof id === 'string' ? parseInt(id) : -1;
+	const { slug } = router.query;
 
 	const { data, loading } = useMangaQuery({
-		variables: { slug: slug as string, apiID },
+		variables: { slug: slug as string },
 		skip: isServer(),
 	});
 

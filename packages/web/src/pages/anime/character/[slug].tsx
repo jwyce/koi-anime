@@ -2,18 +2,19 @@ import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Box, Image } from '@chakra-ui/react';
+import { Box, Image, Spacer } from '@chakra-ui/react';
 import { useCharacterQuery } from '@koi/controller';
 
-import { Layout } from '../../../components/Layout/Layout';
-import { MediaDescription } from '../../../components/MediaDetail/MediaDescription';
-import { MediaDetails } from '../../../components/MediaDetail/MediaDetails';
-import { PosterListControl } from '../../../components/MediaDetail/PosterListControl';
-import { Loader } from '../../../components/UI/Loader';
-import { withApollo } from '../../../stores/withApollo';
-import { isServer } from '../../../utils/isServer';
+import { Layout } from '@/components/Layout/Layout';
+import { MediaDescription } from '@/components/MediaDetail/MediaDescription';
+import { MediaDetails } from '@/components/MediaDetail/MediaDetails';
+import { PosterListControl } from '@/components/MediaDetail/PosterListControl';
+import { Loader } from '@/components/UI/Loader';
+import { withApollo } from '@/stores/withApollo';
+import { isServer } from '@/utils/isServer';
 
 import type { NextPage } from 'next';
+import { Animeography } from '@/components/MediaDetail/Animeography';
 export const CharacterDetail: NextPage = ({}) => {
 	const router = useRouter();
 	const { slug } = router.query;
@@ -58,6 +59,8 @@ export const CharacterDetail: NextPage = ({}) => {
 						title={data.character.englishName}
 						description={data.character.description}
 					/>
+					<Spacer mt={3} />
+					<Animeography characterSlug={data.character.slug} />
 				</Box>
 				<Box flex={1} h="100%" pos="sticky" top={16}>
 					<MediaDetails

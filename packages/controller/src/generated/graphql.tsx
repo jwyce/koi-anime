@@ -34,13 +34,13 @@ export type Anime = {
   apiID: Scalars['Int'];
   canonicalTitle: Scalars['String'];
   coverLinkOriginal: Scalars['String'];
-  coverLinkSmall: Scalars['String'];
   createdAt: Scalars['String'];
   endDate: Scalars['DateTime'];
   englishTitle: Scalars['String'];
   episodeCount: Scalars['Int'];
   id: Scalars['Int'];
   japaneseTitle: Scalars['String'];
+  nextRelease: Scalars['DateTime'];
   nsfw: Scalars['Boolean'];
   posterLinkOriginal: Scalars['String'];
   posterLinkSmall: Scalars['String'];
@@ -120,12 +120,12 @@ export type Manga = {
   canonicalTitle: Scalars['String'];
   chapterCount: Scalars['Int'];
   coverLinkOriginal: Scalars['String'];
-  coverLinkSmall: Scalars['String'];
   createdAt: Scalars['String'];
   endDate: Scalars['DateTime'];
   englishTitle: Scalars['String'];
   id: Scalars['Int'];
   japaneseTitle: Scalars['String'];
+  nextRelease: Scalars['DateTime'];
   posterLinkOriginal: Scalars['String'];
   posterLinkSmall: Scalars['String'];
   romajiTitle: Scalars['String'];
@@ -269,6 +269,7 @@ export enum ProfileIcon {
 export type Query = {
   __typename?: 'Query';
   anime?: Maybe<Anime>;
+  animeography: Array<Anime>;
   character: Character;
   charactersForAnime: Array<Character>;
   kitsuSearchAnime: PaginatedAnimeResponse;
@@ -282,8 +283,12 @@ export type Query = {
 
 
 export type QueryAnimeArgs = {
-  apiID?: Maybe<Scalars['Int']>;
   slug: Scalars['String'];
+};
+
+
+export type QueryAnimeographyArgs = {
+  characterSlug: Scalars['String'];
 };
 
 
@@ -312,7 +317,6 @@ export type QueryKitsuSearchMangaArgs = {
 
 
 export type QueryMangaArgs = {
-  apiID?: Maybe<Scalars['Int']>;
   slug: Scalars['String'];
 };
 
@@ -493,7 +497,6 @@ export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { 
 
 export type AnimeQueryVariables = Exact<{
   slug: Scalars['String'];
-  apiID?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -513,6 +516,13 @@ export type SongsForAnimeQueryVariables = Exact<{
 
 export type SongsForAnimeQuery = { __typename?: 'Query', songsForAnime: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType }> };
 
+export type AnimeographyQueryVariables = Exact<{
+  characterSlug: Scalars['String'];
+}>;
+
+
+export type AnimeographyQuery = { __typename?: 'Query', animeography: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> };
+
 export type CharacterQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
@@ -522,7 +532,6 @@ export type CharacterQuery = { __typename?: 'Query', character: { __typename?: '
 
 export type MangaQueryVariables = Exact<{
   slug: Scalars['String'];
-  apiID?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -952,8 +961,8 @@ export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPassword
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const AnimeDocument = gql`
-    query Anime($slug: String!, $apiID: Int) {
-  anime(slug: $slug, apiID: $apiID) {
+    query Anime($slug: String!) {
+  anime(slug: $slug) {
     ...DefaultAnime
     ageRatingGuide
     posterLinkOriginal
@@ -982,7 +991,6 @@ ${DefaultSongFragmentDoc}`;
  * const { data, loading, error } = useAnimeQuery({
  *   variables: {
  *      slug: // value for 'slug'
- *      apiID: // value for 'apiID'
  *   },
  * });
  */
@@ -1072,6 +1080,41 @@ export function useSongsForAnimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type SongsForAnimeQueryHookResult = ReturnType<typeof useSongsForAnimeQuery>;
 export type SongsForAnimeLazyQueryHookResult = ReturnType<typeof useSongsForAnimeLazyQuery>;
 export type SongsForAnimeQueryResult = Apollo.QueryResult<SongsForAnimeQuery, SongsForAnimeQueryVariables>;
+export const AnimeographyDocument = gql`
+    query Animeography($characterSlug: String!) {
+  animeography(characterSlug: $characterSlug) {
+    ...DefaultAnime
+  }
+}
+    ${DefaultAnimeFragmentDoc}`;
+
+/**
+ * __useAnimeographyQuery__
+ *
+ * To run a query within a React component, call `useAnimeographyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAnimeographyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAnimeographyQuery({
+ *   variables: {
+ *      characterSlug: // value for 'characterSlug'
+ *   },
+ * });
+ */
+export function useAnimeographyQuery(baseOptions: Apollo.QueryHookOptions<AnimeographyQuery, AnimeographyQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AnimeographyQuery, AnimeographyQueryVariables>(AnimeographyDocument, options);
+      }
+export function useAnimeographyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AnimeographyQuery, AnimeographyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AnimeographyQuery, AnimeographyQueryVariables>(AnimeographyDocument, options);
+        }
+export type AnimeographyQueryHookResult = ReturnType<typeof useAnimeographyQuery>;
+export type AnimeographyLazyQueryHookResult = ReturnType<typeof useAnimeographyLazyQuery>;
+export type AnimeographyQueryResult = Apollo.QueryResult<AnimeographyQuery, AnimeographyQueryVariables>;
 export const CharacterDocument = gql`
     query Character($slug: String!) {
   character(slug: $slug) {
@@ -1115,8 +1158,8 @@ export type CharacterQueryHookResult = ReturnType<typeof useCharacterQuery>;
 export type CharacterLazyQueryHookResult = ReturnType<typeof useCharacterLazyQuery>;
 export type CharacterQueryResult = Apollo.QueryResult<CharacterQuery, CharacterQueryVariables>;
 export const MangaDocument = gql`
-    query Manga($slug: String!, $apiID: Int) {
-  manga(slug: $slug, apiID: $apiID) {
+    query Manga($slug: String!) {
+  manga(slug: $slug) {
     ...DefaultManga
     ageRatingGuide
     posterLinkOriginal
@@ -1141,7 +1184,6 @@ export const MangaDocument = gql`
  * const { data, loading, error } = useMangaQuery({
  *   variables: {
  *      slug: // value for 'slug'
- *      apiID: // value for 'apiID'
  *   },
  * });
  */

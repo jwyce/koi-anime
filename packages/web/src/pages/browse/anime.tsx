@@ -85,7 +85,7 @@ export const BrowseAnime: NextPage = ({}) => {
 								{data.kitsuSearchAnime.items.map((x) => (
 									<Poster
 										key={x.id}
-										url={`/anime/${x.slug}?id=${x.apiID}`}
+										url={`/anime/${x.slug}`}
 										title={x.canonicalTitle}
 										status={x.status}
 										posterSrc={x.posterLinkSmall}

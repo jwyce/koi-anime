@@ -16,6 +16,9 @@
 		"noUnusedLocals": true,
 		"skipLibCheck": true,
 		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
 		"allowSyntheticDefaultImports": true,
 		"removeComments": true
 	},

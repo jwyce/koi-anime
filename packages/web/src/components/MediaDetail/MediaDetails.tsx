@@ -116,24 +116,36 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 						{type} Details
 					</Text>
 					<SimpleGrid columns={2} spacingY={2}>
-						<Text fontSize="smaller" fontWeight="bold">
-							English
-						</Text>
-						<Text fontSize="smaller">{enName}</Text>
-						<Text fontSize="smaller" fontWeight="bold">
-							Japanese
-						</Text>
-						<Text fontSize="smaller">{jpName}</Text>
+						{enName !== canonName && (
+							<>
+								<Text fontSize="smaller" fontWeight="bold">
+									English
+								</Text>
+								<Text fontSize="smaller">{enName}</Text>
+							</>
+						)}
+						{jpName !== '' && (
+							<>
+								<Text fontSize="smaller" fontWeight="bold">
+									Japanese
+								</Text>
+								<Text fontSize="smaller">{jpName}</Text>
+							</>
+						)}
 						<Text fontSize="smaller" fontWeight="bold">
 							Canonical
 						</Text>
 						<Text fontSize="smaller">{canonName}</Text>
 						{type !== 'character' && (
 							<>
-								<Text fontSize="smaller" fontWeight="bold">
-									Japanese (Romaji)
-								</Text>
-								<Text fontSize="smaller">{enjpName}</Text>
+								{enjpName !== '' && (
+									<>
+										<Text fontSize="smaller" fontWeight="bold">
+											Japanese (Romaji)
+										</Text>
+										<Text fontSize="smaller">{enjpName}</Text>
+									</>
+								)}
 								<Text fontSize="smaller" fontWeight="bold">
 									Status
 								</Text>

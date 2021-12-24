@@ -12,7 +12,7 @@ import {
 	Resolver,
 	Root,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
+import { getConnection, In } from 'typeorm';
 
 import { Anime } from '../../entities/Anime';
 import { Character } from '../../entities/Character';
@@ -21,6 +21,7 @@ import { SongType, Status } from '../../helpers/enums';
 import {
 	apiAnimeFactory,
 	apiCharacterFactory,
+	apiSearchAnimeFactory,
 	apiSongFactory,
 } from '../../utils/apiFactory';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
@@ -37,15 +38,26 @@ export class AnimeResolver {
 		return songs ?? [];
 	}
 
+	@Query(() => [Anime])
+	async animeography(
+		@Arg('characterSlug') characterSlug: string
+	): Promise<Anime[] | null> {
+		const animeIds = (
+			await Character.find({ where: { slug: characterSlug } })
+		).map((x) => x.animeID);
+		const animeography = await Anime.find({
+			where: { id: In(animeIds) },
+		});
+		return animeography;
+	}
+
 	@Query(() => Anime, { nullable: true })
-	async anime(
-		@Arg('slug') slug: string,
-		@Arg('apiID', () => Int, { nullable: true }) apiID?: number
-	): Promise<Anime | null> {
+	async anime(@Arg('slug') slug: string): Promise<Anime | null> {
 		const existingAnime = await Anime.findOne({ where: { slug } });
 		if (
 			existingAnime &&
-			existingAnime.updatedAt > dayjs().subtract(7, 'day').toDate()
+			(existingAnime.updatedAt > dayjs().subtract(7, 'day').toDate() ||
+				existingAnime.status === Status.FINISHED)
 		) {
 			return existingAnime;
 		}
@@ -54,12 +66,49 @@ export class AnimeResolver {
 		let songs = [];
 		let characters: any[] = [];
 		try {
-			const response = await axios.get(
-				`https://kitsu.io/api/edge/anime/${apiID}`
-			);
+			const response = await axios.post('https://kitsu.io/api/graphql', {
+				query: `query FindAnime($slug: String!) {
+              findAnimeBySlug(slug: $slug) {
+                id
+                subtype
+                description
+                titles {
+                  canonical
+                  localized 
+                }
+                slug
+                startDate
+                endDate
+                nextRelease
+                tba
+                ageRating
+                ageRatingGuide
+                status
+                posterImage {
+                  original {
+                    url
+                  }
+                  views {
+                    url
+                  }
+                }
+                bannerImage {
+                  original {
+                    url
+                  }
+                }
+                episodeCount
+                youtubeTrailerVideoId
+                sfw
+              }
+            }`,
+				variables: {
+					slug,
+				},
+			});
 
 			if (response.status === 200) {
-				const animeData = response.data.data;
+				const animeData = response.data.data.findAnimeBySlug;
 				newAnime = apiAnimeFactory(animeData);
 				axiosRetry(axios, {
 					retries: 3,
@@ -67,7 +116,7 @@ export class AnimeResolver {
 				});
 
 				const searchName =
-					animeData.attributes.titles.en || animeData.attributes.titles.en_us;
+					animeData.titles.localized.en || animeData.titles.localized.en_us;
 				const malData = await malScraper.getInfoFromName(searchName);
 
 				if (malData) {
@@ -173,7 +222,7 @@ export class AnimeResolver {
 					x.animeID = anime.id;
 					x.animeAPIID = anime.apiID;
 				});
-				characters = _.uniqBy(characters, 'apiID').filter(
+				characters = _.uniqBy(characters, 'slug').filter(
 					(x) => x.imageOriginal !== ''
 				);
 
@@ -223,12 +272,11 @@ export class AnimeResolver {
 
 			if (response.data) {
 				const animeRes = (response.data.data as any[]).map((x) =>
-					apiAnimeFactory(x)
+					apiSearchAnimeFactory(x)
 				) as Anime[];
 				animeRes.forEach((x) => {
 					x.id = x.apiID;
 				});
-
 				return {
 					items: animeRes,
 					nextCursor: cursor + limit,

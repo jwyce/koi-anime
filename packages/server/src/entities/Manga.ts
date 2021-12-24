@@ -52,6 +52,10 @@ export class Manga extends BaseEntity {
 	@Column({ nullable: true })
 	endDate?: Date;
 
+	@Field(() => Date)
+	@Column({ nullable: true })
+	nextRelease?: Date;
+
 	@Field()
 	@Column()
 	tba: string;
@@ -83,10 +87,6 @@ export class Manga extends BaseEntity {
 	@Field()
 	@Column()
 	coverLinkOriginal: string;
-
-	@Field()
-	@Column()
-	coverLinkSmall: string;
 
 	@Field(() => Int)
 	@Column({ default: 0 })

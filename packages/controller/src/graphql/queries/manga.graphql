@@ -1,5 +1,5 @@
-query Manga($slug: String!, $apiID: Int) {
-	manga(slug: $slug, apiID: $apiID) {
+query Manga($slug: String!) {
+	manga(slug: $slug) {
 		...DefaultManga
 		ageRatingGuide
 		posterLinkOriginal

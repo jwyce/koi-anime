@@ -7,6 +7,7 @@ import { SiBuymeacoffee } from 'react-icons/si';
 
 import {
 	Avatar,
+	Box,
 	Button,
 	Divider,
 	Heading,
@@ -23,7 +24,7 @@ import { useMeQuery } from '@koi/controller';
 import appStore from '../assets/images/app-store-badge.svg';
 import googlePlay from '../assets/images/google-play-badge.svg';
 import logo from '../assets/images/koi-icon.svg';
-import remram from '../assets/images/remram.png';
+import mascot from '../assets/images/yui-rin.png';
 import hero from '../assets/images/stacked-steps-haikei.svg';
 import { Layout } from '../components/Layout/Layout';
 import { FeedbackIcon } from '../components/UI/CustomIcons';
@@ -129,9 +130,11 @@ const Home: NextPage = () => {
 							</WrapItem>
 						</Wrap>
 						{data?.me ? (
-							<Button size="lg" leftIcon={<IoSearch size={24} />}>
-								Browse anime
-							</Button>
+							<NextLink href="/browse/anime">
+								<Button size="lg" leftIcon={<IoSearch size={24} />}>
+									Browse anime
+								</Button>
+							</NextLink>
 						) : (
 							<NextLink href="/register">
 								<Button size="lg" leftIcon={<IoLogIn size={24} />}>
@@ -140,7 +143,9 @@ const Home: NextPage = () => {
 							</NextLink>
 						)}
 					</Stack>
-					<Image src={remram} alt="remram" height="700em" width="700em" />
+					<Box clipPath="ellipse(600px 540px at top)">
+						<Image src={mascot} alt="yui-rin" width="900em" height="538em" />
+					</Box>
 				</HStack>
 
 				<Stack align="center">

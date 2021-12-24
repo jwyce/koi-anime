@@ -3,7 +3,7 @@ import { useAnimeCharactersQuery } from '@koi/controller';
 import React from 'react';
 import { isServer } from '../../utils/isServer';
 import { Layout } from '../Layout/Layout';
-import { CharacterMug } from '../Media/CharacterMug';
+import { MediaLink } from '../Media/MediaLink';
 import { Loader } from '../UI/Loader';
 
 interface AnimeCharactersProps {
@@ -24,9 +24,9 @@ export const AnimeCharacters: React.FC<AnimeCharactersProps> = ({ id }) => {
 					<Loader size="xl" />
 				</Layout>
 			) : (
-				<Grid templateColumns="repeat(5, 1fr)" gap={3}>
+				<Grid templateColumns="repeat(5, 1fr)" gap={3} mt={1}>
 					{data.charactersForAnime.map((x) => (
-						<CharacterMug
+						<MediaLink
 							key={x.slug}
 							url={`/anime/character/${x.slug}`}
 							name={x.canonicalName}
@@ -37,7 +37,9 @@ export const AnimeCharacters: React.FC<AnimeCharactersProps> = ({ id }) => {
 			)}
 			<>
 				{data?.charactersForAnime.length === 0 && (
-					<Text color="gray.500">Looks like there are no characters :(</Text>
+					<Text color="gray.500">
+						Looks like we don't have any characters :(
+					</Text>
 				)}
 			</>
 		</Box>

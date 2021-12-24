@@ -1,5 +1,5 @@
-query Anime($slug: String!, $apiID: Int) {
-	anime(slug: $slug, apiID: $apiID) {
+query Anime($slug: String!) {
+	anime(slug: $slug) {
 		...DefaultAnime
 		ageRatingGuide
 		posterLinkOriginal

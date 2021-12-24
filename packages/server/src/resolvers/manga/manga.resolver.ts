@@ -4,7 +4,7 @@ import { Status } from '../../helpers/enums';
 import { Arg, Int, Query, Resolver } from 'type-graphql';
 
 import { Manga } from '../../entities/Manga';
-import { apiMangaFactory } from '../../utils/apiFactory';
+import { apiMangaFactory, apiSearchMangaFactory } from '../../utils/apiFactory';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
 import { getConnection } from 'typeorm';
 
@@ -14,27 +14,68 @@ type PaginatedMangaResponse = InstanceType<typeof PaginatedMangaResponse>;
 @Resolver()
 export class MangaResolver {
 	@Query(() => Manga, { nullable: true })
-	async manga(
-		@Arg('slug') slug: string,
-		@Arg('apiID', () => Int, { nullable: true }) apiID?: number
-	): Promise<Manga | null> {
+	async manga(@Arg('slug') slug: string): Promise<Manga | null> {
 		const existingManga = await Manga.findOne({ where: { slug } });
 		if (
 			existingManga &&
-			existingManga.updatedAt > dayjs().subtract(7, 'day').toDate()
+			(existingManga.updatedAt > dayjs().subtract(7, 'day').toDate() ||
+				existingManga.status === Status.FINISHED)
 		) {
 			return existingManga;
 		}
 
 		let newManga;
 		try {
-			const response = await axios.get(
-				`https://kitsu.io/api/edge/manga/${apiID}`
-			);
+			const response = await axios.post('https://kitsu.io/api/graphql', {
+				query: `query FindMange($slug: String!) {
+              findMangaBySlug(slug: $slug) {
+                id
+                subtype
+                description
+                titles {
+                  canonical
+                  localized 
+                }
+                slug
+                startDate
+                endDate
+                tba
+                ageRating
+                ageRatingGuide
+                status
+                posterImage {
+                  original {
+                    url
+                  }
+                  views {
+                    url
+                  }
+                }
+                bannerImage {
+                  original {
+                    url
+                  }
+                }
+                volumeCount
+                chapterCount
+              }
+            }`,
+				variables: {
+					slug,
+				},
+			});
 
 			if (response.status === 200) {
-				const mangaData = response.data.data;
+				const mangaData = response.data.data.findMangaBySlug;
 				newManga = apiMangaFactory(mangaData);
+			}
+
+			const r = await axios.get(
+				`https://kitsu.io/api/edge/manga/${newManga?.apiID}`
+			);
+
+			if (newManga && r.status === 200) {
+				newManga.serialization = r.data.data.attributes.serialization ?? '';
 			}
 		} catch (error) {
 			console.error(error);
@@ -88,7 +129,7 @@ export class MangaResolver {
 
 			if (response.data) {
 				const mangaRes = (response.data.data as any[]).map((x) =>
-					apiMangaFactory(x)
+					apiSearchMangaFactory(x)
 				) as Manga[];
 				mangaRes.forEach((x) => {
 					x.id = x.apiID;

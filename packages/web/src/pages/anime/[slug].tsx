@@ -18,11 +18,10 @@ import type { NextPage } from 'next';
 import { AnimeSongs } from '../../components/MediaDetail/AnimeSongs';
 export const AnimeDetail: NextPage = ({}) => {
 	const router = useRouter();
-	const { slug, id } = router.query;
-	const apiID = typeof id === 'string' ? parseInt(id) : -1;
+	const { slug } = router.query;
 
 	const { data, loading } = useAnimeQuery({
-		variables: { slug: slug as string, apiID },
+		variables: { slug: slug as string },
 		skip: isServer(),
 	});
 

@@ -11,42 +11,41 @@ import {
 export const apiAnimeFactory = (apiData: any) => {
 	const a = apiData;
 
-	const subtype =
-		a.attributes.subtype === 'music' ? 'tv' : a.attributes.subtype;
+	const subtype = a.subtype === 'music' ? 'tv' : a.subtype;
+	const smallPoster = a.posterImage.views.find((x: any) =>
+		x.url.includes('small')
+	)?.url;
 
 	return {
 		id: 0,
 		apiID: a.id as number,
 		subtype: (subtype?.toLowerCase() as AnimeSubtype) ?? AnimeSubtype.TV,
-		synopsis: (a.attributes.synopsis as string) ?? '',
+		synopsis: (a.description?.en as string) ?? '',
 		englishTitle:
-			((a.attributes.titles.en as string) || a.attributes.titles.en_us) ?? '',
-		romajiTitle: (a.attributes.titles.en_jp as string) ?? '',
-		japaneseTitle: (a.attributes.titles.ja_jp as string) ?? '',
-		canonicalTitle: (a.attributes.canonicalTitle as string) ?? '',
-		slug: a.attributes.slug as string,
-		startDate: a.attributes.startDate
-			? dayjs(a.attributes.startDate).toDate()
+			((a.titles.localized.en as string) || a.titles.localized.en_us) ?? '',
+		romajiTitle: (a.titles.localized.en_jp as string) ?? '',
+		japaneseTitle: (a.titles.localized.ja_jp as string) ?? '',
+		canonicalTitle: (a.titles.canonical as string) ?? '',
+		slug: a.slug as string,
+		startDate: a.startDate
+			? dayjs(a.startDate).toDate()
 			: dayjs('1000-1-1').toDate(),
-		endDate: a.attributes.endDate
-			? dayjs(a.attributes.endDate).toDate()
+		endDate: a.endDate ? dayjs(a.endDate).toDate() : dayjs('1000-1-1').toDate(),
+		nextRelease: a.nextRelease
+			? dayjs(a.nextRelease).toDate()
 			: dayjs('1000-1-1').toDate(),
-		tba: a.attributes.tba ?? '',
-		ageRating:
-			(a.attributes.ageRating?.toLowerCase() as AgeRating) ?? AgeRating.G,
-		ageRatingGuide: a.attributes.ageRatingGuide ?? '',
-		status: (a.attributes.status?.toLowerCase() as Status) ?? Status.TBA,
-		posterLinkOriginal: a.attributes.posterImage.original ?? '',
-		posterLinkSmall: a.attributes.posterImage.small ?? '',
+		tba: a.tba ?? '',
+		ageRating: (a.ageRating?.toLowerCase() as AgeRating) ?? AgeRating.G,
+		ageRatingGuide: a.ageRatingGuide ?? '',
+		status: (a.status?.toLowerCase() as Status) ?? Status.TBA,
+		posterLinkOriginal: a.posterImage.original.url ?? '',
+		posterLinkSmall: smallPoster ?? '',
 		coverLinkOriginal:
-			a.attributes.coverImage?.original ??
+			a.bannerImage?.original?.url ??
 			'https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png',
-		coverLinkSmall:
-			a.attributes.coverImage?.small ??
-			'https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png',
-		episodeCount: a.attributes.episodeCount ?? 0,
-		youtubeVideoId: a.attributes.youtubeVideoId ?? '',
-		nsfw: a.attributes.nsfw ?? false,
+		episodeCount: a.episodeCount ?? 0,
+		youtubeVideoId: a.youtubeTrailerVideoId ?? '',
+		nsfw: !a.sfw ?? false,
 		studios: [] as string[],
 	};
 };
@@ -145,6 +144,84 @@ export const apiCharacterFactory = (apiData: any, mediaID: number) => {
 
 export const apiMangaFactory = (apiData: any) => {
 	const a = apiData;
+	const smallPoster = a.posterImage.views.find((x: any) =>
+		x.url.includes('small')
+	)?.url;
+
+	return {
+		id: 0,
+		apiID: a.id as number,
+		subtype: (a.subtype?.toLowerCase() as MangaSubtype) ?? MangaSubtype.MANGA,
+		synopsis: (a.description?.en as string) ?? '',
+		englishTitle:
+			((a.titles.localized.en as string) || a.titles.localized.en_us) ?? '',
+		romajiTitle: (a.titles.localized.en_jp as string) ?? '',
+		japaneseTitle: (a.titles.localized.ja_jp as string) ?? '',
+		canonicalTitle: (a.titles.canonical as string) ?? '',
+		slug: a.slug as string,
+		startDate: a.startDate
+			? dayjs(a.startDate).toDate()
+			: dayjs('1000-1-1').toDate(),
+		endDate: a.endDate ? dayjs(a.endDate).toDate() : dayjs('1000-1-1').toDate(),
+		nextRelease: a.nextRelease
+			? dayjs(a.nextRelease).toDate()
+			: dayjs('1000-1-1').toDate(),
+		tba: a.tba ?? '',
+		ageRating: (a.ageRating?.toLowerCase() as AgeRating) ?? AgeRating.G,
+		ageRatingGuide: a.ageRatingGuide ?? '',
+		status: (a.status?.toLowerCase() as Status) ?? Status.TBA,
+		posterLinkOriginal: a.posterImage?.original?.url ?? '',
+		posterLinkSmall: smallPoster ?? '',
+		coverLinkOriginal:
+			a.bannerImage?.original?.url ??
+			'https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png',
+		chapterCount: a.chapterCount ?? 0,
+		volumeCount: a.volumeCount ?? 0,
+		serialization: '',
+	};
+};
+
+export const apiSearchAnimeFactory = (apiData: any) => {
+	const a = apiData;
+
+	const subtype =
+		a.attributes.subtype === 'music' ? 'tv' : a.attributes.subtype;
+
+	return {
+		id: 0,
+		apiID: a.id as number,
+		subtype: (subtype?.toLowerCase() as AnimeSubtype) ?? AnimeSubtype.TV,
+		synopsis: (a.attributes.synopsis as string) ?? '',
+		englishTitle:
+			((a.attributes.titles.en as string) || a.attributes.titles.en_us) ?? '',
+		romajiTitle: (a.attributes.titles.en_jp as string) ?? '',
+		japaneseTitle: (a.attributes.titles.ja_jp as string) ?? '',
+		canonicalTitle: (a.attributes.canonicalTitle as string) ?? '',
+		slug: a.attributes.slug as string,
+		startDate: a.attributes.startDate
+			? dayjs(a.attributes.startDate).toDate()
+			: dayjs('1000-1-1').toDate(),
+		endDate: a.attributes.endDate
+			? dayjs(a.attributes.endDate).toDate()
+			: dayjs('1000-1-1').toDate(),
+		tba: a.attributes.tba ?? '',
+		ageRating:
+			(a.attributes.ageRating?.toLowerCase() as AgeRating) ?? AgeRating.G,
+		ageRatingGuide: a.attributes.ageRatingGuide ?? '',
+		status: (a.attributes.status?.toLowerCase() as Status) ?? Status.TBA,
+		posterLinkOriginal: a.attributes.posterImage.original ?? '',
+		posterLinkSmall: a.attributes.posterImage.small ?? '',
+		coverLinkOriginal:
+			a.attributes.coverImage?.original ??
+			'https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png',
+		episodeCount: a.attributes.episodeCount ?? 0,
+		youtubeVideoId: a.attributes.youtubeVideoId ?? '',
+		nsfw: a.attributes.nsfw ?? false,
+		studios: [] as string[],
+	};
+};
+export const apiSearchMangaFactory = (apiData: any) => {
+	const a = apiData;
 	return {
 		id: 0,
 		apiID: a.id as number,
@@ -173,9 +250,6 @@ export const apiMangaFactory = (apiData: any) => {
 		posterLinkSmall: a.attributes.posterImage.small ?? '',
 		coverLinkOriginal:
 			a.attributes.coverImage?.original ??
-			'https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png',
-		coverLinkSmall:
-			a.attributes.coverImage?.small ??
 			'https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png',
 		chapterCount: a.attributes.chapterCount ?? 0,
 		volumeCount: a.attributes.volumeCount ?? 0,
