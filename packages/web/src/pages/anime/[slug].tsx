@@ -54,6 +54,7 @@ export const AnimeDetail: NextPage = ({}) => {
 					<PosterListControl
 						posterSrc={data.anime?.posterLinkOriginal}
 						rank={5}
+						type="anime"
 					/>
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>

@@ -6,20 +6,24 @@ import connectRedis from 'connect-redis';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
-import path from 'path';
-import { buildSchema } from 'type-graphql';
-import { createConnection } from 'typeorm';
-
-import { __prod__, COOKIE_NAME, ONE_YEAR } from './helpers/constants';
-import { MyContext } from './typings/MyContext';
-import { registerTypeGraphQLEnums } from './helpers/enums';
-import { redis } from './redis/redis';
 import {
 	fieldExtensionsEstimator,
 	getComplexity,
 	simpleEstimator,
 } from 'graphql-query-complexity';
+import path from 'path';
+import { buildSchema } from 'type-graphql';
+import { createConnection } from 'typeorm';
+
+import { __prod__, COOKIE_NAME, ONE_YEAR } from './helpers/constants';
+import { registerTypeGraphQLEnums } from './helpers/enums';
 import { createSongsLoader } from './loaders/createAnimeSongLoader';
+import {
+	createAnimeLoader,
+	createMangaLoader,
+} from './loaders/createMediaLoader';
+import { redis } from './redis/redis';
+import { MyContext } from './typings/MyContext';
 
 const main = async () => {
 	const conn = await createConnection({
@@ -77,6 +81,8 @@ const main = async () => {
 			res,
 			redis,
 			songsLoader: createSongsLoader(),
+			animeLoader: createAnimeLoader(),
+			mangaLoader: createMangaLoader(),
 		}),
 		plugins: [
 			{

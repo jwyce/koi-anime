@@ -26,7 +26,7 @@ const slides = [
 		title: 'Welcome',
 		description:
 			'The name koi(こい) can be written as both 鯉 meaning carp and 恋 meaning love',
-		image: require('../../../assets/images/onboarding1.png'),
+		image: require('../../../assets/images/rin-yui.png'),
 	},
 	{
 		title: 'Browse Content',

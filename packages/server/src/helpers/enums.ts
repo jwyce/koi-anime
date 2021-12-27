@@ -90,7 +90,26 @@ export enum ListStatus {
 	DROPPED = 'dropped',
 }
 
+export enum Media {
+	ANIME = 'anime',
+	MANGA = 'manga',
+}
+
+export enum SortBy {
+	TITLE = 'title',
+	UPDATED = 'updated',
+	ADDED = 'added',
+	PROGRESS = 'progress',
+	LENGTH = 'length',
+}
+
 export const registerTypeGraphQLEnums = () => {
+	registerEnumType(Media, {
+		name: 'Media',
+	});
+	registerEnumType(SortBy, {
+		name: 'SortBy',
+	});
 	registerEnumType(ProfileIcon, {
 		name: 'ProfileIcon',
 	});

@@ -1,4 +1,4 @@
-import { ListStatus, ResourceType } from '../helpers/enums';
+import { ListStatus, Media } from '../helpers/enums';
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
 	BaseEntity,
@@ -6,6 +6,7 @@ import {
 	CreateDateColumn,
 	Entity,
 	PrimaryColumn,
+	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
 
@@ -13,16 +14,20 @@ import {
 @Entity()
 export class List extends BaseEntity {
 	@Field(() => Int)
-	@PrimaryColumn()
-	userID: number;
+	@PrimaryGeneratedColumn()
+	id!: number;
 
 	@Field(() => Int)
 	@PrimaryColumn()
-	resourceID: number;
+	userID: number;
 
-	@Field(() => ResourceType)
-	@PrimaryColumn({ type: 'enum', enum: ResourceType })
-	resourceType: ResourceType;
+	@Field(() => String)
+	@PrimaryColumn()
+	resourceSlug: string;
+
+	@Field(() => Media)
+	@PrimaryColumn({ type: 'enum', enum: Media })
+	mediaType: Media;
 
 	@Field(() => Int)
 	@Column({ type: 'int', default: 0 })

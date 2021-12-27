@@ -52,6 +52,7 @@ export const CharacterDetail: NextPage = ({}) => {
 					<PosterListControl
 						posterSrc={data.character.imageOriginal}
 						rank={12}
+						type="character"
 					/>
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>
