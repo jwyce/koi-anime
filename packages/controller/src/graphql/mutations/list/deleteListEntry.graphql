@@ -1,0 +1,3 @@
+mutation DeleteListEntry($type: Media!, $slug: String!) {
+	deleteListEntry(type: $type, slug: $slug)
+}

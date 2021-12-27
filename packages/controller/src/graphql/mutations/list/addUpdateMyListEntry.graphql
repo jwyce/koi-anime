@@ -1,0 +1,6 @@
+mutation AddUpdateMyListEntry(options: UpdateListInput!) {
+  addUpdateMyList(options: $options)
+  {
+    ...DefaultList
+  }
+}

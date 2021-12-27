@@ -3,7 +3,6 @@ import {
 	Arg,
 	Ctx,
 	FieldResolver,
-	Int,
 	Mutation,
 	Query,
 	Resolver,
@@ -52,8 +51,8 @@ export class UserResolver {
 	}
 
 	@Query(() => User)
-	user(@Arg('id', () => Int) id: number) {
-		return User.findOne(id);
+	user(@Arg('username') username: string) {
+		return User.findOne({ where: { username } });
 	}
 
 	@Mutation(() => Boolean)

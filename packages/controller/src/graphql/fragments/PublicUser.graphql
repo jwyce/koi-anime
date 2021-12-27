@@ -1,0 +1,7 @@
+fragment PublicUser on User {
+	id
+	username
+	profileIcon
+	profileColor
+	titlePreference
+}

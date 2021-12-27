@@ -1,0 +1,7 @@
+fragment DefaultList on List {
+	resourceSlug
+	mediaType
+	currentEpisode
+	currentChapter
+	status
+}

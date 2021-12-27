@@ -1,0 +1,6 @@
+query MyListEntryStatus($slug: String!, $type: Media!) {
+	myListEntryStatus(slug: $slug, type: $type) {
+		status
+		resourceSlug
+	}
+}

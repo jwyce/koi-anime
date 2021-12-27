@@ -1,10 +1,6 @@
 fragment DefaultUser on User {
-	id
-	username
+	...PublicUser
 	email
-	profileIcon
-	profileColor
-	titlePreference
 	isConfirmed
 	showNSFW
 }

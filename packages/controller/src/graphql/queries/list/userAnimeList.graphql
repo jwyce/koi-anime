@@ -1,0 +1,14 @@
+query UserAnimeList($options: ListFilterInput!) {
+	userList(options: $options) {
+		items {
+			resourceSlug
+			status
+			currentEpisode
+			anime {
+				...DefaultAnime
+			}
+		}
+		hasMore
+		nextCursor
+	}
+}
