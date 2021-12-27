@@ -19,6 +19,7 @@ import {
 	MenuList,
 	Spacer,
 	Tooltip,
+	Text,
 } from '@chakra-ui/react';
 import { useLogoutMutation, useMeQuery } from '@koi/controller';
 
@@ -49,9 +50,13 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 		// user is logged in
 		body = (
 			<Flex align="center">
-				<Button>My Library</Button>
+				<NextLink href={`/users/${data.me.username}/library`}>
+					<a>
+						<Button>My Library</Button>
+					</a>
+				</NextLink>
 				<Spacer mr={2} />
-				<Button>Rate</Button>
+				<Button>Vote</Button>
 				<Spacer mr={2} />
 				<Menu>
 					<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -71,7 +76,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 					</MenuList>
 				</Menu>
 				<Spacer mr={2} />
-				<Button>Rankings</Button>
+				<Button>
+					<Text fontWeight={100}>🏆</Text> Top Rated
+				</Button>
 				<Spacer mr={2} />
 				<Menu>
 					<Tooltip label={data.me.username}>

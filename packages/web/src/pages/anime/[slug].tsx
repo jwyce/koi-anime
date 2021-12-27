@@ -2,11 +2,13 @@ import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { useIsAuth } from '@/utils/hooks/useIsAuth';
 import { Box, Image, Spacer } from '@chakra-ui/react';
 import { useAnimeQuery } from '@koi/controller';
 
 import { Layout } from '../../components/Layout/Layout';
 import { AnimeCharacters } from '../../components/MediaDetail/AnimeCharacters';
+import { AnimeSongs } from '../../components/MediaDetail/AnimeSongs';
 import { MediaDescription } from '../../components/MediaDetail/MediaDescription';
 import { MediaDetails } from '../../components/MediaDetail/MediaDetails';
 import { PosterListControl } from '../../components/MediaDetail/PosterListControl';
@@ -15,8 +17,8 @@ import { withApollo } from '../../stores/withApollo';
 import { isServer } from '../../utils/isServer';
 
 import type { NextPage } from 'next';
-import { AnimeSongs } from '../../components/MediaDetail/AnimeSongs';
 export const AnimeDetail: NextPage = ({}) => {
+	useIsAuth();
 	const router = useRouter();
 	const { slug } = router.query;
 
@@ -55,6 +57,7 @@ export const AnimeDetail: NextPage = ({}) => {
 						posterSrc={data.anime?.posterLinkOriginal}
 						rank={5}
 						type="anime"
+						slug={data.anime?.slug ?? ''}
 					/>
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>

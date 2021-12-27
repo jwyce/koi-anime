@@ -1,4 +1,4 @@
-import { profileColor } from '@/utils/profilePreferences';
+import { isServer } from '@/utils/isServer';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
 	Stack,
@@ -12,23 +12,84 @@ import {
 	MenuList,
 	Text,
 } from '@chakra-ui/react';
-import { ListStatus } from '@koi/controller';
-import React, { useState } from 'react';
-import { BsCircleFill } from 'react-icons/bs';
+import {
+	ListStatus,
+	Media,
+	MyListEntryStatusDocument,
+	MyListEntryStatusQuery,
+	useAddUpdateMyListEntryMutation,
+	useDeleteListEntryMutation,
+	useMyListEntryStatusQuery,
+} from '@koi/controller';
+import React from 'react';
 import { HeartIcon } from '../UI/HeartIcon';
+import { Loader } from '../UI/Loader';
 
 interface PosterListControlProps {
 	rank: number;
 	posterSrc: string | undefined;
 	type: 'anime' | 'manga' | 'character';
+	slug: string;
 }
 
 export const PosterListControl: React.FC<PosterListControlProps> = ({
 	rank,
 	posterSrc,
 	type,
+	slug,
 }) => {
-	const [status, setState] = useState<ListStatus | null>(null);
+	const mediaType = type === 'manga' ? Media.Manga : Media.Anime;
+
+	const { data, loading } = useMyListEntryStatusQuery({
+		variables: { slug, type: mediaType },
+		skip: isServer(),
+	});
+	const [addUpdateListEntry] = useAddUpdateMyListEntryMutation();
+	const [deleteListEntry] = useDeleteListEntryMutation();
+
+	const onSelect = async (status: ListStatus | null) => {
+		if (status) {
+			await addUpdateListEntry({
+				variables: {
+					options: {
+						slug,
+						type: mediaType,
+						status,
+					},
+				},
+				update: (cache, payload) => {
+					const queryVars = { slug, type: mediaType };
+					const payloadStatus = payload.data?.addUpdateMyList.status;
+					const newData = payloadStatus
+						? { status: payloadStatus, resourceSlug: slug }
+						: null;
+
+					cache.writeQuery<MyListEntryStatusQuery>({
+						query: MyListEntryStatusDocument,
+						data: { myListEntryStatus: newData },
+						variables: queryVars,
+					});
+				},
+			});
+		} else {
+			await deleteListEntry({
+				variables: {
+					slug,
+					type: mediaType,
+				},
+				update: (cache) => {
+					const queryVars = { slug, type: mediaType };
+
+					cache.writeQuery<MyListEntryStatusQuery>({
+						query: MyListEntryStatusDocument,
+						data: { myListEntryStatus: null },
+						variables: queryVars,
+					});
+				},
+			});
+		}
+	};
+
 	const statusList = [
 		{
 			icon: '🔥',
@@ -45,6 +106,10 @@ export const PosterListControl: React.FC<PosterListControlProps> = ({
 		{ icon: '💩', status: ListStatus.Dropped, text: 'Dropped' },
 		{ icon: '🗑️', status: null, text: 'Remove from Library' },
 	];
+	let statusFilter = statusList;
+	if (!data?.myListEntryStatus?.status) {
+		statusFilter = statusFilter.filter((x) => x.status !== null);
+	}
 
 	return (
 		<Stack>
@@ -56,36 +121,55 @@ export const PosterListControl: React.FC<PosterListControlProps> = ({
 			)}
 			<>
 				{type !== 'character' && (
-					<Menu>
-						<MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%">
-							{status ? (
-								<HStack spacing="1">
-									<Box mr={3}>
-										<BsCircleFill
-											size={24}
-											color={profileColor('blue') ?? 'transparent'}
-										/>
-									</Box>
-									<Text textTransform="capitalize">{status}</Text>
-								</HStack>
-							) : (
-								<HStack>
-									<span>Add to Library</span>
-								</HStack>
-							)}
-						</MenuButton>
-						<MenuList overflowY="scroll" maxH="60">
-							{statusList.map((x, idx) => (
-								<MenuItem
-									icon={<Text>{x.icon}</Text>}
-									key={idx}
-									onClick={() => alert('hi')}
+					<>
+						{!data || loading ? (
+							<Loader size="xl" />
+						) : (
+							<Menu>
+								<MenuButton
+									as={Button}
+									rightIcon={<ChevronDownIcon />}
+									w="100%"
 								>
-									{x.text}
-								</MenuItem>
-							))}
-						</MenuList>
-					</Menu>
+									{data?.myListEntryStatus ? (
+										<HStack spacing="1">
+											<Box>
+												<Text fontWeight={100}>
+													{
+														statusList.find(
+															(x) => x.status === data.myListEntryStatus?.status
+														)?.icon
+													}
+												</Text>
+											</Box>
+											<Text textTransform="capitalize">
+												{
+													statusList.find(
+														(x) => x.status === data.myListEntryStatus?.status
+													)?.text
+												}
+											</Text>
+										</HStack>
+									) : (
+										<HStack>
+											<span>Add to Library</span>
+										</HStack>
+									)}
+								</MenuButton>
+								<MenuList overflowY="scroll" maxH="60">
+									{statusFilter.map((x, idx) => (
+										<MenuItem
+											icon={<Text>{x.icon}</Text>}
+											key={idx}
+											onClick={() => onSelect(x.status)}
+										>
+											{x.text}
+										</MenuItem>
+									))}
+								</MenuList>
+							</Menu>
+						)}
+					</>
 				)}
 			</>
 		</Stack>

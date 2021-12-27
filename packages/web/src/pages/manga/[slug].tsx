@@ -2,6 +2,7 @@ import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { useIsAuth } from '@/utils/hooks/useIsAuth';
 import { Box, Image } from '@chakra-ui/react';
 import { useMangaQuery } from '@koi/controller';
 
@@ -15,6 +16,7 @@ import { isServer } from '../../utils/isServer';
 
 import type { NextPage } from 'next';
 export const MangaDetail: NextPage = ({}) => {
+	useIsAuth();
 	const router = useRouter();
 	const { slug } = router.query;
 
@@ -53,6 +55,7 @@ export const MangaDetail: NextPage = ({}) => {
 						posterSrc={data.manga?.posterLinkOriginal}
 						rank={12}
 						type="manga"
+						slug={data.manga?.slug ?? ''}
 					/>
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>

@@ -566,6 +566,13 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined } };
 
+export type AddUpdateMyListEntryMutationVariables = Exact<{
+  options: UpdateListInput;
+}>;
+
+
+export type AddUpdateMyListEntryMutation = { __typename?: 'Mutation', addUpdateMyList: { __typename?: 'List', resourceSlug: string, mediaType: Media, currentEpisode: number, currentChapter: number, status: ListStatus } };
+
 export type DeleteListEntryMutationVariables = Exact<{
   type: Media;
   slug: Scalars['String'];
@@ -1075,6 +1082,39 @@ export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOption
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const AddUpdateMyListEntryDocument = gql`
+    mutation AddUpdateMyListEntry($options: UpdateListInput!) {
+  addUpdateMyList(options: $options) {
+    ...DefaultList
+  }
+}
+    ${DefaultListFragmentDoc}`;
+export type AddUpdateMyListEntryMutationFn = Apollo.MutationFunction<AddUpdateMyListEntryMutation, AddUpdateMyListEntryMutationVariables>;
+
+/**
+ * __useAddUpdateMyListEntryMutation__
+ *
+ * To run a mutation, you first call `useAddUpdateMyListEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddUpdateMyListEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addUpdateMyListEntryMutation, { data, loading, error }] = useAddUpdateMyListEntryMutation({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useAddUpdateMyListEntryMutation(baseOptions?: Apollo.MutationHookOptions<AddUpdateMyListEntryMutation, AddUpdateMyListEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddUpdateMyListEntryMutation, AddUpdateMyListEntryMutationVariables>(AddUpdateMyListEntryDocument, options);
+      }
+export type AddUpdateMyListEntryMutationHookResult = ReturnType<typeof useAddUpdateMyListEntryMutation>;
+export type AddUpdateMyListEntryMutationResult = Apollo.MutationResult<AddUpdateMyListEntryMutation>;
+export type AddUpdateMyListEntryMutationOptions = Apollo.BaseMutationOptions<AddUpdateMyListEntryMutation, AddUpdateMyListEntryMutationVariables>;
 export const DeleteListEntryDocument = gql`
     mutation DeleteListEntry($type: Media!, $slug: String!) {
   deleteListEntry(type: $type, slug: $slug)
