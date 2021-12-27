@@ -93,15 +93,28 @@ export type FieldError = {
 
 export type List = {
   __typename?: 'List';
+  anime?: Maybe<Anime>;
   createdAt: Scalars['String'];
   currentChapter: Scalars['Int'];
   currentEpisode: Scalars['Int'];
   currentVolume: Scalars['Int'];
-  resourceID: Scalars['Int'];
-  resourceType: ResourceType;
+  id: Scalars['Int'];
+  manga?: Maybe<Manga>;
+  mediaType: Media;
+  resourceSlug: Scalars['String'];
   status: ListStatus;
   updatedAt: Scalars['String'];
   userID: Scalars['Int'];
+};
+
+export type ListFilterInput = {
+  cursor?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+  media?: Maybe<Media>;
+  sort?: Maybe<SortBy>;
+  status?: Maybe<ListStatus>;
+  title?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
 };
 
 export enum ListStatus {
@@ -151,11 +164,18 @@ export enum MangaSubtype {
   Oneshot = 'ONESHOT'
 }
 
+export enum Media {
+  Anime = 'ANIME',
+  Manga = 'MANGA'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
+  addUpdateMyList: List;
   changePassword: UserResponse;
   confirmEmail: Scalars['Boolean'];
   deleteAccount: Scalars['Boolean'];
+  deleteListEntry: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -163,6 +183,11 @@ export type Mutation = {
   resetPassword: UserResponse;
   sendConfirmation: Scalars['Boolean'];
   updatePreferences: UserResponse;
+};
+
+
+export type MutationAddUpdateMyListArgs = {
+  options: UpdateListInput;
 };
 
 
@@ -174,6 +199,12 @@ export type MutationChangePasswordArgs = {
 
 export type MutationConfirmEmailArgs = {
   token: Scalars['String'];
+};
+
+
+export type MutationDeleteListEntryArgs = {
+  slug: Scalars['String'];
+  type: Media;
 };
 
 
@@ -213,6 +244,13 @@ export type PaginatedAnimeResponse = {
   __typename?: 'PaginatedAnimeResponse';
   hasMore: Scalars['Boolean'];
   items: Array<Anime>;
+  nextCursor: Scalars['Int'];
+};
+
+export type PaginatedListResponse = {
+  __typename?: 'PaginatedListResponse';
+  hasMore: Scalars['Boolean'];
+  items: Array<List>;
   nextCursor: Scalars['Int'];
 };
 
@@ -276,8 +314,10 @@ export type Query = {
   kitsuSearchManga: PaginatedMangaResponse;
   manga?: Maybe<Manga>;
   me?: Maybe<User>;
+  myListEntryStatus?: Maybe<List>;
   songsForAnime: Array<Song>;
   user: User;
+  userList: PaginatedListResponse;
   users: Array<User>;
 };
 
@@ -321,23 +361,24 @@ export type QueryMangaArgs = {
 };
 
 
+export type QueryMyListEntryStatusArgs = {
+  slug: Scalars['String'];
+  type: Media;
+};
+
+
 export type QuerySongsForAnimeArgs = {
   id: Scalars['Int'];
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['Int'];
+  username: Scalars['String'];
 };
 
-export type Ranking = {
-  __typename?: 'Ranking';
-  createdAt: Scalars['String'];
-  matchupKey: Scalars['String'];
-  resourceType: ResourceType;
-  updatedAt: Scalars['String'];
-  userID: Scalars['Int'];
-  votedResourceID: Scalars['Int'];
+
+export type QueryUserListArgs = {
+  options: ListFilterInput;
 };
 
 export type RegisterInput = {
@@ -377,6 +418,14 @@ export enum SongType {
   Op = 'OP'
 }
 
+export enum SortBy {
+  Added = 'ADDED',
+  Length = 'LENGTH',
+  Progress = 'PROGRESS',
+  Title = 'TITLE',
+  Updated = 'UPDATED'
+}
+
 export enum Status {
   Current = 'CURRENT',
   Finished = 'FINISHED',
@@ -391,6 +440,14 @@ export enum TitlePreference {
   Japanese = 'JAPANESE',
   Romanized = 'ROMANIZED'
 }
+
+export type UpdateListInput = {
+  chapterCount?: Maybe<Scalars['Int']>;
+  episodeCount?: Maybe<Scalars['Int']>;
+  slug: Scalars['String'];
+  status?: Maybe<ListStatus>;
+  type: Media;
+};
 
 export type User = {
   __typename?: 'User';
@@ -413,17 +470,31 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type Vote = {
+  __typename?: 'Vote';
+  createdAt: Scalars['String'];
+  resourceType: ResourceType;
+  updatedAt: Scalars['String'];
+  userID: Scalars['Int'];
+  votedAgainst: Scalars['String'];
+  votedFor: Scalars['String'];
+};
+
 export type DefaultAnimeFragment = { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
 
 export type DefaultErrorFragment = { __typename?: 'FieldError', field: string, message: string };
+
+export type DefaultListFragment = { __typename?: 'List', resourceSlug: string, mediaType: Media, currentEpisode: number, currentChapter: number, status: ListStatus };
 
 export type DefaultMangaFragment = { __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
 
 export type DefaultSongFragment = { __typename?: 'Song', name: string, artist: string, songType: SongType };
 
-export type DefaultUserFragment = { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean };
+export type DefaultUserFragment = { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference };
 
-export type DefaultUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean } | null | undefined };
+export type DefaultUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined };
+
+export type PublicUserFragment = { __typename?: 'User', id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference };
 
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String'];
@@ -431,7 +502,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean } | null | undefined } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined } };
 
 export type ConfirmEmailMutationVariables = Exact<{
   token: Scalars['String'];
@@ -457,7 +528,7 @@ export type UpdatePreferencesMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePreferencesMutation = { __typename?: 'Mutation', updatePreferences: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean } | null | undefined } };
+export type UpdatePreferencesMutation = { __typename?: 'Mutation', updatePreferences: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -472,7 +543,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean } | null | undefined } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -484,7 +555,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean } | null | undefined } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined } };
 
 export type ResetPasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -493,7 +564,15 @@ export type ResetPasswordMutationVariables = Exact<{
 }>;
 
 
-export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean } | null | undefined } };
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined } };
+
+export type DeleteListEntryMutationVariables = Exact<{
+  type: Media;
+  slug: Scalars['String'];
+}>;
+
+
+export type DeleteListEntryMutation = { __typename?: 'Mutation', deleteListEntry: boolean };
 
 export type AnimeQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -516,6 +595,15 @@ export type SongsForAnimeQueryVariables = Exact<{
 
 export type SongsForAnimeQuery = { __typename?: 'Query', songsForAnime: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType }> };
 
+export type SearchAnimeQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor: Scalars['Int'];
+  filter?: Maybe<Scalars['String']>;
+}>;
+
+
+export type SearchAnimeQuery = { __typename?: 'Query', kitsuSearchAnime: { __typename?: 'PaginatedAnimeResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
+
 export type AnimeographyQueryVariables = Exact<{
   characterSlug: Scalars['String'];
 }>;
@@ -530,26 +618,27 @@ export type CharacterQueryVariables = Exact<{
 
 export type CharacterQuery = { __typename?: 'Query', character: { __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string } };
 
+export type MyListEntryStatusQueryVariables = Exact<{
+  slug: Scalars['String'];
+  type: Media;
+}>;
+
+
+export type MyListEntryStatusQuery = { __typename?: 'Query', myListEntryStatus?: { __typename?: 'List', status: ListStatus, resourceSlug: string } | null | undefined };
+
+export type UserAnimeListQueryVariables = Exact<{
+  options: ListFilterInput;
+}>;
+
+
+export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', resourceSlug: string, status: ListStatus, currentEpisode: number, anime?: { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+
 export type MangaQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
 
 
 export type MangaQuery = { __typename?: 'Query', manga?: { __typename?: 'Manga', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, serialization: string, volumeCount: number, chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined };
-
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string, email: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference, isConfirmed: boolean, showNSFW: boolean } | null | undefined };
-
-export type SearchAnimeQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  cursor: Scalars['Int'];
-  filter?: Maybe<Scalars['String']>;
-}>;
-
-
-export type SearchAnimeQuery = { __typename?: 'Query', kitsuSearchAnime: { __typename?: 'PaginatedAnimeResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
 
 export type SearchMangaQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -559,6 +648,18 @@ export type SearchMangaQueryVariables = Exact<{
 
 
 export type SearchMangaQuery = { __typename?: 'Query', kitsuSearchManga: { __typename?: 'PaginatedMangaResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } | null | undefined };
+
+export type UserQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } };
 
 export const DefaultAnimeFragmentDoc = gql`
     fragment DefaultAnime on Anime {
@@ -577,6 +678,15 @@ export const DefaultAnimeFragmentDoc = gql`
   ageRating
   status
   posterLinkSmall
+}
+    `;
+export const DefaultListFragmentDoc = gql`
+    fragment DefaultList on List {
+  resourceSlug
+  mediaType
+  currentEpisode
+  currentChapter
+  status
 }
     `;
 export const DefaultMangaFragmentDoc = gql`
@@ -611,18 +721,23 @@ export const DefaultErrorFragmentDoc = gql`
   message
 }
     `;
-export const DefaultUserFragmentDoc = gql`
-    fragment DefaultUser on User {
+export const PublicUserFragmentDoc = gql`
+    fragment PublicUser on User {
   id
   username
-  email
   profileIcon
   profileColor
   titlePreference
+}
+    `;
+export const DefaultUserFragmentDoc = gql`
+    fragment DefaultUser on User {
+  ...PublicUser
+  email
   isConfirmed
   showNSFW
 }
-    `;
+    ${PublicUserFragmentDoc}`;
 export const DefaultUserResponseFragmentDoc = gql`
     fragment DefaultUserResponse on UserResponse {
   errors {
@@ -960,6 +1075,38 @@ export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOption
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const DeleteListEntryDocument = gql`
+    mutation DeleteListEntry($type: Media!, $slug: String!) {
+  deleteListEntry(type: $type, slug: $slug)
+}
+    `;
+export type DeleteListEntryMutationFn = Apollo.MutationFunction<DeleteListEntryMutation, DeleteListEntryMutationVariables>;
+
+/**
+ * __useDeleteListEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteListEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteListEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteListEntryMutation, { data, loading, error }] = useDeleteListEntryMutation({
+ *   variables: {
+ *      type: // value for 'type'
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useDeleteListEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteListEntryMutation, DeleteListEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteListEntryMutation, DeleteListEntryMutationVariables>(DeleteListEntryDocument, options);
+      }
+export type DeleteListEntryMutationHookResult = ReturnType<typeof useDeleteListEntryMutation>;
+export type DeleteListEntryMutationResult = Apollo.MutationResult<DeleteListEntryMutation>;
+export type DeleteListEntryMutationOptions = Apollo.BaseMutationOptions<DeleteListEntryMutation, DeleteListEntryMutationVariables>;
 export const AnimeDocument = gql`
     query Anime($slug: String!) {
   anime(slug: $slug) {
@@ -1080,6 +1227,47 @@ export function useSongsForAnimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type SongsForAnimeQueryHookResult = ReturnType<typeof useSongsForAnimeQuery>;
 export type SongsForAnimeLazyQueryHookResult = ReturnType<typeof useSongsForAnimeLazyQuery>;
 export type SongsForAnimeQueryResult = Apollo.QueryResult<SongsForAnimeQuery, SongsForAnimeQueryVariables>;
+export const SearchAnimeDocument = gql`
+    query SearchAnime($limit: Int!, $cursor: Int!, $filter: String) {
+  kitsuSearchAnime(limit: $limit, cursor: $cursor, filter: $filter) {
+    items {
+      ...DefaultAnime
+    }
+    hasMore
+    nextCursor
+  }
+}
+    ${DefaultAnimeFragmentDoc}`;
+
+/**
+ * __useSearchAnimeQuery__
+ *
+ * To run a query within a React component, call `useSearchAnimeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchAnimeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchAnimeQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useSearchAnimeQuery(baseOptions: Apollo.QueryHookOptions<SearchAnimeQuery, SearchAnimeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchAnimeQuery, SearchAnimeQueryVariables>(SearchAnimeDocument, options);
+      }
+export function useSearchAnimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchAnimeQuery, SearchAnimeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchAnimeQuery, SearchAnimeQueryVariables>(SearchAnimeDocument, options);
+        }
+export type SearchAnimeQueryHookResult = ReturnType<typeof useSearchAnimeQuery>;
+export type SearchAnimeLazyQueryHookResult = ReturnType<typeof useSearchAnimeLazyQuery>;
+export type SearchAnimeQueryResult = Apollo.QueryResult<SearchAnimeQuery, SearchAnimeQueryVariables>;
 export const AnimeographyDocument = gql`
     query Animeography($characterSlug: String!) {
   animeography(characterSlug: $characterSlug) {
@@ -1157,6 +1345,87 @@ export function useCharacterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type CharacterQueryHookResult = ReturnType<typeof useCharacterQuery>;
 export type CharacterLazyQueryHookResult = ReturnType<typeof useCharacterLazyQuery>;
 export type CharacterQueryResult = Apollo.QueryResult<CharacterQuery, CharacterQueryVariables>;
+export const MyListEntryStatusDocument = gql`
+    query MyListEntryStatus($slug: String!, $type: Media!) {
+  myListEntryStatus(slug: $slug, type: $type) {
+    status
+    resourceSlug
+  }
+}
+    `;
+
+/**
+ * __useMyListEntryStatusQuery__
+ *
+ * To run a query within a React component, call `useMyListEntryStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyListEntryStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyListEntryStatusQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useMyListEntryStatusQuery(baseOptions: Apollo.QueryHookOptions<MyListEntryStatusQuery, MyListEntryStatusQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyListEntryStatusQuery, MyListEntryStatusQueryVariables>(MyListEntryStatusDocument, options);
+      }
+export function useMyListEntryStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyListEntryStatusQuery, MyListEntryStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyListEntryStatusQuery, MyListEntryStatusQueryVariables>(MyListEntryStatusDocument, options);
+        }
+export type MyListEntryStatusQueryHookResult = ReturnType<typeof useMyListEntryStatusQuery>;
+export type MyListEntryStatusLazyQueryHookResult = ReturnType<typeof useMyListEntryStatusLazyQuery>;
+export type MyListEntryStatusQueryResult = Apollo.QueryResult<MyListEntryStatusQuery, MyListEntryStatusQueryVariables>;
+export const UserAnimeListDocument = gql`
+    query UserAnimeList($options: ListFilterInput!) {
+  userList(options: $options) {
+    items {
+      resourceSlug
+      status
+      currentEpisode
+      anime {
+        ...DefaultAnime
+      }
+    }
+    hasMore
+    nextCursor
+  }
+}
+    ${DefaultAnimeFragmentDoc}`;
+
+/**
+ * __useUserAnimeListQuery__
+ *
+ * To run a query within a React component, call `useUserAnimeListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserAnimeListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserAnimeListQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useUserAnimeListQuery(baseOptions: Apollo.QueryHookOptions<UserAnimeListQuery, UserAnimeListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserAnimeListQuery, UserAnimeListQueryVariables>(UserAnimeListDocument, options);
+      }
+export function useUserAnimeListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserAnimeListQuery, UserAnimeListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserAnimeListQuery, UserAnimeListQueryVariables>(UserAnimeListDocument, options);
+        }
+export type UserAnimeListQueryHookResult = ReturnType<typeof useUserAnimeListQuery>;
+export type UserAnimeListLazyQueryHookResult = ReturnType<typeof useUserAnimeListLazyQuery>;
+export type UserAnimeListQueryResult = Apollo.QueryResult<UserAnimeListQuery, UserAnimeListQueryVariables>;
 export const MangaDocument = gql`
     query Manga($slug: String!) {
   manga(slug: $slug) {
@@ -1198,81 +1467,6 @@ export function useMangaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Mang
 export type MangaQueryHookResult = ReturnType<typeof useMangaQuery>;
 export type MangaLazyQueryHookResult = ReturnType<typeof useMangaLazyQuery>;
 export type MangaQueryResult = Apollo.QueryResult<MangaQuery, MangaQueryVariables>;
-export const MeDocument = gql`
-    query Me {
-  me {
-    ...DefaultUser
-  }
-}
-    ${DefaultUserFragmentDoc}`;
-
-/**
- * __useMeQuery__
- *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMeQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-      }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
-export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
-export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
-export const SearchAnimeDocument = gql`
-    query SearchAnime($limit: Int!, $cursor: Int!, $filter: String) {
-  kitsuSearchAnime(limit: $limit, cursor: $cursor, filter: $filter) {
-    items {
-      ...DefaultAnime
-    }
-    hasMore
-    nextCursor
-  }
-}
-    ${DefaultAnimeFragmentDoc}`;
-
-/**
- * __useSearchAnimeQuery__
- *
- * To run a query within a React component, call `useSearchAnimeQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchAnimeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchAnimeQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      cursor: // value for 'cursor'
- *      filter: // value for 'filter'
- *   },
- * });
- */
-export function useSearchAnimeQuery(baseOptions: Apollo.QueryHookOptions<SearchAnimeQuery, SearchAnimeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchAnimeQuery, SearchAnimeQueryVariables>(SearchAnimeDocument, options);
-      }
-export function useSearchAnimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchAnimeQuery, SearchAnimeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchAnimeQuery, SearchAnimeQueryVariables>(SearchAnimeDocument, options);
-        }
-export type SearchAnimeQueryHookResult = ReturnType<typeof useSearchAnimeQuery>;
-export type SearchAnimeLazyQueryHookResult = ReturnType<typeof useSearchAnimeLazyQuery>;
-export type SearchAnimeQueryResult = Apollo.QueryResult<SearchAnimeQuery, SearchAnimeQueryVariables>;
 export const SearchMangaDocument = gql`
     query SearchManga($limit: Int!, $cursor: Int!, $filter: String) {
   kitsuSearchManga(limit: $limit, cursor: $cursor, filter: $filter) {
@@ -1314,3 +1508,72 @@ export function useSearchMangaLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type SearchMangaQueryHookResult = ReturnType<typeof useSearchMangaQuery>;
 export type SearchMangaLazyQueryHookResult = ReturnType<typeof useSearchMangaLazyQuery>;
 export type SearchMangaQueryResult = Apollo.QueryResult<SearchMangaQuery, SearchMangaQueryVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    ...DefaultUser
+  }
+}
+    ${DefaultUserFragmentDoc}`;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const UserDocument = gql`
+    query User($username: String!) {
+  user(username: $username) {
+    ...PublicUser
+  }
+}
+    ${PublicUserFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
