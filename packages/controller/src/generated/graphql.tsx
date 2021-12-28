@@ -131,6 +131,12 @@ export enum ListStatus {
   Planned = 'PLANNED'
 }
 
+export type ListStatusCount = {
+  __typename?: 'ListStatusCount';
+  count: Scalars['Int'];
+  status: ListStatus;
+};
+
 export type Manga = {
   __typename?: 'Manga';
   ageRating: AgeRating;
@@ -324,6 +330,7 @@ export type Query = {
   songsForAnime: Array<Song>;
   user: User;
   userList: PaginatedListResponse;
+  userListStatusCounts: Array<ListStatusCount>;
   users: Array<User>;
 };
 
@@ -385,6 +392,11 @@ export type QueryUserArgs = {
 
 export type QueryUserListArgs = {
   options: ListFilterInput;
+};
+
+
+export type QueryUserListStatusCountsArgs = {
+  username: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -645,6 +657,13 @@ export type UserAnimeListQueryVariables = Exact<{
 
 
 export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', resourceSlug: string, status: ListStatus, currentEpisode: number, anime?: { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+
+export type UserListCountsQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type UserListCountsQuery = { __typename?: 'Query', userListStatusCounts: Array<{ __typename?: 'ListStatusCount', status: ListStatus, count: number }> };
 
 export type UserMangaListQueryVariables = Exact<{
   options: ListFilterInput;
@@ -1479,6 +1498,42 @@ export function useUserAnimeListLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type UserAnimeListQueryHookResult = ReturnType<typeof useUserAnimeListQuery>;
 export type UserAnimeListLazyQueryHookResult = ReturnType<typeof useUserAnimeListLazyQuery>;
 export type UserAnimeListQueryResult = Apollo.QueryResult<UserAnimeListQuery, UserAnimeListQueryVariables>;
+export const UserListCountsDocument = gql`
+    query UserListCounts($username: String!) {
+  userListStatusCounts(username: $username) {
+    status
+    count
+  }
+}
+    `;
+
+/**
+ * __useUserListCountsQuery__
+ *
+ * To run a query within a React component, call `useUserListCountsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserListCountsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserListCountsQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useUserListCountsQuery(baseOptions: Apollo.QueryHookOptions<UserListCountsQuery, UserListCountsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserListCountsQuery, UserListCountsQueryVariables>(UserListCountsDocument, options);
+      }
+export function useUserListCountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserListCountsQuery, UserListCountsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserListCountsQuery, UserListCountsQueryVariables>(UserListCountsDocument, options);
+        }
+export type UserListCountsQueryHookResult = ReturnType<typeof useUserListCountsQuery>;
+export type UserListCountsLazyQueryHookResult = ReturnType<typeof useUserListCountsLazyQuery>;
+export type UserListCountsQueryResult = Apollo.QueryResult<UserListCountsQuery, UserListCountsQueryVariables>;
 export const UserMangaListDocument = gql`
     query UserMangaList($options: ListFilterInput!) {
   userList(options: $options) {

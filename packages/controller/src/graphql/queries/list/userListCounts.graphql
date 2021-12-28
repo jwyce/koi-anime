@@ -1,0 +1,6 @@
+query UserListCounts($username: String!) {
+	userListStatusCounts(username: $username) {
+		status
+		count
+	}
+}

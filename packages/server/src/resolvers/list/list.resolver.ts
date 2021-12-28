@@ -12,10 +12,11 @@ import { Anime } from '../../entities/Anime';
 import { List } from '../../entities/List';
 import { Manga } from '../../entities/Manga';
 import { User } from '../../entities/User';
-import { Direction, Media, SortBy } from '../../helpers/enums';
+import { Direction, ListStatus, Media, SortBy } from '../../helpers/enums';
 import { MyContext } from '../../typings/MyContext';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
 import { ListFilterInput } from './ListFilterInput';
+import { ListStatusCount } from './ListStatusCount';
 import { UpdateListInput } from './UpdateListInput';
 
 const PaginatedListResponse = PaginatedResponse(List);
@@ -53,6 +54,27 @@ export class ListResolver {
 			},
 		});
 		return listEntry ?? null;
+	}
+
+	@Query(() => [ListStatusCount])
+	async userListStatusCounts(
+		@Arg('username') username: string
+	): Promise<ListStatusCount[]> {
+		const user = await User.findOne({ where: { username } });
+		if (!user) {
+			throw new Error('user does not exist');
+		}
+
+		let result: ListStatusCount[] = [];
+
+		await Promise.all(
+			Object.values(ListStatus).map(async (status) => {
+				const count = await List.count({ where: { userID: user.id, status } });
+				result.push({ status, count });
+			})
+		);
+
+		return result;
 	}
 
 	@Query(() => PaginatedListResponse)
