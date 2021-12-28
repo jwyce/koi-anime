@@ -12,7 +12,7 @@ import { Anime } from '../../entities/Anime';
 import { List } from '../../entities/List';
 import { Manga } from '../../entities/Manga';
 import { User } from '../../entities/User';
-import { Media, SortBy } from '../../helpers/enums';
+import { Direction, Media, SortBy } from '../../helpers/enums';
 import { MyContext } from '../../typings/MyContext';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
 import { ListFilterInput } from './ListFilterInput';
@@ -65,6 +65,8 @@ export class ListResolver {
 			const realLimit = Math.min(50, options.limit);
 			const realLimitPlusOne = realLimit + 1;
 			const mediaType = options.media ?? Media.ANIME;
+			const direction = options.direction === Direction.ASC ? 'ASC' : 'DESC';
+
 			const listItems = await List.find({
 				where: {
 					userID: user.id,
@@ -73,13 +75,14 @@ export class ListResolver {
 					...(options.title && { resourceSlug: options.title }),
 				},
 				order: {
-					...(options.sort === SortBy.ADDED && { createdAt: 'DESC' }),
-					...(options.sort === SortBy.TITLE && { resourceSlug: 'ASC' }),
-					...(options.sort === SortBy.UPDATED && { updatedAt: 'ASC' }),
+					status: 'ASC',
+					...(options.sort === SortBy.ADDED && { createdAt: direction }),
+					...(options.sort === SortBy.TITLE && { resourceSlug: direction }),
+					...(options.sort === SortBy.UPDATED && { updatedAt: direction }),
 					...(options.sort === SortBy.PROGRESS &&
-						mediaType === Media.ANIME && { currentEpisode: 'DESC' }),
+						mediaType === Media.ANIME && { currentEpisode: direction }),
 					...(options.sort === SortBy.PROGRESS &&
-						mediaType === Media.MANGA && { currentChapter: 'DESC' }),
+						mediaType === Media.MANGA && { currentChapter: direction }),
 				},
 				skip: options.cursor ?? 0,
 				take: realLimitPlusOne,

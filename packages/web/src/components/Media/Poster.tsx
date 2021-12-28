@@ -13,7 +13,7 @@ interface PosterProps {
 	synopsis: string;
 	rank?: number;
 	date: string;
-	status: Status;
+	status?: Status;
 	url: string;
 }
 

@@ -1,4 +1,4 @@
-import { Media, SortBy, ListStatus } from '../../helpers/enums';
+import { Media, SortBy, ListStatus, Direction } from '../../helpers/enums';
 import { InputType, Field, Int } from 'type-graphql';
 
 @InputType()
@@ -23,4 +23,7 @@ export class ListFilterInput {
 
 	@Field(() => ListStatus, { nullable: true })
 	status: ListStatus;
+
+	@Field(() => Direction, { nullable: true })
+	direction: Direction;
 }

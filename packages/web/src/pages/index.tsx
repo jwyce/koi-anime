@@ -143,7 +143,7 @@ const Home: NextPage = () => {
 							</NextLink>
 						)}
 					</Stack>
-					<Box clipPath="ellipse(600px 540px at top)">
+					<Box clipPath="ellipse(600px 540px at top)" userSelect="none">
 						<Image src={mascot} alt="yui-rin" width="900em" height="538em" />
 					</Box>
 				</HStack>

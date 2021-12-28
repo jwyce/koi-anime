@@ -1,0 +1,14 @@
+query UserMangaList($options: ListFilterInput!) {
+	userList(options: $options) {
+		items {
+			resourceSlug
+			status
+			currentEpisode
+			manga {
+				...DefaultManga
+			}
+		}
+		hasMore
+		nextCursor
+	}
+}

@@ -83,8 +83,8 @@ export enum ResourceType {
 }
 
 export enum ListStatus {
-	WANT_TO_WATCH = 'want_to_watch',
-	WATCHING = 'watching',
+	PLANNED = 'planned',
+	CURRENT = 'current',
 	COMPLETED = 'completed',
 	ON_HOLD = 'on_hold',
 	DROPPED = 'dropped',
@@ -103,12 +103,20 @@ export enum SortBy {
 	LENGTH = 'length',
 }
 
+export enum Direction {
+	ASC = 'asc',
+	DESC = 'desc',
+}
+
 export const registerTypeGraphQLEnums = () => {
 	registerEnumType(Media, {
 		name: 'Media',
 	});
 	registerEnumType(SortBy, {
 		name: 'SortBy',
+	});
+	registerEnumType(Direction, {
+		name: 'Direction',
 	});
 	registerEnumType(ProfileIcon, {
 		name: 'ProfileIcon',

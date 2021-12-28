@@ -10,7 +10,7 @@ interface PosterDetailsProps {
 	synopsis: string;
 	rank?: number;
 	date: string;
-	status: Status;
+	status?: Status;
 }
 
 export const PosterDetails: React.FC<PosterDetailsProps> = ({
@@ -52,7 +52,7 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 					</WrapItem>
 				</Wrap>
 
-				<PosterStatus status={status} />
+				{status && <PosterStatus status={status} />}
 
 				<Text fontSize="sm">{synopsis}</Text>
 				<Box

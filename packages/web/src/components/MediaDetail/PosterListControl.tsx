@@ -93,12 +93,12 @@ export const PosterListControl: React.FC<PosterListControlProps> = ({
 	const statusList = [
 		{
 			icon: '🔥',
-			status: ListStatus.Watching,
+			status: ListStatus.Current,
 			text: type === 'anime' ? 'Started Watching' : 'Started Reading',
 		},
 		{
 			icon: '💖',
-			status: ListStatus.WantToWatch,
+			status: ListStatus.Planned,
 			text: type === 'anime' ? 'Want to Watch' : 'Want to Read',
 		},
 		{ icon: '✅', status: ListStatus.Completed, text: 'Completed' },

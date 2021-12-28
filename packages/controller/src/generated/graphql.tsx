@@ -85,6 +85,11 @@ export type Character = {
   updatedAt: Scalars['String'];
 };
 
+export enum Direction {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -109,6 +114,7 @@ export type List = {
 
 export type ListFilterInput = {
   cursor?: Maybe<Scalars['Int']>;
+  direction?: Maybe<Direction>;
   limit: Scalars['Int'];
   media?: Maybe<Media>;
   sort?: Maybe<SortBy>;
@@ -119,10 +125,10 @@ export type ListFilterInput = {
 
 export enum ListStatus {
   Completed = 'COMPLETED',
+  Current = 'CURRENT',
   Dropped = 'DROPPED',
   OnHold = 'ON_HOLD',
-  WantToWatch = 'WANT_TO_WATCH',
-  Watching = 'WATCHING'
+  Planned = 'PLANNED'
 }
 
 export type Manga = {
@@ -639,6 +645,13 @@ export type UserAnimeListQueryVariables = Exact<{
 
 
 export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', resourceSlug: string, status: ListStatus, currentEpisode: number, anime?: { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+
+export type UserMangaListQueryVariables = Exact<{
+  options: ListFilterInput;
+}>;
+
+
+export type UserMangaListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', resourceSlug: string, status: ListStatus, currentEpisode: number, manga?: { __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
 
 export type MangaQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -1466,6 +1479,50 @@ export function useUserAnimeListLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type UserAnimeListQueryHookResult = ReturnType<typeof useUserAnimeListQuery>;
 export type UserAnimeListLazyQueryHookResult = ReturnType<typeof useUserAnimeListLazyQuery>;
 export type UserAnimeListQueryResult = Apollo.QueryResult<UserAnimeListQuery, UserAnimeListQueryVariables>;
+export const UserMangaListDocument = gql`
+    query UserMangaList($options: ListFilterInput!) {
+  userList(options: $options) {
+    items {
+      resourceSlug
+      status
+      currentEpisode
+      manga {
+        ...DefaultManga
+      }
+    }
+    hasMore
+    nextCursor
+  }
+}
+    ${DefaultMangaFragmentDoc}`;
+
+/**
+ * __useUserMangaListQuery__
+ *
+ * To run a query within a React component, call `useUserMangaListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserMangaListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserMangaListQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useUserMangaListQuery(baseOptions: Apollo.QueryHookOptions<UserMangaListQuery, UserMangaListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserMangaListQuery, UserMangaListQueryVariables>(UserMangaListDocument, options);
+      }
+export function useUserMangaListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserMangaListQuery, UserMangaListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserMangaListQuery, UserMangaListQueryVariables>(UserMangaListDocument, options);
+        }
+export type UserMangaListQueryHookResult = ReturnType<typeof useUserMangaListQuery>;
+export type UserMangaListLazyQueryHookResult = ReturnType<typeof useUserMangaListLazyQuery>;
+export type UserMangaListQueryResult = Apollo.QueryResult<UserMangaListQuery, UserMangaListQueryVariables>;
 export const MangaDocument = gql`
     query Manga($slug: String!) {
   manga(slug: $slug) {

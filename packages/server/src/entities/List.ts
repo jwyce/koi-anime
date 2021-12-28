@@ -42,7 +42,7 @@ export class List extends BaseEntity {
 	currentVolume: number;
 
 	@Field(() => ListStatus)
-	@Column({ type: 'enum', enum: ListStatus, default: ListStatus.WANT_TO_WATCH })
+	@Column({ type: 'enum', enum: ListStatus, default: ListStatus.PLANNED })
 	status: ListStatus;
 
 	@Field(() => String)
