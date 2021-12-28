@@ -5,7 +5,7 @@ Simple anime and manga tracker with a unique and accurate rating system
 Ever wanted a simplistic modern designed web app in order to store and track your anime and manga progress? Me too! Additionally all other anime trackers choose to have users rate media on a 5 or 10 star scale. Koi Anime goes in the complete opposite direction and only allows users to vote for their favorites from their list in random matchups which allows the app to generate user-level and global rankings for anime, manga, female characters, male characters, opening themes, and ending themes. Now we can finally have a true answer to who is the best waifu 😂 
 
 ## TODO
-- [ ] add getting staarted section to README
+- [ ] add getting started section to README
 - [ ] build user library page
 - [ ] build voting page
 - [ ] build top rated page
