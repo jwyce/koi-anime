@@ -48,7 +48,7 @@ export const UserLibrary: React.FC<UserLibraryProps> = ({ user }) => {
 				<FilterPanel
 					username={user.username}
 					media={mediaQueryToEnum(media as string)}
-					status={ListStatus.Planned}
+					status={null}
 				/>
 			</Box>
 		</>
