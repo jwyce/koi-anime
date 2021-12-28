@@ -7,6 +7,7 @@ import {
 	Resolver,
 	Root,
 } from 'type-graphql';
+import { Like } from 'typeorm';
 
 import { Anime } from '../../entities/Anime';
 import { List } from '../../entities/List';
@@ -58,7 +59,8 @@ export class ListResolver {
 
 	@Query(() => [ListStatusCount])
 	async userListStatusCounts(
-		@Arg('username') username: string
+		@Arg('username') username: string,
+		@Arg('media', () => Media) media: Media
 	): Promise<ListStatusCount[]> {
 		const user = await User.findOne({ where: { username } });
 		if (!user) {
@@ -69,7 +71,9 @@ export class ListResolver {
 
 		await Promise.all(
 			Object.values(ListStatus).map(async (status) => {
-				const count = await List.count({ where: { userID: user.id, status } });
+				const count = await List.count({
+					where: { userID: user.id, status, mediaType: media },
+				});
 				result.push({ status, count });
 			})
 		);
@@ -94,7 +98,7 @@ export class ListResolver {
 					userID: user.id,
 					mediaType,
 					...(options.status && { status: options.status }),
-					...(options.title && { resourceSlug: options.title }),
+					...(options.title && { resourceSlug: Like(options.title) }),
 				},
 				order: {
 					status: 'ASC',

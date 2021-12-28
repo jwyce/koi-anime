@@ -1,5 +1,9 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
+
+import { Box, HStack, Text } from '@chakra-ui/react';
+import { ListStatus } from '@koi/controller';
+
+import { shallowRouteInput } from './UserLibrary';
 
 interface StatusButtonProps {
 	text: string;
@@ -7,6 +11,8 @@ interface StatusButtonProps {
 	color: string;
 	icon: string;
 	selected: boolean;
+	status: ListStatus | null;
+	filterCallback: (options: shallowRouteInput) => void;
 }
 
 export const StatusButton: React.FC<StatusButtonProps> = ({
@@ -14,10 +20,20 @@ export const StatusButton: React.FC<StatusButtonProps> = ({
 	color,
 	count,
 	icon,
+	status,
 	selected,
+	filterCallback,
 }) => {
 	return (
-		<Box p={2} m={1} bg={color} opacity={selected ? 1 : 0.42} cursor="pointer">
+		<Box
+			p={2}
+			m={1}
+			bg={color}
+			opacity={selected ? 1 : 0.42}
+			cursor="pointer"
+			_hover={{ bg: 'gray.300' }}
+			onClick={() => filterCallback({ status })}
+		>
 			<HStack align="center" justify="space-between">
 				<HStack>
 					<Text fontWeight={100}>{icon}</Text>

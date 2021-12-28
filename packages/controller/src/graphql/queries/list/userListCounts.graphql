@@ -1,5 +1,5 @@
-query UserListCounts($username: String!) {
-	userListStatusCounts(username: $username) {
+query UserListCounts($username: String!, $media: Media!) {
+	userListStatusCounts(username: $username, media: $media) {
 		status
 		count
 	}

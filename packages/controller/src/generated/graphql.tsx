@@ -396,6 +396,7 @@ export type QueryUserListArgs = {
 
 
 export type QueryUserListStatusCountsArgs = {
+  media: Media;
   username: Scalars['String'];
 };
 
@@ -660,6 +661,7 @@ export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?
 
 export type UserListCountsQueryVariables = Exact<{
   username: Scalars['String'];
+  media: Media;
 }>;
 
 
@@ -1499,8 +1501,8 @@ export type UserAnimeListQueryHookResult = ReturnType<typeof useUserAnimeListQue
 export type UserAnimeListLazyQueryHookResult = ReturnType<typeof useUserAnimeListLazyQuery>;
 export type UserAnimeListQueryResult = Apollo.QueryResult<UserAnimeListQuery, UserAnimeListQueryVariables>;
 export const UserListCountsDocument = gql`
-    query UserListCounts($username: String!) {
-  userListStatusCounts(username: $username) {
+    query UserListCounts($username: String!, $media: Media!) {
+  userListStatusCounts(username: $username, media: $media) {
     status
     count
   }
@@ -1520,6 +1522,7 @@ export const UserListCountsDocument = gql`
  * const { data, loading, error } = useUserListCountsQuery({
  *   variables: {
  *      username: // value for 'username'
+ *      media: // value for 'media'
  *   },
  * });
  */

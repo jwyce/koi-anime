@@ -1,28 +1,50 @@
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	InputGroup,
-	InputLeftElement,
-	Input,
-	HStack,
-	FormLabel,
-	Select,
-	IconButton,
-} from '@chakra-ui/react';
-import { SortBy } from '@koi/controller';
 import React, { useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import {
+	Box,
+	FormLabel,
+	HStack,
+	IconButton,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Select,
+} from '@chakra-ui/react';
+import { Direction, SortBy, useDebounce } from '@koi/controller';
+
+import { shallowRouteInput } from './UserLibrary';
+
 interface SearchBarProps {
 	username: string;
+	title: string;
+	sort: SortBy;
+	direction: Direction;
+	filterCallback: (options: shallowRouteInput) => void;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ username }) => {
-	const [searchStr, setSearchStr] = useState('');
+export const SearchBar: React.FC<SearchBarProps> = ({
+	username,
+	title,
+	sort,
+	direction,
+	filterCallback,
+}) => {
+	const [searchStr, setSearchStr] = useState(title);
 	const sortByListMap = Object.values(SortBy).map((value) => ({
 		text: value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(),
-		value: value.toLowerCase(),
+		value: value.toUpperCase(),
 	}));
+
+	useDebounce(
+		() => {
+			filterCallback({ title: searchStr });
+		},
+		500,
+		[searchStr]
+	);
+
 	return (
 		<>
 			<Box textAlign="left" w="100%" pt={5}>
@@ -55,7 +77,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({ username }) => {
 						Sort by:
 					</FormLabel>
 
-					<Select size="sm">
+					<Select
+						size="sm"
+						defaultValue={sort}
+						onChange={(e) => filterCallback({ sort: e.target.value as SortBy })}
+					>
 						{sortByListMap.map((x, idx) => (
 							<option key={idx} value={x.value}>
 								{x.text}
@@ -68,7 +94,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({ username }) => {
 					colorScheme="teal"
 					size="sm"
 					isRound
-					icon={<ChevronDownIcon fontSize="2xl" />}
+					icon={
+						direction === Direction.Asc ? (
+							<ChevronUpIcon fontSize="2xl" />
+						) : (
+							<ChevronDownIcon fontSize="2xl" />
+						)
+					}
+					onClick={() =>
+						filterCallback({
+							direction:
+								direction === Direction.Asc ? Direction.Desc : Direction.Asc,
+						})
+					}
 				/>
 			</HStack>
 		</>
