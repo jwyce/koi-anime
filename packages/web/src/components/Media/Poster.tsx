@@ -15,6 +15,7 @@ interface PosterProps {
 	date: string;
 	status?: Status;
 	url: string;
+	topRadiusOnly?: boolean;
 }
 
 export const Poster: React.FC<PosterProps> = ({
@@ -25,6 +26,7 @@ export const Poster: React.FC<PosterProps> = ({
 	date,
 	status,
 	url,
+	topRadiusOnly = false,
 }) => {
 	const [hovering, setHovering] = useState(false);
 
@@ -42,7 +44,9 @@ export const Poster: React.FC<PosterProps> = ({
 							width: '100%',
 							height: '100%',
 							background: '#000',
-							borderRadius: 6,
+							...(topRadiusOnly
+								? { borderTopLeftRadius: 6, borderTopRightRadius: 6 }
+								: { borderRadius: 6 }),
 							top: 0,
 							left: 0,
 							opacity: 0,
@@ -54,7 +58,8 @@ export const Poster: React.FC<PosterProps> = ({
 						src={posterSrc}
 						alt={title}
 						w={200}
-						borderRadius={6}
+						borderRadius={topRadiusOnly ? undefined : 6}
+						borderTopRadius={topRadiusOnly ? 6 : undefined}
 						fallback={<Skeleton h={64} w={190} />}
 					/>
 				</a>

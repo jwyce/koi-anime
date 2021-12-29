@@ -28,8 +28,8 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 					zIndex: 9990,
 					left: '105%',
 					top: 0,
-					maxHeight: 270,
-					width: 350,
+					maxHeight: '100%',
+					width: 325,
 					background: '#171923',
 					opacity: 0,
 					padding: 10,
@@ -39,30 +39,34 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 				animate={{ opacity: 1 }}
 				transition={{ duration: 0.3 }}
 			>
-				<Wrap>
-					<WrapItem>
-						<Text fontSize="lg" fontWeight="semibold">
-							{title}
-						</Text>
-					</WrapItem>
-					<WrapItem>
-						<Text fontSize="lg" color="gray.500">
-							{date === '' ? 'TBA' : date}
-						</Text>
-					</WrapItem>
-				</Wrap>
+				<Box px={2}>
+					<Wrap>
+						<WrapItem>
+							<Text fontSize="md" fontWeight="semibold">
+								{title}
+							</Text>
+						</WrapItem>
+						<WrapItem>
+							<Text fontSize="md" color="gray.500">
+								{date === '' ? 'TBA' : date}
+							</Text>
+						</WrapItem>
+					</Wrap>
 
-				{status && <PosterStatus status={status} />}
+					{status && <PosterStatus status={status} />}
 
-				<Text fontSize="sm">{synopsis}</Text>
-				<Box
-					pos="absolute"
-					w="100%"
-					h="14"
-					bottom={0}
-					left={0}
-					backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1))"
-				></Box>
+					<Text fontSize="xs" color="gray.300" pt={1}>
+						{synopsis}
+					</Text>
+					<Box
+						pos="absolute"
+						w="100%"
+						h="14"
+						bottom={0}
+						left={0}
+						backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1))"
+					></Box>
+				</Box>
 			</motion.div>
 			<motion.div
 				style={{

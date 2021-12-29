@@ -86,6 +86,7 @@ export class ListResolver {
 		@Arg('options') options: ListFilterInput
 	): Promise<PaginatedListResponse> {
 		const user = await User.findOne({ where: { username: options.username } });
+		console.log('cursor', options.cursor);
 		if (user) {
 			// TODO: add better title filtering, order by length
 			const realLimit = Math.min(50, options.limit);
@@ -116,7 +117,7 @@ export class ListResolver {
 			return {
 				items: listItems.slice(0, realLimit),
 				hasMore: listItems.length === realLimitPlusOne,
-				nextCursor: realLimitPlusOne,
+				nextCursor: realLimit,
 			};
 		}
 
@@ -136,6 +137,31 @@ export class ListResolver {
 				mediaType: options.type,
 			},
 		});
+
+		if (options.type === Media.ANIME) {
+			const resource = await Anime.findOne({ where: { slug: options.slug } });
+			if (resource && resource.episodeCount > 0) {
+				if (options.episodeCount >= resource.episodeCount) {
+					options.status = ListStatus.COMPLETED;
+					options.episodeCount = resource.episodeCount;
+				}
+				if (options.status === ListStatus.COMPLETED) {
+					options.episodeCount = resource.episodeCount;
+				}
+			}
+		} else {
+			const resource = await Manga.findOne({ where: { slug: options.slug } });
+			if (resource && resource.chapterCount > 0) {
+				if (options.chapterCount >= resource.chapterCount) {
+					options.status = ListStatus.COMPLETED;
+					options.chapterCount = resource.chapterCount;
+				}
+				if (options.status === ListStatus.COMPLETED) {
+					options.chapterCount = resource.chapterCount;
+				}
+			}
+		}
+
 		if (listEntry) {
 			if (options.status) listEntry.status = options.status;
 			if (options.episodeCount) listEntry.currentEpisode = options.episodeCount;

@@ -56,7 +56,7 @@ export const BrowseAnime: NextPage = ({}) => {
 				description="A short description goes here."
 			/>
 			<Stack alignItems="center">
-				<Box w={1000}>
+				<Box w={1000} pb={5}>
 					<Box textAlign="left" w="100%">
 						<Heading pb={1}>Explore Anime</Heading>
 						<InputGroup pb={6}>

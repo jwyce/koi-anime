@@ -83,8 +83,8 @@ export enum ResourceType {
 }
 
 export enum ListStatus {
-	PLANNED = 'planned',
 	CURRENT = 'current',
+	PLANNED = 'planned',
 	COMPLETED = 'completed',
 	ON_HOLD = 'on_hold',
 	DROPPED = 'dropped',

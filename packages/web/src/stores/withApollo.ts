@@ -10,6 +10,7 @@ import { withApollo as createWithApollo } from 'next-apollo';
 import { onError } from '@apollo/client/link/error';
 import {
 	PaginatedAnimeResponse,
+	PaginatedListResponse,
 	PaginatedMangaResponse,
 } from '@koi/controller';
 
@@ -73,6 +74,39 @@ const client = new ApolloClient({
 							return {
 								...incoming,
 								items: [...(existing?.items || []), ...incoming.items],
+							};
+						},
+					},
+					userList: {
+						keyArgs: [],
+						merge(
+							existing: PaginatedListResponse | undefined,
+							incoming: PaginatedListResponse,
+							{ args }
+						): PaginatedListResponse {
+							let filteredExistingItems = [...(existing?.items || [])];
+							if (
+								args &&
+								args.options.cursor === undefined &&
+								existing &&
+								incoming
+							) {
+								console.log('erased');
+								filteredExistingItems = [];
+							}
+
+							let filteredIncomingItems = [...incoming.items];
+							if (filteredExistingItems.length > 0) {
+								filteredIncomingItems = incoming.items.filter((x) =>
+									filteredExistingItems.every(
+										(y) => y.resourceSlug !== x.resourceSlug
+									)
+								);
+							}
+
+							return {
+								...incoming,
+								items: [...filteredExistingItems, ...filteredIncomingItems],
 							};
 						},
 					},

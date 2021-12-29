@@ -6,6 +6,7 @@ query UserMangaList($options: ListFilterInput!) {
 			currentEpisode
 			manga {
 				...DefaultManga
+				chapterCount
 			}
 		}
 		hasMore

@@ -13,6 +13,8 @@ import {
 
 import { Poster } from '../Media/Poster';
 import { Loader } from '../UI/Loader';
+import { ProgressStepper } from './ProgressStepper';
+import { isServer } from '@/utils/isServer';
 
 interface AnimeListProps {
 	username: string;
@@ -41,13 +43,14 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 				direction,
 			},
 		},
-		fetchPolicy: 'cache-and-network',
+		fetchPolicy: 'network-only',
+		// skip: isServer(),
 	});
 	if (loading || !data) {
 		return <Loader size="xl" />;
 	}
 	return (
-		<>
+		<Box pb={5}>
 			<Box pt={3}>
 				{data.userList.items.length === 0 ? (
 					<Box bg="gray.700" p={5} borderRadius={3}>
@@ -75,16 +78,23 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 							{data.userList.items.map((x) => (
 								<React.Fragment key={x.anime?.id}>
 									{x.anime && (
-										<Poster
-											url={`/anime/${x.anime.slug}`}
-											title={x.anime.canonicalTitle}
-											posterSrc={x.anime.posterLinkSmall}
-											synopsis={x.anime.synopsis}
-											date={x.anime.startDate.substring(
-												0,
-												x.anime.startDate.indexOf('-')
-											)}
-										/>
+										<Stack bg="gray.700" spacing={0} borderRadius={6}>
+											<Poster
+												url={`/anime/${x.anime.slug}`}
+												title={x.anime.canonicalTitle}
+												posterSrc={x.anime.posterLinkSmall}
+												synopsis={x.anime.synopsis}
+												date={x.anime.startDate.substring(
+													0,
+													x.anime.startDate.indexOf('-')
+												)}
+												topRadiusOnly
+											/>
+											<ProgressStepper
+												count={x.currentEpisode}
+												total={x.anime.episodeCount}
+											/>
+										</Stack>
 									)}
 								</React.Fragment>
 							))}
@@ -93,16 +103,23 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 							<>
 								<Grid templateColumns="repeat(5, 1fr)" gap={3} pt={3}>
 									{[...Array(5)].map((_x, i) => (
-										<Skeleton key={i} h="64" w={190} borderRadius={6} />
+										<Skeleton key={i} h="64" w={166} borderRadius={6} />
 									))}
 								</Grid>
 								<Waypoint
 									onEnter={() => {
-										console.log('fetching more...');
 										fetchMore({
 											variables: {
-												limit: variables?.options.limit ?? 0,
-												cursor: data.userList.nextCursor,
+												options: {
+													limit: variables?.options.limit ?? 0,
+													cursor: data.userList.nextCursor,
+													media: Media.Anime,
+													username,
+													title,
+													sort,
+													status,
+													direction,
+												},
 											},
 										});
 									}}
@@ -112,6 +129,6 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 					</>
 				)}
 			</Box>
-		</>
+		</Box>
 	);
 };
