@@ -98,7 +98,7 @@ export class ListResolver {
 					userID: user.id,
 					mediaType,
 					...(options.status && { status: options.status }),
-					...(options.title && { resourceSlug: Like(options.title) }),
+					...(options.title && { resourceSlug: Like(`%${options.title}%`) }),
 				},
 				order: {
 					status: 'ASC',

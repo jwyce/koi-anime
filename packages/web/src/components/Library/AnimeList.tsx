@@ -13,8 +13,6 @@ import {
 
 import { Poster } from '../Media/Poster';
 import { Loader } from '../UI/Loader';
-import { SearchBar } from './SearchBar';
-import { shallowRouteInput } from './UserLibrary';
 
 interface AnimeListProps {
 	username: string;
@@ -22,7 +20,6 @@ interface AnimeListProps {
 	sort: SortBy;
 	direction: Direction;
 	status: ListStatus | null;
-	filterCallback: (options: shallowRouteInput) => void;
 }
 
 export const AnimeList: React.FC<AnimeListProps> = ({
@@ -31,7 +28,6 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 	sort,
 	status,
 	direction,
-	filterCallback,
 }) => {
 	const { data, loading, fetchMore, variables } = useUserAnimeListQuery({
 		variables: {
@@ -52,14 +48,6 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 	}
 	return (
 		<>
-			<SearchBar
-				username={username}
-				title={title}
-				sort={sort}
-				direction={direction}
-				filterCallback={filterCallback}
-			/>
-
 			<Box pt={3}>
 				{data.userList.items.length === 0 ? (
 					<Box bg="gray.700" p={5} borderRadius={3}>

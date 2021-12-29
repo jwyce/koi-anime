@@ -11,6 +11,7 @@ import React, { useCallback } from 'react';
 import { AnimeList } from './AnimeList';
 import { FilterPanel } from './FilterPanel';
 import { MangaList } from './MangaList';
+import { SearchBar } from './SearchBar';
 
 interface UserLibraryProps {
 	user: PublicUserFragment;
@@ -29,31 +30,29 @@ export const UserLibrary: React.FC<UserLibraryProps> = ({ user }) => {
 		useLibraryQueryParams();
 	const currentParams = { ...router.query };
 	delete currentParams.username;
-	console.log(currentParams);
 
 	const filterCallback = useCallback(
 		({ title, sort, media, direction, status }: shallowRouteInput) => {
-			console.log(media, title, sort, direction, status);
 			if (status === null) {
 				delete currentParams.status;
 			}
-			router.push(
-				{
-					pathname: `/users/wabamn/library`,
-					query: {
-						...currentParams,
-						...(title && { title: title.toLowerCase() }),
-						...(sort && { sort: sort.toLowerCase() }),
-						...(media && { media: media.toLowerCase() }),
-						...(status && { status: status?.toLowerCase() }),
-						...(direction && { direction: direction.toLowerCase() }),
-					},
-				}
-				// undefined,
-				// { shallow: true }
-			);
+			if (title === '') {
+				delete currentParams.title;
+			}
+			const query = {
+				...currentParams,
+				...(title && { title: title.toLowerCase() }),
+				...(sort && { sort: sort.toLowerCase() }),
+				...(media && { media: media.toLowerCase() }),
+				...(status && { status: status?.toLowerCase() }),
+				...(direction && { direction: direction.toLowerCase() }),
+			};
+			router.push({
+				pathname: `/users/wabamn/library`,
+				query,
+			});
 		},
-		[]
+		[currentParams]
 	);
 
 	return (
@@ -61,14 +60,22 @@ export const UserLibrary: React.FC<UserLibraryProps> = ({ user }) => {
 			<Box flex={3.5} h="100%">
 				<>
 					{media === Media.Anime && (
-						<AnimeList
-							username={user.username}
-							title={title ?? ''}
-							sort={sort}
-							status={status}
-							direction={direction}
-							filterCallback={filterCallback}
-						/>
+						<>
+							<SearchBar
+								username={user.username}
+								title={title ?? ''}
+								sort={sort}
+								direction={direction}
+								filterCallback={filterCallback}
+							/>
+							<AnimeList
+								username={user.username}
+								title={title ?? ''}
+								sort={sort}
+								status={status}
+								direction={direction}
+							/>
+						</>
 					)}
 				</>
 				<>{media === Media.Manga && <MangaList username={user.username} />}</>
