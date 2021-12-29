@@ -14,7 +14,6 @@ import {
 import { Poster } from '../Media/Poster';
 import { Loader } from '../UI/Loader';
 import { ProgressStepper } from './ProgressStepper';
-import { isServer } from '@/utils/isServer';
 
 interface AnimeListProps {
 	username: string;
@@ -44,7 +43,6 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 			},
 		},
 		fetchPolicy: 'network-only',
-		// skip: isServer(),
 	});
 	if (loading || !data) {
 		return <Loader size="xl" />;
@@ -93,6 +91,10 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 											<ProgressStepper
 												count={x.currentEpisode}
 												total={x.anime.episodeCount}
+												type={Media.Anime}
+												username={username}
+												slug={x.anime.slug}
+												listId={x.id}
 											/>
 										</Stack>
 									)}
@@ -108,6 +110,7 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 								</Grid>
 								<Waypoint
 									onEnter={() => {
+										console.log('fetching more...');
 										fetchMore({
 											variables: {
 												options: {

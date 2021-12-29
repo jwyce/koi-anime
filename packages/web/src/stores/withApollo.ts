@@ -95,18 +95,9 @@ const client = new ApolloClient({
 								filteredExistingItems = [];
 							}
 
-							let filteredIncomingItems = [...incoming.items];
-							if (filteredExistingItems.length > 0) {
-								filteredIncomingItems = incoming.items.filter((x) =>
-									filteredExistingItems.every(
-										(y) => y.resourceSlug !== x.resourceSlug
-									)
-								);
-							}
-
 							return {
 								...incoming,
-								items: [...filteredExistingItems, ...filteredIncomingItems],
+								items: [...filteredExistingItems, ...incoming.items],
 							};
 						},
 					},

@@ -657,7 +657,7 @@ export type UserAnimeListQueryVariables = Exact<{
 }>;
 
 
-export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', resourceSlug: string, status: ListStatus, currentEpisode: number, anime?: { __typename?: 'Anime', episodeCount: number, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentEpisode: number, anime?: { __typename?: 'Anime', episodeCount: number, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
 
 export type UserListCountsQueryVariables = Exact<{
   username: Scalars['String'];
@@ -672,7 +672,7 @@ export type UserMangaListQueryVariables = Exact<{
 }>;
 
 
-export type UserMangaListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', resourceSlug: string, status: ListStatus, currentEpisode: number, manga?: { __typename?: 'Manga', chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+export type UserMangaListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentEpisode: number, manga?: { __typename?: 'Manga', chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
 
 export type MangaQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -1460,6 +1460,7 @@ export const UserAnimeListDocument = gql`
     query UserAnimeList($options: ListFilterInput!) {
   userList(options: $options) {
     items {
+      id
       resourceSlug
       status
       currentEpisode
@@ -1542,6 +1543,7 @@ export const UserMangaListDocument = gql`
     query UserMangaList($options: ListFilterInput!) {
   userList(options: $options) {
     items {
+      id
       resourceSlug
       status
       currentEpisode

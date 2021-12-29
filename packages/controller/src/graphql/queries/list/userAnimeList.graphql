@@ -1,6 +1,7 @@
 query UserAnimeList($options: ListFilterInput!) {
 	userList(options: $options) {
 		items {
+			id
 			resourceSlug
 			status
 			currentEpisode

@@ -148,6 +148,9 @@ export class ListResolver {
 				if (options.status === ListStatus.COMPLETED) {
 					options.episodeCount = resource.episodeCount;
 				}
+				if (options.episodeCount < resource.episodeCount) {
+					options.status = ListStatus.CURRENT;
+				}
 			}
 		} else {
 			const resource = await Manga.findOne({ where: { slug: options.slug } });
@@ -158,6 +161,9 @@ export class ListResolver {
 				}
 				if (options.status === ListStatus.COMPLETED) {
 					options.chapterCount = resource.chapterCount;
+				}
+				if (options.chapterCount < resource.chapterCount) {
+					options.status = ListStatus.CURRENT;
 				}
 			}
 		}
@@ -175,8 +181,12 @@ export class ListResolver {
 			resourceSlug: options.slug,
 			mediaType: options.type,
 			...(options.status && { status: options.status }),
-			...(options.episodeCount && { currentEpisode: options.episodeCount }),
-			...(options.chapterCount && { currentChapter: options.chapterCount }),
+			...(options.episodeCount && {
+				currentEpisode: Math.max(0, options.episodeCount),
+			}),
+			...(options.chapterCount && {
+				currentChapter: Math.max(0, options.chapterCount),
+			}),
 		}).save();
 	}
 
