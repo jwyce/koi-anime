@@ -48,7 +48,7 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 		return <Loader size="xl" />;
 	}
 	return (
-		<Box pb={5}>
+		<Box pb={10}>
 			<Box pt={3}>
 				{data.userList.items.length === 0 ? (
 					<Box bg="gray.700" p={5} borderRadius={3}>
