@@ -1,5 +1,4 @@
 # Koi Anime List
-Simple anime and manga tracker with a unique and accurate rating system
 Here to answer the eternal question - which anime, manga, character, and song is objectively most popular?
 
 ## Why?
