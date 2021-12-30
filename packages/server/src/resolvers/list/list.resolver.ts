@@ -170,8 +170,10 @@ export class ListResolver {
 
 		if (listEntry) {
 			if (options.status) listEntry.status = options.status;
-			if (options.episodeCount) listEntry.currentEpisode = options.episodeCount;
-			if (options.chapterCount) listEntry.currentChapter = options.chapterCount;
+			if (options.episodeCount !== undefined)
+				listEntry.currentEpisode = Math.max(0, options.episodeCount);
+			if (options.chapterCount !== undefined)
+				listEntry.currentChapter = Math.max(0, options.chapterCount);
 			listEntry.save();
 			return listEntry;
 		}
