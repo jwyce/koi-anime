@@ -672,7 +672,7 @@ export type UserMangaListQueryVariables = Exact<{
 }>;
 
 
-export type UserMangaListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentEpisode: number, manga?: { __typename?: 'Manga', chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+export type UserMangaListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentChapter: number, manga?: { __typename?: 'Manga', chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
 
 export type MangaQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -1546,7 +1546,7 @@ export const UserMangaListDocument = gql`
       id
       resourceSlug
       status
-      currentEpisode
+      currentChapter
       manga {
         ...DefaultManga
         chapterCount

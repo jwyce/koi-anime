@@ -169,7 +169,7 @@ export const ProgressStepper: React.FC<ProgressStepperProps> = ({
 										value={pickerVal}
 										onChange={(_, n) => setPickerVal(n)}
 										min={0}
-										max={total}
+										max={total > 0 ? total : Infinity}
 										w="20"
 										size="sm"
 									>
@@ -181,24 +181,34 @@ export const ProgressStepper: React.FC<ProgressStepperProps> = ({
 									</NumberInput>
 									<Text fontSize="smaller">
 										{' '}
-										of {total} {type === Media.Anime ? 'Episodes' : 'Chapters'}
+										{total > 0 ? (
+											<Text>
+												of {total}{' '}
+												{type === Media.Anime ? 'Episodes' : 'Chapters'}
+											</Text>
+										) : (
+											<Text>—</Text>
+										)}
 									</Text>
 								</HStack>
-								<Button size="sm" colorScheme="teal" onClick={async () => {
-							await updateListEntry({
-								variables: {
-									options: {
-										type,
-										slug,
-										...(type === Media.Anime
-											? { episodeCount: pickerVal }
-											: { chapterCount: pickerVal }),
-									},
-								},
-								update: (cache) => updateCache(pickerVal, listId, cache),
-							});
-
-                }}>
+								<Button
+									size="sm"
+									colorScheme="teal"
+									onClick={async () => {
+										await updateListEntry({
+											variables: {
+												options: {
+													type,
+													slug,
+													...(type === Media.Anime
+														? { episodeCount: pickerVal }
+														: { chapterCount: pickerVal }),
+												},
+											},
+											update: (cache) => updateCache(pickerVal, listId, cache),
+										});
+									}}
+								>
 									Save
 								</Button>
 							</Stack>

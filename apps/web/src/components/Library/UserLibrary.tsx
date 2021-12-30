@@ -78,7 +78,26 @@ export const UserLibrary: React.FC<UserLibraryProps> = ({ user }) => {
 						</>
 					)}
 				</>
-				<>{media === Media.Manga && <MangaList username={user.username} />}</>
+				<>
+					{media === Media.Manga && (
+						<>
+							<SearchBar
+								username={user.username}
+								title={title ?? ''}
+								sort={sort}
+								direction={direction}
+								filterCallback={filterCallback}
+							/>
+							<MangaList
+								username={user.username}
+								title={title ?? ''}
+								sort={sort}
+								status={status}
+								direction={direction}
+							/>
+						</>
+					)}
+				</>
 			</Box>
 			<Box flex={1.2} h="100%" pos="sticky" top="24" mx={3}>
 				<FilterPanel
