@@ -26,7 +26,7 @@ Setup
 ## TODO
 - [x] add getting started section to README
 - [x] build user library page
-- [ ] build voting page
+- [x] build voting page
 - [ ] build top rated page
 - [ ] make web responsive + fix light mode
 - [ ] create email templates
