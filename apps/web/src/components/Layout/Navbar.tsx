@@ -56,7 +56,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 					</a>
 				</NextLink>
 				<Spacer mr={2} />
-				<Button>Vote</Button>
+				<NextLink href="/vote/anime">
+					<a>
+						<Button>Vote</Button>
+					</a>
+				</NextLink>
 				<Spacer mr={2} />
 				<Menu>
 					<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>

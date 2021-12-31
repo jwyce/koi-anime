@@ -1,0 +1,10 @@
+query GetMatchup($type: ResourceType!) {
+	getMatchup(type: $type) {
+		first {
+			...DefaultResource
+		}
+		second {
+			...DefaultResource
+		}
+	}
+}

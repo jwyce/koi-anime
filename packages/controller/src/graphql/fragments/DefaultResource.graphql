@@ -1,0 +1,6 @@
+fragment DefaultResource on Resource {
+	slug
+	imageUrl
+	name
+	type
+}

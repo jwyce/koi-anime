@@ -176,6 +176,12 @@ export enum MangaSubtype {
   Oneshot = 'ONESHOT'
 }
 
+export type Matchup = {
+  __typename?: 'Matchup';
+  first: Resource;
+  second: Resource;
+};
+
 export enum Media {
   Anime = 'ANIME',
   Manga = 'MANGA'
@@ -322,6 +328,7 @@ export type Query = {
   animeography: Array<Anime>;
   character: Character;
   charactersForAnime: Array<Character>;
+  getMatchup?: Maybe<Matchup>;
   kitsuSearchAnime: PaginatedAnimeResponse;
   kitsuSearchManga: PaginatedMangaResponse;
   manga?: Maybe<Manga>;
@@ -352,6 +359,11 @@ export type QueryCharacterArgs = {
 
 export type QueryCharactersForAnimeArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryGetMatchupArgs = {
+  type: ResourceType;
 };
 
 
@@ -405,6 +417,14 @@ export type RegisterInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type Resource = {
+  __typename?: 'Resource';
+  imageUrl: Scalars['String'];
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  type: ResourceType;
 };
 
 export enum ResourceType {
@@ -506,6 +526,8 @@ export type DefaultErrorFragment = { __typename?: 'FieldError', field: string, m
 export type DefaultListFragment = { __typename?: 'List', resourceSlug: string, mediaType: Media, currentEpisode: number, currentChapter: number, status: ListStatus };
 
 export type DefaultMangaFragment = { __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
+
+export type DefaultResourceFragment = { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType };
 
 export type DefaultSongFragment = { __typename?: 'Song', name: string, artist: string, songType: SongType };
 
@@ -702,6 +724,13 @@ export type UserQueryVariables = Exact<{
 
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } };
 
+export type GetMatchupQueryVariables = Exact<{
+  type: ResourceType;
+}>;
+
+
+export type GetMatchupQuery = { __typename?: 'Query', getMatchup?: { __typename?: 'Matchup', first: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType }, second: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType } } | null | undefined };
+
 export const DefaultAnimeFragmentDoc = gql`
     fragment DefaultAnime on Anime {
   id
@@ -747,6 +776,14 @@ export const DefaultMangaFragmentDoc = gql`
   ageRating
   status
   posterLinkSmall
+}
+    `;
+export const DefaultResourceFragmentDoc = gql`
+    fragment DefaultResource on Resource {
+  slug
+  imageUrl
+  name
+  type
 }
     `;
 export const DefaultSongFragmentDoc = gql`
@@ -1736,3 +1773,43 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const GetMatchupDocument = gql`
+    query GetMatchup($type: ResourceType!) {
+  getMatchup(type: $type) {
+    first {
+      ...DefaultResource
+    }
+    second {
+      ...DefaultResource
+    }
+  }
+}
+    ${DefaultResourceFragmentDoc}`;
+
+/**
+ * __useGetMatchupQuery__
+ *
+ * To run a query within a React component, call `useGetMatchupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMatchupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMatchupQuery({
+ *   variables: {
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetMatchupQuery(baseOptions: Apollo.QueryHookOptions<GetMatchupQuery, GetMatchupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMatchupQuery, GetMatchupQueryVariables>(GetMatchupDocument, options);
+      }
+export function useGetMatchupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMatchupQuery, GetMatchupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMatchupQuery, GetMatchupQueryVariables>(GetMatchupDocument, options);
+        }
+export type GetMatchupQueryHookResult = ReturnType<typeof useGetMatchupQuery>;
+export type GetMatchupLazyQueryHookResult = ReturnType<typeof useGetMatchupLazyQuery>;
+export type GetMatchupQueryResult = Apollo.QueryResult<GetMatchupQuery, GetMatchupQueryVariables>;
