@@ -2,6 +2,7 @@ import { ResourceType } from '../helpers/enums';
 import { Field, Int, ObjectType } from 'type-graphql';
 import {
 	BaseEntity,
+	Column,
 	CreateDateColumn,
 	Entity,
 	PrimaryColumn,
@@ -22,6 +23,10 @@ export class Vote extends BaseEntity {
 	@Field(() => String)
 	@PrimaryColumn()
 	votedAgainst: string;
+
+	@Field(() => Int)
+	@Column({ type: 'int', default: 0 })
+	count: number;
 
 	@Field(() => ResourceType)
 	@PrimaryColumn({ type: 'enum', enum: ResourceType })

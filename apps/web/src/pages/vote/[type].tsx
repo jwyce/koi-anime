@@ -16,19 +16,25 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
-import { ResourceType, useGetMatchupQuery } from '@koi/controller';
+import {
+	ResourceType,
+	useGetMatchupQuery,
+	useVoteMutation,
+} from '@koi/controller';
 
 import type { NextPage } from 'next';
+import { NetworkStatus } from '@apollo/client';
 export const Vote: NextPage = ({}) => {
 	const router = useRouter();
 	const { type } = router.query;
 	const typeAsEnum = (type as string)?.toUpperCase() as ResourceType;
 
 	const [shouldSkip, setShouldSkip] = useState(true);
-	const { data, loading } = useGetMatchupQuery({
+	const { data, loading, refetch, networkStatus } = useGetMatchupQuery({
 		variables: { type: typeAsEnum },
 		skip: shouldSkip,
 	});
+	const [vote] = useVoteMutation();
 
 	useEffect(() => {
 		if (type) {
@@ -37,12 +43,12 @@ export const Vote: NextPage = ({}) => {
 	}, [type]);
 
 	const types = [
-		{ status: ResourceType.Anime, text: 'Anime' },
-		{ status: ResourceType.Manga, text: 'Manga' },
-		{ status: ResourceType.EdSong, text: 'Ending Song' },
-		{ status: ResourceType.OpSong, text: 'Opening Song' },
-		{ status: ResourceType.MCharacter, text: 'Best Boy' },
-		{ status: ResourceType.FCharacter, text: 'Best Girl' },
+		{ icon: '🎥', status: ResourceType.Anime, text: 'Anime' },
+		{ icon: '📙', status: ResourceType.Manga, text: 'Manga' },
+		{ icon: '🎵', status: ResourceType.EdSong, text: 'Ending Song' },
+		{ icon: '🎶', status: ResourceType.OpSong, text: 'Opening Song' },
+		{ icon: '💙', status: ResourceType.MCharacter, text: 'Best Boy' },
+		{ icon: '🌸', status: ResourceType.FCharacter, text: 'Best Girl' },
 	];
 
 	if (loading && !data) {
@@ -77,55 +83,87 @@ export const Vote: NextPage = ({}) => {
 				<Heading textAlign="center" pb={5}>
 					Which is better?
 				</Heading>
-				{data && data.getMatchup ? (
-					<>
-						<HStack align="center" justify="space-evenly" w="100%">
-							<Resource
-								imageSrc={data.getMatchup.first.imageUrl}
-								name={data.getMatchup.first.name}
-								isSong={
-									typeAsEnum === ResourceType.EdSong ||
-									typeAsEnum === ResourceType.OpSong
-								}
-							/>
-							<Text fontSize="xl" fontStyle="italic">
-								or
-							</Text>
-							<Resource
-								imageSrc={data.getMatchup.second.imageUrl}
-								name={data.getMatchup.second.name}
-								isSong={
-									typeAsEnum === ResourceType.EdSong ||
-									typeAsEnum === ResourceType.OpSong
-								}
-							/>
-						</HStack>
-					</>
+				{loading || networkStatus === NetworkStatus.refetch ? (
+					<Loader size="lg" />
 				) : (
-					<Stack
-						p={10}
-						bg="gray.700"
-						align="center"
-						justify="center"
-						spacing={1}
-					>
-						<Text fontSize="larger" fontWeight={700} color="gray.500">
-							Not enough media in your list to vote! Ready to start something
-							new?
-						</Text>
-						<NextLink href="/browse/anime">
-							<a>
-								<Button colorScheme="teal">Browse Anime</Button>
-							</a>
-						</NextLink>
-					</Stack>
+					<>
+						{data && data.getMatchup ? (
+							<>
+								<HStack align="center" justify="space-evenly" w="100%">
+									<Resource
+										imageSrc={data.getMatchup.first.imageUrl}
+										name={data.getMatchup.first.name}
+										isSong={
+											typeAsEnum === ResourceType.EdSong ||
+											typeAsEnum === ResourceType.OpSong
+										}
+										callback={async () => {
+											await vote({
+												variables: {
+													type: typeAsEnum,
+													votedAgainst: data.getMatchup?.second.slug ?? '',
+													votedFor: data.getMatchup?.first.slug ?? '',
+												},
+											});
+											refetch();
+										}}
+									/>
+									<Text fontSize="xl" fontStyle="italic">
+										or
+									</Text>
+									<Resource
+										imageSrc={data.getMatchup.second.imageUrl}
+										name={data.getMatchup.second.name}
+										isSong={
+											typeAsEnum === ResourceType.EdSong ||
+											typeAsEnum === ResourceType.OpSong
+										}
+										callback={async () => {
+											await vote({
+												variables: {
+													type: typeAsEnum,
+													votedAgainst: data.getMatchup?.first.slug ?? '',
+													votedFor: data.getMatchup?.second.slug ?? '',
+												},
+											});
+											refetch();
+										}}
+									/>
+								</HStack>
+							</>
+						) : (
+							<Stack
+								p={10}
+								bg="gray.700"
+								align="center"
+								justify="center"
+								spacing={1}
+							>
+								<Text fontSize="larger" fontWeight={700} color="gray.500">
+									Not enough media in your list to vote! Ready to start
+									something new?
+								</Text>
+								<NextLink href="/browse/anime">
+									<a>
+										<Button colorScheme="teal">Browse Anime</Button>
+									</a>
+								</NextLink>
+							</Stack>
+						)}
+					</>
 				)}
 				<HStack w={300} align="center" justify="space-between" pt={5}>
 					<Text fontWeight={600}>Voting For: </Text>
-					<Select w="60%">
+					<Select
+						w="60%"
+						defaultValue={typeAsEnum}
+						onChange={(e) =>
+							router.push(`/vote/${e.target.value.toLowerCase()}`)
+						}
+					>
 						{types.map((x, idx) => (
 							<option key={idx} value={x.status}>
-								{x.text}
+								{x.icon} {x.text}
 							</option>
 						))}
 					</Select>

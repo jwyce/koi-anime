@@ -1,5 +1,5 @@
-import { Arg, Ctx, Query, Resolver } from 'type-graphql';
-import { In } from 'typeorm';
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { getConnection, In } from 'typeorm';
 
 import { Anime } from '../../entities/Anime';
 import { Character } from '../../entities/Character';
@@ -14,6 +14,43 @@ import { Matchup, Resource } from './Matchup';
 
 @Resolver(Vote)
 export class VoteResolver {
+	@Mutation(() => Boolean)
+	async vote(
+		@Arg('votedFor') votedFor: string,
+		@Arg('votedAgainst') votedAgainst: string,
+		@Arg('type', () => ResourceType) type: ResourceType,
+		@Ctx() { req }: MyContext
+	) {
+		const existing = await Vote.findOne({
+			where: {
+				votedFor,
+				votedAgainst,
+				userID: req.session.userId,
+				resourceType: type,
+			},
+		});
+
+		if (existing) {
+			existing.count++;
+			existing.save();
+		} else {
+			await getConnection()
+				.createQueryBuilder()
+				.insert()
+				.into(Vote)
+				.values({
+					count: 1,
+					votedAgainst,
+					votedFor,
+					resourceType: type,
+					userID: req.session.userId,
+				})
+				.returning('*')
+				.execute();
+		}
+		return true;
+	}
+
 	@Query(() => Matchup, { nullable: true })
 	async getMatchup(
 		@Arg('type', () => ResourceType) type: ResourceType,

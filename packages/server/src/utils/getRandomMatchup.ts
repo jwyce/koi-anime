@@ -11,10 +11,13 @@ export const getRandomMatchup = (options: Resource[]): Matchup | null => {
 	return { first, second };
 };
 
-const getRandomResource = (options: Resource[], notThisOne?: string) => {
+const getRandomResource = (
+	options: Resource[],
+	notThisOne?: string
+): Resource => {
 	const choice = options[random(0, options.length - 1)];
-	if (notThisOne && choice.slug !== notThisOne) {
-		getRandomResource(options, notThisOne);
+	if (notThisOne && choice.slug === notThisOne) {
+		return getRandomResource(options, notThisOne);
 	}
 	return choice;
 };

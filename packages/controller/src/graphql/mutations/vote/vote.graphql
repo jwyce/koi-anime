@@ -1,0 +1,7 @@
+mutation Vote(
+	$type: ResourceType!
+	$votedFor: String!
+	$votedAgainst: String!
+) {
+	vote(type: $type, votedFor: $votedFor, votedAgainst: $votedAgainst)
+}
