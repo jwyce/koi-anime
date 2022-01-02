@@ -51,8 +51,9 @@ export const CharacterDetail: NextPage = ({}) => {
 				<Box flex={0.6} h="100%" pos="sticky" mt="-24" top="24">
 					<PosterListControl
 						posterSrc={data.character.imageOriginal}
-						rank={12}
+						rank={data.character.rank}
 						type="character"
+						slug={data.character.slug}
 					/>
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>

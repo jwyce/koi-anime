@@ -2,6 +2,10 @@ query SearchManga($limit: Int!, $cursor: Int!, $filter: String) {
 	kitsuSearchManga(limit: $limit, cursor: $cursor, filter: $filter) {
 		items {
 			...DefaultManga
+			rank {
+				rank
+				approval
+			}
 		}
 		hasMore
 		nextCursor

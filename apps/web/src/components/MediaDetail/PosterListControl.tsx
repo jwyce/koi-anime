@@ -17,6 +17,7 @@ import {
 	Media,
 	MyListEntryStatusDocument,
 	MyListEntryStatusQuery,
+	Rank,
 	useAddUpdateMyListEntryMutation,
 	useDeleteListEntryMutation,
 	useMyListEntryStatusQuery,
@@ -26,7 +27,7 @@ import { HeartIcon } from '../UI/HeartIcon';
 import { Loader } from '../UI/Loader';
 
 interface PosterListControlProps {
-	rank: number;
+	rank?: Rank | null;
 	posterSrc: string | undefined;
 	type: 'anime' | 'manga' | 'character';
 	slug: string;
@@ -114,9 +115,9 @@ export const PosterListControl: React.FC<PosterListControlProps> = ({
 	return (
 		<Stack>
 			<Image src={posterSrc} alt="poster" borderRadius={6} />
-			{rank < 1000 && (
+			{rank && rank.rank < 1000 && (
 				<Box pos="absolute" top={-1} right={1}>
-					<HeartIcon rank={rank} size={36} />
+					<HeartIcon rank={rank.rank} size={36} />
 				</Box>
 			)}
 			<>

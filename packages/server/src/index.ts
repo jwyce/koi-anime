@@ -22,6 +22,7 @@ import {
 	createAnimeLoader,
 	createMangaLoader,
 } from './loaders/createMediaLoader';
+import { createRankLoader } from './loaders/createRankLoader';
 import { redis } from './redis/redis';
 import { MyContext } from './typings/MyContext';
 
@@ -83,6 +84,7 @@ const main = async () => {
 			songsLoader: createSongsLoader(),
 			animeLoader: createAnimeLoader(),
 			mangaLoader: createMangaLoader(),
+			rankLoader: createRankLoader(),
 		}),
 		plugins: [
 			{

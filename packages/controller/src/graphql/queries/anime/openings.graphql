@@ -1,0 +1,9 @@
+query Openings($id: Int!) {
+	openingsForAnime(id: $id) {
+		...DefaultSong
+		rank {
+			rank
+			approval
+		}
+	}
+}

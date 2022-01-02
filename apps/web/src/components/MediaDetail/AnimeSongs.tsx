@@ -1,3 +1,7 @@
+import React from 'react';
+import { IoMusicalNotes } from 'react-icons/io5';
+
+import { isServer } from '@/utils/isServer';
 import {
 	Box,
 	Heading,
@@ -7,15 +11,35 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
-import { DefaultSongFragment, SongType } from '@koi/controller';
-import React from 'react';
-import { IoMusicalNotes } from 'react-icons/io5';
+import {
+	DefaultSongFragment,
+	SongType,
+	useEndingsQuery,
+	useOpeningsQuery,
+} from '@koi/controller';
+
+import { HeartIcon } from '../UI/HeartIcon';
 
 interface AnimeSongsProps {
+	animeId: number;
 	songs: DefaultSongFragment[];
 }
 
-export const AnimeSongs: React.FC<AnimeSongsProps> = ({ songs }) => {
+export const AnimeSongs: React.FC<AnimeSongsProps> = ({ animeId, songs }) => {
+	const { data: opData } = useOpeningsQuery({
+		variables: { id: animeId },
+		skip: isServer(),
+	});
+	const { data: edData } = useEndingsQuery({
+		variables: { id: animeId },
+		skip: isServer(),
+	});
+
+	if (opData && edData) {
+		console.log('op', opData.openingsForAnime);
+		console.log('ed', edData.endingsForAnime);
+	}
+
 	return (
 		<Box mb={6}>
 			<HStack>
@@ -29,7 +53,16 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ songs }) => {
 						<Box borderRadius={3} bg="gray.900" p={2} key={`${x.name}-${i}`}>
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
-									<Text fontWeight="bold">{x.name}</Text>
+									<HStack>
+										<HeartIcon
+											rank={
+												opData?.openingsForAnime.find((y) => y.slug === x.slug)
+													?.rank?.rank
+											}
+											size={32}
+										/>
+										<Text fontWeight="bold">{x.name}</Text>
+									</HStack>
 								</WrapItem>
 								<WrapItem>
 									<Text color="gray.500"> by {x.artist}</Text>
@@ -52,7 +85,16 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ songs }) => {
 						<Box borderRadius={3} bg="gray.900" p={2} key={`${x.name}-${i}`}>
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
-									<Text fontWeight="bold">{x.name}</Text>
+									<HStack>
+										<HeartIcon
+											rank={
+												edData?.endingsForAnime.find((y) => y.slug === x.slug)
+													?.rank?.rank
+											}
+											size={32}
+										/>
+										<Text fontWeight="bold">{x.name}</Text>
+									</HStack>
 								</WrapItem>
 								<WrapItem>
 									<Text color="gray.500"> by {x.artist}</Text>

@@ -55,7 +55,7 @@ export const AnimeDetail: NextPage = ({}) => {
 				<Box flex={0.6} h="100%" pos="sticky" mt="-24" top="24">
 					<PosterListControl
 						posterSrc={data.anime?.posterLinkOriginal}
-						rank={5}
+						rank={data.anime?.rank}
 						type="anime"
 						slug={data.anime?.slug ?? ''}
 					/>
@@ -65,11 +65,12 @@ export const AnimeDetail: NextPage = ({}) => {
 						title={data.anime?.englishTitle!}
 						date={data.anime?.startDate!}
 						description={data.anime?.synopsis!}
+						rank={data.anime?.rank}
 					/>
 					<Spacer mt={3} />
 					<AnimeCharacters id={data.anime?.id ?? 0} />
 					<Spacer mt={6} />
-					<AnimeSongs songs={data.anime?.songs!} />
+					<AnimeSongs songs={data.anime?.songs!} animeId={data.anime?.id!} />
 				</Box>
 				<Box flex={1} h="100%" pos="sticky" top={16}>
 					<MediaDetails

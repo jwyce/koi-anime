@@ -1,0 +1,14 @@
+fragment DefaultCharacter on Character {
+	id
+	slug
+	englishName
+	japaneseName
+	canonicalName
+	gender
+	description
+	imageOriginal
+	rank {
+		rank
+		approval
+	}
+}

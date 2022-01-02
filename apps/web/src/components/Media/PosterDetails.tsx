@@ -1,14 +1,17 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 
-import { Box, Text, Wrap, WrapItem } from '@chakra-ui/react';
-import { Status } from '@koi/controller';
+import { Box, HStack, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Rank, Status } from '@koi/controller';
+
+import { HeartIcon } from '../UI/HeartIcon';
+import { ApprovalText } from './ApprovalText';
 import { PosterStatus } from './PosterStatus';
 
 interface PosterDetailsProps {
 	title: string;
 	synopsis: string;
-	rank?: number;
+	rank?: Rank | null;
 	date: string;
 	status?: Status;
 }
@@ -53,7 +56,15 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 						</WrapItem>
 					</Wrap>
 
-					{status && <PosterStatus status={status} />}
+					{rank && (
+						<ApprovalText textApproval={rank.approval} truncated size="md" />
+					)}
+					<HStack justify="space-between">
+						{status && <PosterStatus status={status} />}
+						{rank && rank.rank < 1000 && (
+							<HeartIcon rank={rank.rank} size={24} />
+						)}
+					</HStack>
 
 					<Text fontSize="xs" color="gray.300" pt={1}>
 						{synopsis}

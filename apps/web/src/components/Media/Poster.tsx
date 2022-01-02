@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import React, { useState } from 'react';
 
 import { Box, Image, Skeleton } from '@chakra-ui/react';
-import { Status } from '@koi/controller';
+import { Rank, Status } from '@koi/controller';
 
 import { PosterDetails } from './PosterDetails';
 
@@ -11,7 +11,7 @@ interface PosterProps {
 	posterSrc: string;
 	title: string;
 	synopsis: string;
-	rank?: number;
+	rank?: Rank | null;
 	date: string;
 	status?: Status;
 	url: string;

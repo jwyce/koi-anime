@@ -17,7 +17,8 @@ import { getConnection, In } from 'typeorm';
 import { Anime } from '../../entities/Anime';
 import { Character } from '../../entities/Character';
 import { Song } from '../../entities/Song';
-import { SongType, Status } from '../../helpers/enums';
+import { ResourceType, SongType, Status } from '../../helpers/enums';
+import { Rank } from '../../loaders/createRankLoader';
 import {
 	apiAnimeFactory,
 	apiCharacterFactory,
@@ -25,6 +26,7 @@ import {
 	apiSongFactory,
 } from '../../utils/apiFactory';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
+
 const malScraper = require('mal-scraper');
 
 const PaginatedAnimeResponse = PaginatedResponse(Anime);
@@ -36,6 +38,11 @@ export class AnimeResolver {
 	async songs(@Root() anime: Anime, @Ctx() { songsLoader }: MyContext) {
 		const songs = await songsLoader.load(anime.id);
 		return songs ?? [];
+	}
+
+	@FieldResolver(() => Rank, { nullable: true })
+	async rank(@Root() anime: Anime, @Ctx() { rankLoader }: MyContext) {
+		return rankLoader.load({ slugId: anime.slug, type: ResourceType.ANIME });
 	}
 
 	@Query(() => [Anime])

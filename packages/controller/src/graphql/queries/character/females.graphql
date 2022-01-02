@@ -1,0 +1,5 @@
+query Females($id: Int!) {
+	femalesForAnime(id: $id) {
+		...DefaultCharacter
+	}
+}

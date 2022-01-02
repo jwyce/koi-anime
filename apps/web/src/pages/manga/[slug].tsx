@@ -53,7 +53,7 @@ export const MangaDetail: NextPage = ({}) => {
 				<Box flex={0.6} h="100%" pos="sticky" mt="-24" top="24">
 					<PosterListControl
 						posterSrc={data.manga?.posterLinkOriginal}
-						rank={12}
+						rank={data.manga?.rank}
 						type="manga"
 						slug={data.manga?.slug ?? ''}
 					/>
@@ -63,6 +63,7 @@ export const MangaDetail: NextPage = ({}) => {
 						title={data.manga?.englishTitle!}
 						date={data.manga?.startDate!}
 						description={data.manga?.synopsis!}
+						rank={data.manga?.rank}
 					/>
 				</Box>
 				<Box flex={1} h="100%" pos="sticky" top={16}>

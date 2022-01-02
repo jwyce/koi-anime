@@ -44,6 +44,7 @@ export type Anime = {
   nsfw: Scalars['Boolean'];
   posterLinkOriginal: Scalars['String'];
   posterLinkSmall: Scalars['String'];
+  rank?: Maybe<Rank>;
   romajiTitle: Scalars['String'];
   slug: Scalars['String'];
   songs: Array<Song>;
@@ -81,6 +82,7 @@ export type Character = {
   imageOriginal: Scalars['String'];
   japaneseName: Scalars['String'];
   malID: Scalars['Int'];
+  rank?: Maybe<Rank>;
   slug: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -153,6 +155,7 @@ export type Manga = {
   nextRelease: Scalars['DateTime'];
   posterLinkOriginal: Scalars['String'];
   posterLinkSmall: Scalars['String'];
+  rank?: Maybe<Rank>;
   romajiTitle: Scalars['String'];
   serialization: Scalars['String'];
   slug: Scalars['String'];
@@ -336,12 +339,16 @@ export type Query = {
   animeography: Array<Anime>;
   character: Character;
   charactersForAnime: Array<Character>;
+  endingsForAnime: Array<Song>;
+  femalesForAnime: Array<Character>;
   getMatchup?: Maybe<Matchup>;
   kitsuSearchAnime: PaginatedAnimeResponse;
   kitsuSearchManga: PaginatedMangaResponse;
+  malesForAnime: Array<Character>;
   manga?: Maybe<Manga>;
   me?: Maybe<User>;
   myListEntryStatus?: Maybe<List>;
+  openingsForAnime: Array<Song>;
   songsForAnime: Array<Song>;
   user: User;
   userList: PaginatedListResponse;
@@ -370,6 +377,16 @@ export type QueryCharactersForAnimeArgs = {
 };
 
 
+export type QueryEndingsForAnimeArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryFemalesForAnimeArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryGetMatchupArgs = {
   type: ResourceType;
 };
@@ -389,6 +406,11 @@ export type QueryKitsuSearchMangaArgs = {
 };
 
 
+export type QueryMalesForAnimeArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryMangaArgs = {
   slug: Scalars['String'];
 };
@@ -397,6 +419,11 @@ export type QueryMangaArgs = {
 export type QueryMyListEntryStatusArgs = {
   slug: Scalars['String'];
   type: Media;
+};
+
+
+export type QueryOpeningsForAnimeArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -418,6 +445,21 @@ export type QueryUserListArgs = {
 export type QueryUserListStatusCountsArgs = {
   media: Media;
   username: Scalars['String'];
+};
+
+export type Rank = {
+  __typename?: 'Rank';
+  approval: Scalars['String'];
+  rank: Scalars['Float'];
+};
+
+export type RankedResource = {
+  __typename?: 'RankedResource';
+  approval: Scalars['String'];
+  approval_rank: Scalars['Float'];
+  dislikes: Scalars['Float'];
+  likes: Scalars['Float'];
+  slug: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -453,6 +495,7 @@ export type Song = {
   fullTitle: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  rank?: Maybe<Rank>;
   slug: Scalars['String'];
   songType: SongType;
   updatedAt: Scalars['String'];
@@ -528,17 +571,19 @@ export type Vote = {
   votedFor: Scalars['String'];
 };
 
-export type DefaultAnimeFragment = { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
+export type DefaultAnimeFragment = { __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined };
+
+export type DefaultCharacterFragment = { __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined };
 
 export type DefaultErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
 export type DefaultListFragment = { __typename?: 'List', resourceSlug: string, mediaType: Media, currentEpisode: number, currentChapter: number, status: ListStatus };
 
-export type DefaultMangaFragment = { __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string };
+export type DefaultMangaFragment = { __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined };
 
 export type DefaultResourceFragment = { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType };
 
-export type DefaultSongFragment = { __typename?: 'Song', name: string, artist: string, songType: SongType };
+export type DefaultSongFragment = { __typename?: 'Song', name: string, artist: string, songType: SongType, slug: string };
 
 export type DefaultUserFragment = { __typename?: 'User', email: string, isConfirmed: boolean, showNSFW: boolean, id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference };
 
@@ -645,7 +690,7 @@ export type AnimeQueryVariables = Exact<{
 }>;
 
 
-export type AnimeQuery = { __typename?: 'Query', anime?: { __typename?: 'Anime', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, studios: Array<string>, episodeCount: number, youtubeVideoId: string, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, songs: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType }> } | null | undefined };
+export type AnimeQuery = { __typename?: 'Query', anime?: { __typename?: 'Anime', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, studios: Array<string>, episodeCount: number, youtubeVideoId: string, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, songs: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType, slug: string }>, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined } | null | undefined };
 
 export type AnimeCharactersQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -659,7 +704,21 @@ export type SongsForAnimeQueryVariables = Exact<{
 }>;
 
 
-export type SongsForAnimeQuery = { __typename?: 'Query', songsForAnime: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType }> };
+export type SongsForAnimeQuery = { __typename?: 'Query', songsForAnime: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType, slug: string }> };
+
+export type EndingsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type EndingsQuery = { __typename?: 'Query', endingsForAnime: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType, slug: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined }> };
+
+export type OpeningsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type OpeningsQuery = { __typename?: 'Query', openingsForAnime: Array<{ __typename?: 'Song', name: string, artist: string, songType: SongType, slug: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined }> };
 
 export type SearchAnimeQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -668,21 +727,35 @@ export type SearchAnimeQueryVariables = Exact<{
 }>;
 
 
-export type SearchAnimeQuery = { __typename?: 'Query', kitsuSearchAnime: { __typename?: 'PaginatedAnimeResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
+export type SearchAnimeQuery = { __typename?: 'Query', kitsuSearchAnime: { __typename?: 'PaginatedAnimeResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined }> } };
 
 export type AnimeographyQueryVariables = Exact<{
   characterSlug: Scalars['String'];
 }>;
 
 
-export type AnimeographyQuery = { __typename?: 'Query', animeography: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> };
+export type AnimeographyQuery = { __typename?: 'Query', animeography: Array<{ __typename?: 'Anime', id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined }> };
 
 export type CharacterQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
 
 
-export type CharacterQuery = { __typename?: 'Query', character: { __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string } };
+export type CharacterQuery = { __typename?: 'Query', character: { __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined } };
+
+export type FemalesQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FemalesQuery = { __typename?: 'Query', femalesForAnime: Array<{ __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined }> };
+
+export type MalesQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type MalesQuery = { __typename?: 'Query', malesForAnime: Array<{ __typename?: 'Character', id: number, slug: string, englishName: string, japaneseName: string, canonicalName: string, gender: string, description: string, imageOriginal: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined }> };
 
 export type MyListEntryStatusQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -697,7 +770,7 @@ export type UserAnimeListQueryVariables = Exact<{
 }>;
 
 
-export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentEpisode: number, anime?: { __typename?: 'Anime', episodeCount: number, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+export type UserAnimeListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentEpisode: number, anime?: { __typename?: 'Anime', episodeCount: number, id: number, apiID: number, slug: string, subtype: AnimeSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined } | null | undefined }> } };
 
 export type UserListCountsQueryVariables = Exact<{
   username: Scalars['String'];
@@ -712,14 +785,14 @@ export type UserMangaListQueryVariables = Exact<{
 }>;
 
 
-export type UserMangaListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentChapter: number, manga?: { __typename?: 'Manga', chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined }> } };
+export type UserMangaListQuery = { __typename?: 'Query', userList: { __typename?: 'PaginatedListResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'List', id: number, resourceSlug: string, status: ListStatus, currentChapter: number, manga?: { __typename?: 'Manga', chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined } | null | undefined }> } };
 
 export type MangaQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
 
 
-export type MangaQuery = { __typename?: 'Query', manga?: { __typename?: 'Manga', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, serialization: string, volumeCount: number, chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string } | null | undefined };
+export type MangaQuery = { __typename?: 'Query', manga?: { __typename?: 'Manga', ageRatingGuide: string, posterLinkOriginal: string, coverLinkOriginal: string, serialization: string, volumeCount: number, chapterCount: number, id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined } | null | undefined };
 
 export type SearchMangaQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -728,7 +801,7 @@ export type SearchMangaQueryVariables = Exact<{
 }>;
 
 
-export type SearchMangaQuery = { __typename?: 'Query', kitsuSearchManga: { __typename?: 'PaginatedMangaResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string }> } };
+export type SearchMangaQuery = { __typename?: 'Query', kitsuSearchManga: { __typename?: 'PaginatedMangaResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'Manga', id: number, apiID: number, slug: string, subtype: MangaSubtype, synopsis: string, englishTitle: string, romajiTitle: string, japaneseTitle: string, canonicalTitle: string, startDate: any, endDate: any, tba: string, ageRating: AgeRating, status: Status, posterLinkSmall: string, rank?: { __typename?: 'Rank', rank: number, approval: string } | null | undefined }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -766,6 +839,26 @@ export const DefaultAnimeFragmentDoc = gql`
   ageRating
   status
   posterLinkSmall
+  rank {
+    rank
+    approval
+  }
+}
+    `;
+export const DefaultCharacterFragmentDoc = gql`
+    fragment DefaultCharacter on Character {
+  id
+  slug
+  englishName
+  japaneseName
+  canonicalName
+  gender
+  description
+  imageOriginal
+  rank {
+    rank
+    approval
+  }
 }
     `;
 export const DefaultListFragmentDoc = gql`
@@ -794,6 +887,10 @@ export const DefaultMangaFragmentDoc = gql`
   ageRating
   status
   posterLinkSmall
+  rank {
+    rank
+    approval
+  }
 }
     `;
 export const DefaultResourceFragmentDoc = gql`
@@ -809,6 +906,7 @@ export const DefaultSongFragmentDoc = gql`
   name
   artist
   songType
+  slug
 }
     `;
 export const DefaultErrorFragmentDoc = gql`
@@ -1389,6 +1487,84 @@ export function useSongsForAnimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type SongsForAnimeQueryHookResult = ReturnType<typeof useSongsForAnimeQuery>;
 export type SongsForAnimeLazyQueryHookResult = ReturnType<typeof useSongsForAnimeLazyQuery>;
 export type SongsForAnimeQueryResult = Apollo.QueryResult<SongsForAnimeQuery, SongsForAnimeQueryVariables>;
+export const EndingsDocument = gql`
+    query Endings($id: Int!) {
+  endingsForAnime(id: $id) {
+    ...DefaultSong
+    rank {
+      rank
+      approval
+    }
+  }
+}
+    ${DefaultSongFragmentDoc}`;
+
+/**
+ * __useEndingsQuery__
+ *
+ * To run a query within a React component, call `useEndingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEndingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEndingsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEndingsQuery(baseOptions: Apollo.QueryHookOptions<EndingsQuery, EndingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EndingsQuery, EndingsQueryVariables>(EndingsDocument, options);
+      }
+export function useEndingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EndingsQuery, EndingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EndingsQuery, EndingsQueryVariables>(EndingsDocument, options);
+        }
+export type EndingsQueryHookResult = ReturnType<typeof useEndingsQuery>;
+export type EndingsLazyQueryHookResult = ReturnType<typeof useEndingsLazyQuery>;
+export type EndingsQueryResult = Apollo.QueryResult<EndingsQuery, EndingsQueryVariables>;
+export const OpeningsDocument = gql`
+    query Openings($id: Int!) {
+  openingsForAnime(id: $id) {
+    ...DefaultSong
+    rank {
+      rank
+      approval
+    }
+  }
+}
+    ${DefaultSongFragmentDoc}`;
+
+/**
+ * __useOpeningsQuery__
+ *
+ * To run a query within a React component, call `useOpeningsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOpeningsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOpeningsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOpeningsQuery(baseOptions: Apollo.QueryHookOptions<OpeningsQuery, OpeningsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OpeningsQuery, OpeningsQueryVariables>(OpeningsDocument, options);
+      }
+export function useOpeningsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OpeningsQuery, OpeningsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OpeningsQuery, OpeningsQueryVariables>(OpeningsDocument, options);
+        }
+export type OpeningsQueryHookResult = ReturnType<typeof useOpeningsQuery>;
+export type OpeningsLazyQueryHookResult = ReturnType<typeof useOpeningsLazyQuery>;
+export type OpeningsQueryResult = Apollo.QueryResult<OpeningsQuery, OpeningsQueryVariables>;
 export const SearchAnimeDocument = gql`
     query SearchAnime($limit: Int!, $cursor: Int!, $filter: String) {
   kitsuSearchAnime(limit: $limit, cursor: $cursor, filter: $filter) {
@@ -1468,17 +1644,10 @@ export type AnimeographyQueryResult = Apollo.QueryResult<AnimeographyQuery, Anim
 export const CharacterDocument = gql`
     query Character($slug: String!) {
   character(slug: $slug) {
-    id
-    slug
-    englishName
-    japaneseName
-    canonicalName
-    gender
-    description
-    imageOriginal
+    ...DefaultCharacter
   }
 }
-    `;
+    ${DefaultCharacterFragmentDoc}`;
 
 /**
  * __useCharacterQuery__
@@ -1507,6 +1676,76 @@ export function useCharacterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type CharacterQueryHookResult = ReturnType<typeof useCharacterQuery>;
 export type CharacterLazyQueryHookResult = ReturnType<typeof useCharacterLazyQuery>;
 export type CharacterQueryResult = Apollo.QueryResult<CharacterQuery, CharacterQueryVariables>;
+export const FemalesDocument = gql`
+    query Females($id: Int!) {
+  femalesForAnime(id: $id) {
+    ...DefaultCharacter
+  }
+}
+    ${DefaultCharacterFragmentDoc}`;
+
+/**
+ * __useFemalesQuery__
+ *
+ * To run a query within a React component, call `useFemalesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFemalesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFemalesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFemalesQuery(baseOptions: Apollo.QueryHookOptions<FemalesQuery, FemalesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FemalesQuery, FemalesQueryVariables>(FemalesDocument, options);
+      }
+export function useFemalesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FemalesQuery, FemalesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FemalesQuery, FemalesQueryVariables>(FemalesDocument, options);
+        }
+export type FemalesQueryHookResult = ReturnType<typeof useFemalesQuery>;
+export type FemalesLazyQueryHookResult = ReturnType<typeof useFemalesLazyQuery>;
+export type FemalesQueryResult = Apollo.QueryResult<FemalesQuery, FemalesQueryVariables>;
+export const MalesDocument = gql`
+    query Males($id: Int!) {
+  malesForAnime(id: $id) {
+    ...DefaultCharacter
+  }
+}
+    ${DefaultCharacterFragmentDoc}`;
+
+/**
+ * __useMalesQuery__
+ *
+ * To run a query within a React component, call `useMalesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMalesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMalesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMalesQuery(baseOptions: Apollo.QueryHookOptions<MalesQuery, MalesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MalesQuery, MalesQueryVariables>(MalesDocument, options);
+      }
+export function useMalesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MalesQuery, MalesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MalesQuery, MalesQueryVariables>(MalesDocument, options);
+        }
+export type MalesQueryHookResult = ReturnType<typeof useMalesQuery>;
+export type MalesLazyQueryHookResult = ReturnType<typeof useMalesLazyQuery>;
+export type MalesQueryResult = Apollo.QueryResult<MalesQuery, MalesQueryVariables>;
 export const MyListEntryStatusDocument = gql`
     query MyListEntryStatus($slug: String!, $type: Media!) {
   myListEntryStatus(slug: $slug, type: $type) {
@@ -1719,6 +1958,10 @@ export const SearchMangaDocument = gql`
   kitsuSearchManga(limit: $limit, cursor: $cursor, filter: $filter) {
     items {
       ...DefaultManga
+      rank {
+        rank
+        approval
+      }
     }
     hasMore
     nextCursor

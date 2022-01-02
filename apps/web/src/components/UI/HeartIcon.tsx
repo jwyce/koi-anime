@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface HeartIconProps {
-	rank: number;
+	rank?: number;
 	size?: number;
 }
 
@@ -24,6 +24,10 @@ const GetSVGBackground = (rank: number) => {
 };
 
 export const HeartIcon: React.FC<HeartIconProps> = ({ rank, size = 48 }) => {
+	if (!rank || rank > 1000) {
+		return <></>;
+	}
+
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -69,6 +73,7 @@ export const HeartIcon: React.FC<HeartIconProps> = ({ rank, size = 48 }) => {
 				dominantBaseline="middle"
 				textAnchor="middle"
 				fontWeight="bolder"
+				letterSpacing={0}
 			>
 				#{rank}
 			</text>

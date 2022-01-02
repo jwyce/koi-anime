@@ -14,4 +14,8 @@ fragment DefaultManga on Manga {
 	ageRating
 	status
 	posterLinkSmall
+	rank {
+		rank
+		approval
+	}
 }

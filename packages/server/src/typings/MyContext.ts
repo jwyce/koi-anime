@@ -1,11 +1,12 @@
+import { Request, Response } from 'express';
+import { Redis } from 'ioredis';
+
 import {
 	createAnimeLoader,
 	createMangaLoader,
 } from '@/loaders/createMediaLoader';
-import { Request, Response } from 'express';
-import { Redis } from 'ioredis';
-
-import { createSongsLoader } from '../loaders/createAnimeSongLoader';
+import { createSongsLoader } from '@/loaders/createAnimeSongLoader';
+import { createRankLoader } from '@/loaders/createRankLoader';
 
 export type MyContext = {
 	req: Request;
@@ -14,6 +15,7 @@ export type MyContext = {
 	songsLoader: ReturnType<typeof createSongsLoader>;
 	animeLoader: ReturnType<typeof createAnimeLoader>;
 	mangaLoader: ReturnType<typeof createMangaLoader>;
+	rankLoader: ReturnType<typeof createRankLoader>;
 };
 
 declare module 'express-session' {

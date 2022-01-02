@@ -14,4 +14,8 @@ fragment DefaultAnime on Anime {
 	ageRating
 	status
 	posterLinkSmall
+	rank {
+		rank
+		approval
+	}
 }

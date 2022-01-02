@@ -89,6 +89,7 @@ export const BrowseAnime: NextPage = ({}) => {
 										title={x.canonicalTitle}
 										status={x.status}
 										posterSrc={x.posterLinkSmall}
+										rank={x.rank}
 										synopsis={x.synopsis}
 										date={x.startDate.substring(0, x.startDate.indexOf('-'))}
 									/>

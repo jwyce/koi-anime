@@ -3,11 +3,14 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { Button, Heading, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { ApprovalText } from '../Media/ApprovalText';
+import { Rank } from '@koi/controller';
 
 interface MediaDescriptionProps {
 	title: string;
 	date?: Date | string;
 	description: string;
+	rank?: Rank | null;
 }
 
 type ReadMoreType = 'read-more' | 'read-less' | 'hidden';
@@ -16,9 +19,10 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 	title,
 	date,
 	description,
+	rank,
 }) => {
 	const MAX_CHARS = 480;
-	const splitDesc = description.split('\n');
+	const splitDesc = description?.split('\n');
 
 	const [clippedDesc, setClippedDesc] = useState<string[]>([]);
 	const [state, setState] = useState<ReadMoreType>('hidden');
@@ -54,6 +58,7 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 					</WrapItem>
 				)}
 			</Wrap>
+			{rank && <ApprovalText textApproval={rank.approval} />}
 			{state === 'hidden' && (
 				<>
 					{description.split('\n').map((x, i) => (

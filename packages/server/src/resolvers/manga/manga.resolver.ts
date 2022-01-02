@@ -1,18 +1,33 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { Status } from '../../helpers/enums';
-import { Arg, Int, Query, Resolver } from 'type-graphql';
+import {
+	Arg,
+	Ctx,
+	FieldResolver,
+	Int,
+	Query,
+	Resolver,
+	Root,
+} from 'type-graphql';
+import { getConnection } from 'typeorm';
 
 import { Manga } from '../../entities/Manga';
+import { ResourceType, Status } from '../../helpers/enums';
+import { Rank } from '../../loaders/createRankLoader';
+import { MyContext } from '../../typings/MyContext';
 import { apiMangaFactory, apiSearchMangaFactory } from '../../utils/apiFactory';
 import { PaginatedResponse } from '../commonObj/PaginatedResonse';
-import { getConnection } from 'typeorm';
 
 const PaginatedMangaResponse = PaginatedResponse(Manga);
 type PaginatedMangaResponse = InstanceType<typeof PaginatedMangaResponse>;
 
-@Resolver()
+@Resolver(Manga)
 export class MangaResolver {
+	@FieldResolver(() => Rank, { nullable: true })
+	async rank(@Root() manga: Manga, @Ctx() { rankLoader }: MyContext) {
+		return rankLoader.load({ slugId: manga.slug, type: ResourceType.MANGA });
+	}
+
 	@Query(() => Manga, { nullable: true })
 	async manga(@Arg('slug') slug: string): Promise<Manga | null> {
 		const existingManga = await Manga.findOne({ where: { slug } });
