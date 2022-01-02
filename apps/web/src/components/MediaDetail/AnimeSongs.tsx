@@ -54,13 +54,16 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ animeId, songs }) => {
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
 									<HStack>
-										<HeartIcon
-											rank={
-												opData?.openingsForAnime.find((y) => y.slug === x.slug)
-													?.rank?.rank
-											}
-											size={32}
-										/>
+										<Box>
+											<HeartIcon
+												rank={
+													opData?.openingsForAnime.find(
+														(y) => y.slug === x.slug
+													)?.rank?.rank
+												}
+												size={32}
+											/>
+										</Box>
 										<Text fontWeight="bold">{x.name}</Text>
 									</HStack>
 								</WrapItem>
@@ -85,14 +88,16 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ animeId, songs }) => {
 						<Box borderRadius={3} bg="gray.900" p={2} key={`${x.name}-${i}`}>
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
-									<HStack>
-										<HeartIcon
-											rank={
-												edData?.endingsForAnime.find((y) => y.slug === x.slug)
-													?.rank?.rank
-											}
-											size={32}
-										/>
+									<HStack justify="flex-start">
+										<Box>
+											<HeartIcon
+												rank={
+													edData?.endingsForAnime.find((y) => y.slug === x.slug)
+														?.rank?.rank
+												}
+												size={32}
+											/>
+										</Box>
 										<Text fontWeight="bold">{x.name}</Text>
 									</HStack>
 								</WrapItem>

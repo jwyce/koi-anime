@@ -2,19 +2,18 @@ import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Box, Image, Spacer } from '@chakra-ui/react';
-import { useCharacterQuery } from '@koi/controller';
-
 import { Layout } from '@/components/Layout/Layout';
+import { Animeography } from '@/components/MediaDetail/Animeography';
 import { MediaDescription } from '@/components/MediaDetail/MediaDescription';
 import { MediaDetails } from '@/components/MediaDetail/MediaDetails';
 import { PosterListControl } from '@/components/MediaDetail/PosterListControl';
 import { Loader } from '@/components/UI/Loader';
 import { withApollo } from '@/stores/withApollo';
 import { isServer } from '@/utils/isServer';
+import { Box, Image, Spacer } from '@chakra-ui/react';
+import { useCharacterQuery, getPreferredName } from '@koi/controller';
 
 import type { NextPage } from 'next';
-import { Animeography } from '@/components/MediaDetail/Animeography';
 export const CharacterDetail: NextPage = ({}) => {
 	const router = useRouter();
 	const { slug } = router.query;
@@ -58,7 +57,12 @@ export const CharacterDetail: NextPage = ({}) => {
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>
 					<MediaDescription
-						title={data.character.englishName}
+						title={getPreferredName(
+							data.character?.englishName!,
+							data.character?.japaneseName!,
+							data.character?.canonicalName!,
+							data.character?.canonicalName!
+						)}
 						description={data.character.description}
 					/>
 					<Spacer mt={3} />

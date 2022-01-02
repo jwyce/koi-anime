@@ -3,6 +3,7 @@ export * from './utils/sleep';
 export * from './utils/passwordStrength';
 export * from './utils/toErrorMap';
 export * from './utils/yupSchemas';
+export * from './utils/getPreferredName';
 export * from './generated/graphql';
 
 export { useCountRenders } from './hooks/useCountRenders';

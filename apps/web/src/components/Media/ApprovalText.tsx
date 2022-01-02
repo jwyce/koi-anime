@@ -15,7 +15,7 @@ export const ApprovalText: React.FC<ApprovalTextProps> = ({
 	const approval = parseFloat(textApproval.slice(0, -1));
 	if (approval >= 80.0) {
 		return (
-			<Text fontSize={size} fontWeight={600} color="green.500">
+			<Text fontSize={size} fontWeight={600} color="green.300">
 				{textApproval}
 				{!truncated && ' Community Approval'}
 			</Text>
@@ -29,7 +29,7 @@ export const ApprovalText: React.FC<ApprovalTextProps> = ({
 		);
 	} else {
 		return (
-			<Text fontSize={size} fontWeight={600} color="red.500">
+			<Text fontSize={size} fontWeight={600} color="red.400">
 				{textApproval}
 				{!truncated && ' Community Approval'}
 			</Text>

@@ -6,10 +6,12 @@ import { Character } from '../../entities/Character';
 import { List } from '../../entities/List';
 import { Manga } from '../../entities/Manga';
 import { Song } from '../../entities/Song';
+import { User } from '../../entities/User';
 import { Vote } from '../../entities/Vote';
 import { Media, ResourceType, SongType } from '../../helpers/enums';
 import { MyContext } from '../../typings/MyContext';
 import { getRandomMatchup } from '../../utils/getRandomMatchup';
+import { getPreferredName } from '../../utils/getPreferredName';
 import { Matchup, Resource } from './Matchup';
 
 @Resolver(Vote)
@@ -56,6 +58,7 @@ export class VoteResolver {
 		@Arg('type', () => ResourceType) type: ResourceType,
 		@Ctx() { req }: MyContext
 	): Promise<Matchup | null> {
+		const me = await User.findOne({ where: { id: req.session.userId } });
 		const list = await List.find({
 			where: {
 				userID: req.session.userId,
@@ -70,7 +73,13 @@ export class VoteResolver {
 			const options: Resource[] = (
 				await Anime.find({ where: { slug: In(slugs) } })
 			).map((x) => ({
-				name: x.canonicalTitle,
+				name: getPreferredName(
+					me ?? null,
+					x.englishTitle,
+					x.japaneseTitle,
+					x.romajiTitle,
+					x.canonicalTitle
+				),
 				imageUrl: x.posterLinkSmall,
 				slug: x.slug,
 				type: ResourceType.ANIME,
@@ -82,7 +91,13 @@ export class VoteResolver {
 			const options: Resource[] = (
 				await Manga.find({ where: { slug: In(slugs) } })
 			).map((x) => ({
-				name: x.canonicalTitle,
+				name: getPreferredName(
+					me ?? null,
+					x.englishTitle,
+					x.japaneseTitle,
+					x.romajiTitle,
+					x.canonicalTitle
+				),
 				imageUrl: x.posterLinkSmall,
 				slug: x.slug,
 				type: ResourceType.MANGA,
@@ -107,7 +122,13 @@ export class VoteResolver {
 					},
 				})
 			).map((x) => ({
-				name: x.canonicalName,
+				name: getPreferredName(
+					me ?? null,
+					x.englishName,
+					x.japaneseName,
+					x.canonicalName,
+					x.canonicalName
+				),
 				imageUrl: x.imageOriginal,
 				slug: x.slug,
 				...(type === ResourceType.F_CHARACTER

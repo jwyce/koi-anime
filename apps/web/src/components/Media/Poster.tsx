@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import React, { useState } from 'react';
 
 import { Box, Image, Skeleton } from '@chakra-ui/react';
-import { Rank, Status } from '@koi/controller';
+import { ListStatus, Rank, Status } from '@koi/controller';
 
 import { PosterDetails } from './PosterDetails';
 
@@ -14,6 +14,7 @@ interface PosterProps {
 	rank?: Rank | null;
 	date: string;
 	status?: Status;
+	listStatus?: ListStatus;
 	url: string;
 	topRadiusOnly?: boolean;
 }
@@ -25,6 +26,7 @@ export const Poster: React.FC<PosterProps> = ({
 	rank,
 	date,
 	status,
+	listStatus,
 	url,
 	topRadiusOnly = false,
 }) => {
@@ -71,6 +73,7 @@ export const Poster: React.FC<PosterProps> = ({
 					rank={rank}
 					date={date}
 					status={status}
+					listStatus={listStatus}
 				/>
 			)}
 		</Box>

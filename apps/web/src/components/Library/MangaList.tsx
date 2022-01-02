@@ -5,6 +5,7 @@ import { Waypoint } from 'react-waypoint';
 import { Box, Button, Grid, Heading, Skeleton, Stack } from '@chakra-ui/react';
 import {
 	Direction,
+	getPreferredName,
 	ListStatus,
 	Media,
 	SortBy,
@@ -79,7 +80,13 @@ export const MangaList: React.FC<MangaListProps> = ({
 										<Stack bg="gray.700" spacing={0} borderRadius={6}>
 											<Poster
 												url={`/manga/${x.manga.slug}`}
-												title={x.manga.canonicalTitle}
+												title={getPreferredName(
+													x.manga.englishTitle,
+													x.manga.japaneseTitle,
+													x.manga.romajiTitle,
+													x.manga.canonicalTitle
+												)}
+												rank={x.manga.rank}
 												posterSrc={x.manga.posterLinkSmall}
 												synopsis={x.manga.synopsis}
 												date={x.manga.startDate.substring(

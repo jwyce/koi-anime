@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useIsAuth } from '@/utils/hooks/useIsAuth';
 import { Box, Image } from '@chakra-ui/react';
-import { useMangaQuery } from '@koi/controller';
+import { useMangaQuery, getPreferredName } from '@koi/controller';
 
 import { Layout } from '../../components/Layout/Layout';
 import { MediaDescription } from '../../components/MediaDetail/MediaDescription';
@@ -60,7 +60,12 @@ export const MangaDetail: NextPage = ({}) => {
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>
 					<MediaDescription
-						title={data.manga?.englishTitle!}
+						title={getPreferredName(
+							data.manga?.englishTitle!,
+							data.manga?.japaneseTitle!,
+							data.manga?.romajiTitle!,
+							data.manga?.canonicalTitle!
+						)}
 						date={data.manga?.startDate!}
 						description={data.manga?.synopsis!}
 						rank={data.manga?.rank}

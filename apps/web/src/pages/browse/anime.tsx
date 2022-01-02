@@ -13,15 +13,19 @@ import {
 	Skeleton,
 	Stack,
 } from '@chakra-ui/react';
-import { useDebounce, useSearchAnimeQuery } from '@koi/controller';
+import {
+	useDebounce,
+	useSearchAnimeQuery,
+	getPreferredName,
+} from '@koi/controller';
 
 import { Layout } from '../../components/Layout/Layout';
+import { Poster } from '../../components/Media/Poster';
 import { Loader } from '../../components/UI/Loader';
 import { withApollo } from '../../stores/withApollo';
 import { isServer } from '../../utils/isServer';
 
 import type { NextPage } from 'next';
-import { Poster } from '../../components/Media/Poster';
 export const BrowseAnime: NextPage = ({}) => {
 	const [searchStr, setSearchStr] = useState('');
 	const { data, loading, refetch, fetchMore, variables } = useSearchAnimeQuery({
@@ -86,7 +90,12 @@ export const BrowseAnime: NextPage = ({}) => {
 									<Poster
 										key={x.id}
 										url={`/anime/${x.slug}`}
-										title={x.canonicalTitle}
+										title={getPreferredName(
+											x.englishTitle,
+											x.japaneseTitle,
+											x.romajiTitle,
+											x.canonicalTitle
+										)}
 										status={x.status}
 										posterSrc={x.posterLinkSmall}
 										synopsis={x.synopsis}

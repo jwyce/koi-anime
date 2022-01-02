@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useIsAuth } from '@/utils/hooks/useIsAuth';
 import { Box, Image, Spacer } from '@chakra-ui/react';
-import { useAnimeQuery } from '@koi/controller';
+import { useAnimeQuery, getPreferredName } from '@koi/controller';
 
 import { Layout } from '../../components/Layout/Layout';
 import { AnimeCharacters } from '../../components/MediaDetail/AnimeCharacters';
@@ -62,7 +62,12 @@ export const AnimeDetail: NextPage = ({}) => {
 				</Box>
 				<Box flex={1.8} h="100%" px={5}>
 					<MediaDescription
-						title={data.anime?.englishTitle!}
+						title={getPreferredName(
+							data.anime?.englishTitle!,
+							data.anime?.japaneseTitle!,
+							data.anime?.romajiTitle!,
+							data.anime?.canonicalTitle!
+						)}
 						date={data.anime?.startDate!}
 						description={data.anime?.synopsis!}
 						rank={data.anime?.rank}

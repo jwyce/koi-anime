@@ -2,11 +2,11 @@ import { motion } from 'framer-motion';
 import React from 'react';
 
 import { Box, HStack, Text, Wrap, WrapItem } from '@chakra-ui/react';
-import { Rank, Status } from '@koi/controller';
+import { ListStatus, Rank, Status } from '@koi/controller';
 
 import { HeartIcon } from '../UI/HeartIcon';
 import { ApprovalText } from './ApprovalText';
-import { PosterStatus } from './PosterStatus';
+import { PosterListStatus, PosterStatus } from './PosterStatus';
 
 interface PosterDetailsProps {
 	title: string;
@@ -14,6 +14,7 @@ interface PosterDetailsProps {
 	rank?: Rank | null;
 	date: string;
 	status?: Status;
+	listStatus?: ListStatus;
 }
 
 export const PosterDetails: React.FC<PosterDetailsProps> = ({
@@ -22,6 +23,7 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 	rank,
 	date,
 	status,
+	listStatus,
 }) => {
 	return (
 		<>
@@ -60,6 +62,7 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 						<ApprovalText textApproval={rank.approval} truncated size="md" />
 					)}
 					<HStack justify="space-between">
+						{listStatus && <PosterListStatus status={listStatus} />}
 						{status && <PosterStatus status={status} />}
 						{rank && rank.rank < 1000 && (
 							<HeartIcon rank={rank.rank} size={24} />

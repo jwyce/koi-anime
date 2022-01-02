@@ -1,6 +1,8 @@
-import { Box, Grid, Heading, Text } from '@chakra-ui/react';
-import { useAnimeCharactersQuery } from '@koi/controller';
 import React from 'react';
+
+import { Box, Grid, Heading, Text } from '@chakra-ui/react';
+import { useAnimeCharactersQuery, getPreferredName } from '@koi/controller';
+
 import { isServer } from '../../utils/isServer';
 import { Layout } from '../Layout/Layout';
 import { MediaLink } from '../Media/MediaLink';
@@ -29,7 +31,12 @@ export const AnimeCharacters: React.FC<AnimeCharactersProps> = ({ id }) => {
 						<MediaLink
 							key={x.slug}
 							url={`/anime/character/${x.slug}`}
-							name={x.canonicalName}
+							name={getPreferredName(
+								x.englishName,
+								x.japaneseName,
+								x.canonicalName,
+								x.canonicalName
+							)}
 							imageSrc={x.imageOriginal}
 						/>
 					))}
