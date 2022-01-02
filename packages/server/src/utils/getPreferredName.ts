@@ -13,11 +13,11 @@ export const getPreferredName = (
 			case TitlePreference.CANONICAL:
 				return canon;
 			case TitlePreference.JAPANESE:
-				return jp;
+				return jp === '' ? canon : jp;
 			case TitlePreference.ENGLISH:
 				return en;
 			case TitlePreference.ROMANIZED:
-				return en_jp;
+				return en_jp === '' ? canon : en_jp;
 		}
 	}
 	return canon;
