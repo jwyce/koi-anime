@@ -12,6 +12,7 @@ import {
 	PaginatedAnimeResponse,
 	PaginatedListResponse,
 	PaginatedMangaResponse,
+	PaginatedRankedResourceResponse,
 } from '@koi/controller';
 
 export const gqlErrors = makeVar<string[]>([]);
@@ -74,6 +75,24 @@ const client = new ApolloClient({
 							return {
 								...incoming,
 								items: [...(existing?.items || []), ...incoming.items],
+							};
+						},
+					},
+					getTopRated: {
+						keyArgs: [],
+						merge(
+							existing: PaginatedRankedResourceResponse | undefined,
+							incoming: PaginatedRankedResourceResponse,
+							{ args }
+						): PaginatedRankedResourceResponse {
+							let filteredExistingItems = [...(existing?.items || [])];
+							if (args?.offset === 0) {
+								filteredExistingItems = [];
+							}
+
+							return {
+								...incoming,
+								items: [...filteredExistingItems, ...incoming.items],
 							};
 						},
 					},

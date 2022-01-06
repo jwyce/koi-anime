@@ -32,7 +32,7 @@ export const Resource: React.FC<ResourceProps> = ({
 			{url ? (
 				<NextLink href="url">
 					<a>
-						<Box pos="relative" cursor="pointer">
+						<Box pos="relative" cursor="pointer" w="100%">
 							<motion.div
 								style={{
 									position: 'absolute',
@@ -57,7 +57,7 @@ export const Resource: React.FC<ResourceProps> = ({
 								</Box>
 							)}
 
-							<Image src={imageSrc} alt="media link" fit="cover" />
+							<Image src={imageSrc} alt="media link" fit="contain" />
 						</Box>
 					</a>
 				</NextLink>

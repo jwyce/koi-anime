@@ -33,6 +33,7 @@ export const Vote: NextPage = ({}) => {
 	const { data, loading, refetch, networkStatus } = useGetMatchupQuery({
 		variables: { type: typeAsEnum },
 		skip: shouldSkip,
+		fetchPolicy: 'no-cache',
 	});
 	const [vote] = useVoteMutation();
 
@@ -47,7 +48,7 @@ export const Vote: NextPage = ({}) => {
 		{ icon: '📙', status: ResourceType.Manga, text: 'Manga' },
 		{ icon: '🎵', status: ResourceType.EdSong, text: 'Ending Song' },
 		{ icon: '🎶', status: ResourceType.OpSong, text: 'Opening Song' },
-		{ icon: '💙', status: ResourceType.MCharacter, text: 'Best Boy' },
+		{ icon: '💎', status: ResourceType.MCharacter, text: 'Best Boy' },
 		{ icon: '🌸', status: ResourceType.FCharacter, text: 'Best Girl' },
 	];
 

@@ -86,7 +86,6 @@ export class ListResolver {
 		@Arg('options') options: ListFilterInput
 	): Promise<PaginatedListResponse> {
 		const user = await User.findOne({ where: { username: options.username } });
-		console.log('cursor', options.cursor);
 		if (user) {
 			// TODO: add better title filtering, order by length
 			const realLimit = Math.min(50, options.limit);
@@ -117,7 +116,7 @@ export class ListResolver {
 			return {
 				items: listItems.slice(0, realLimit),
 				hasMore: listItems.length === realLimitPlusOne,
-				nextCursor: realLimit,
+				nextCursor: realLimit + (options.cursor ?? 0),
 			};
 		}
 

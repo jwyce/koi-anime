@@ -17,6 +17,30 @@ export class Resource {
 }
 
 @ObjectType()
+export class RankedResource {
+	@Field()
+	slug: string;
+
+	@Field()
+	name: string;
+
+	@Field()
+	rank: number;
+
+	@Field()
+	approval: string;
+
+	@Field(() => String, { nullable: true })
+	animeSlug?: string;
+
+	@Field()
+	imageUrl: string;
+
+	@Field(() => ResourceType)
+	type: ResourceType;
+}
+
+@ObjectType()
 export class Matchup {
 	@Field(() => Resource)
 	first: Resource;

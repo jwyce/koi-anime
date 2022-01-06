@@ -80,9 +80,13 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 					</MenuList>
 				</Menu>
 				<Spacer mr={2} />
-				<Button>
-					<Text fontWeight={100}>🏆</Text> Top Rated
-				</Button>
+				<NextLink href={`/top-rated/anime`}>
+					<a>
+						<Button>
+							<Text fontWeight={100}>🏆</Text> Top Rated
+						</Button>
+					</a>
+				</NextLink>
 				<Spacer mr={2} />
 				<Menu>
 					<Tooltip label={data.me.username}>

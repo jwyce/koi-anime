@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 
-import { Box, HStack, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 import { ListStatus, Rank, Status } from '@koi/controller';
 
 import { HeartIcon } from '../UI/HeartIcon';
@@ -45,19 +45,12 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 				transition={{ duration: 0.3 }}
 			>
 				<Box px={2}>
-					<Wrap>
-						<WrapItem>
-							<Text fontSize="md" fontWeight="semibold">
-								{title}
-							</Text>
-						</WrapItem>
-						<WrapItem>
-							<Text fontSize="md" color="gray.500">
-								{date === '' ? 'TBA' : date}
-							</Text>
-						</WrapItem>
-					</Wrap>
-
+					<Text fontSize="md" fontWeight="semibold">
+						{title}{' '}
+						<Text as="span" fontSize="md" color="gray.500">
+							{date === '' ? 'TBA' : date}
+						</Text>
+					</Text>
 					{rank && (
 						<ApprovalText textApproval={rank.approval} truncated size="md" />
 					)}

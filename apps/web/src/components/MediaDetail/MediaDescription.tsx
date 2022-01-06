@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
-import { Button, Heading, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Button, Heading, Text } from '@chakra-ui/react';
 import { ApprovalText } from '../Media/ApprovalText';
 import { Rank } from '@koi/controller';
 
@@ -46,18 +46,14 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 
 	return (
 		<>
-			<Wrap align="flex-end">
-				<WrapItem>
-					<Heading fontSize="3xl">{title}</Heading>
-				</WrapItem>
+			<Heading fontSize="3xl">
+				{title}{' '}
 				{date && (
-					<WrapItem>
-						<Text fontSize="lg" color="gray.500" fontWeight="bold">
-							{dayjs(date).format('YYYY')}
-						</Text>
-					</WrapItem>
+					<Text as="span" fontSize="lg" color="gray.500" fontWeight="bold">
+						{dayjs(date).format('YYYY')}
+					</Text>
 				)}
-			</Wrap>
+			</Heading>
 			{rank && <ApprovalText textApproval={rank.approval} />}
 			{state === 'hidden' && (
 				<>

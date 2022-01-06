@@ -1,0 +1,15 @@
+query GetGlobalTopRated($type: ResourceType!, $limit: Int!, $offset: Int!) {
+	getTopRated(type: $type, limit: $limit, offset: $offset) {
+		items {
+			slug
+			name
+			rank
+			approval
+			imageUrl
+			type
+			animeSlug
+		}
+		hasMore
+		nextCursor
+	}
+}

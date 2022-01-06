@@ -290,6 +290,13 @@ export type PaginatedMangaResponse = {
   nextCursor: Scalars['Int'];
 };
 
+export type PaginatedRankedResourceResponse = {
+  __typename?: 'PaginatedRankedResourceResponse';
+  hasMore: Scalars['Boolean'];
+  items: Array<RankedResource>;
+  nextCursor: Scalars['Int'];
+};
+
 export type PreferencesInput = {
   email?: Maybe<Scalars['String']>;
   profileColor: ProfileColor;
@@ -342,6 +349,7 @@ export type Query = {
   endingsForAnime: Array<Song>;
   femalesForAnime: Array<Character>;
   getMatchup?: Maybe<Matchup>;
+  getTopRated: PaginatedRankedResourceResponse;
   kitsuSearchAnime: PaginatedAnimeResponse;
   kitsuSearchManga: PaginatedMangaResponse;
   malesForAnime: Array<Character>;
@@ -388,6 +396,13 @@ export type QueryFemalesForAnimeArgs = {
 
 
 export type QueryGetMatchupArgs = {
+  type: ResourceType;
+};
+
+
+export type QueryGetTopRatedArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
   type: ResourceType;
 };
 
@@ -455,11 +470,13 @@ export type Rank = {
 
 export type RankedResource = {
   __typename?: 'RankedResource';
+  animeSlug?: Maybe<Scalars['String']>;
   approval: Scalars['String'];
-  approval_rank: Scalars['Float'];
-  dislikes: Scalars['Float'];
-  likes: Scalars['Float'];
+  imageUrl: Scalars['String'];
+  name: Scalars['String'];
+  rank: Scalars['Float'];
   slug: Scalars['String'];
+  type: ResourceType;
 };
 
 export type RegisterInput = {
@@ -821,6 +838,15 @@ export type GetMatchupQueryVariables = Exact<{
 
 
 export type GetMatchupQuery = { __typename?: 'Query', getMatchup?: { __typename?: 'Matchup', first: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType }, second: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType } } | null | undefined };
+
+export type GetGlobalTopRatedQueryVariables = Exact<{
+  type: ResourceType;
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+}>;
+
+
+export type GetGlobalTopRatedQuery = { __typename?: 'Query', getTopRated: { __typename?: 'PaginatedRankedResourceResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'RankedResource', slug: string, name: string, rank: number, approval: string, imageUrl: string, type: ResourceType, animeSlug?: string | null | undefined }> } };
 
 export const DefaultAnimeFragmentDoc = gql`
     fragment DefaultAnime on Anime {
@@ -2107,3 +2133,50 @@ export function useGetMatchupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetMatchupQueryHookResult = ReturnType<typeof useGetMatchupQuery>;
 export type GetMatchupLazyQueryHookResult = ReturnType<typeof useGetMatchupLazyQuery>;
 export type GetMatchupQueryResult = Apollo.QueryResult<GetMatchupQuery, GetMatchupQueryVariables>;
+export const GetGlobalTopRatedDocument = gql`
+    query GetGlobalTopRated($type: ResourceType!, $limit: Int!, $offset: Int!) {
+  getTopRated(type: $type, limit: $limit, offset: $offset) {
+    items {
+      slug
+      name
+      rank
+      approval
+      imageUrl
+      type
+      animeSlug
+    }
+    hasMore
+    nextCursor
+  }
+}
+    `;
+
+/**
+ * __useGetGlobalTopRatedQuery__
+ *
+ * To run a query within a React component, call `useGetGlobalTopRatedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGlobalTopRatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGlobalTopRatedQuery({
+ *   variables: {
+ *      type: // value for 'type'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetGlobalTopRatedQuery(baseOptions: Apollo.QueryHookOptions<GetGlobalTopRatedQuery, GetGlobalTopRatedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGlobalTopRatedQuery, GetGlobalTopRatedQueryVariables>(GetGlobalTopRatedDocument, options);
+      }
+export function useGetGlobalTopRatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGlobalTopRatedQuery, GetGlobalTopRatedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGlobalTopRatedQuery, GetGlobalTopRatedQueryVariables>(GetGlobalTopRatedDocument, options);
+        }
+export type GetGlobalTopRatedQueryHookResult = ReturnType<typeof useGetGlobalTopRatedQuery>;
+export type GetGlobalTopRatedLazyQueryHookResult = ReturnType<typeof useGetGlobalTopRatedLazyQuery>;
+export type GetGlobalTopRatedQueryResult = Apollo.QueryResult<GetGlobalTopRatedQuery, GetGlobalTopRatedQueryVariables>;
