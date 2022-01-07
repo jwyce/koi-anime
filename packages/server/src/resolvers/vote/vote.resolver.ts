@@ -1,3 +1,4 @@
+import { ListStatus } from './../../helpers/enums';
 import {
 	Arg,
 	Ctx,
@@ -7,7 +8,7 @@ import {
 	Resolver,
 	UseMiddleware,
 } from 'type-graphql';
-import { getConnection, In } from 'typeorm';
+import { getConnection, In, Not } from 'typeorm';
 
 import { Anime } from '../../entities/Anime';
 import { Character } from '../../entities/Character';
@@ -209,6 +210,7 @@ export class VoteResolver {
 				...(type === ResourceType.MANGA
 					? { mediaType: Media.MANGA }
 					: { mediaType: Media.ANIME }),
+				status: Not(ListStatus.PLANNED),
 			},
 		});
 

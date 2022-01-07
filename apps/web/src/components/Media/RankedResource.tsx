@@ -25,7 +25,7 @@ export const RankedResource: React.FC<PosterProps> = ({
 		<Box pos="relative">
 			<NextLink href={url}>
 				<a>
-					<Box pos="absolute" top={0} right={0} zIndex={999}>
+					<Box pos="absolute" top={1} right={1} zIndex={999}>
 						<HeartIcon rank={rank} size={32} />
 					</Box>
 					<motion.div
