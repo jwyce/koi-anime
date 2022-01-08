@@ -3,7 +3,7 @@ import React from 'react';
 
 import { isServer } from '@/utils/isServer';
 import { textColorFromListStatus } from '@/utils/textColorFromListStatus';
-import { Box, Select } from '@chakra-ui/react';
+import { Box, Select, useColorMode } from '@chakra-ui/react';
 import { ListStatus, Media, useUserListCountsQuery } from '@koi/controller';
 
 import { Loader } from '../UI/Loader';
@@ -37,6 +37,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 	status,
 	filterCallback,
 }) => {
+	const { colorMode } = useColorMode();
 	const { data, loading } = useUserListCountsQuery({
 		variables: { username, media: media !== 'top5' ? media : Media.Anime },
 		skip: isServer(),
@@ -83,7 +84,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 	}
 
 	return (
-		<Box bg="gray.700" p={4} borderRadius={6}>
+		<Box
+			bg={colorMode === 'dark' ? 'gray.700' : 'white'}
+			p={4}
+			borderRadius={6}
+		>
 			<Select
 				defaultValue={media}
 				onChange={(e) =>

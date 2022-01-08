@@ -14,7 +14,7 @@ export const theme = extendTheme({
 			body: {
 				fontFamily: 'body',
 				color: mode('gray.800', 'whiteAlpha.900')(props),
-				bg: mode('white', 'gray.800')(props),
+				bg: mode('gray.50', 'gray.800')(props),
 				lineHeight: 'base',
 			},
 			'&::selection': {
@@ -66,6 +66,14 @@ export const theme = extendTheme({
 			info: '#659FFF',
 			warning: '#EC9200',
 			error: '#EB79FA',
+		},
+		modes: {
+			dark: {
+				bg: '#2d3748',
+			},
+			light: {
+				bg: '#A0AEC0',
+			},
 		},
 	},
 	components,

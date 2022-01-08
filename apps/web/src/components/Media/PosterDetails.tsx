@@ -45,7 +45,7 @@ export const PosterDetails: React.FC<PosterDetailsProps> = ({
 				transition={{ duration: 0.3 }}
 			>
 				<Box px={2}>
-					<Text fontSize="md" fontWeight="semibold">
+					<Text fontSize="md" color="gray.50" fontWeight="semibold">
 						{title}{' '}
 						<Text as="span" fontSize="md" color="gray.500">
 							{date === '' ? 'TBA' : date}

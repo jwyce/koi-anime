@@ -8,6 +8,7 @@ import {
 	SimpleGrid,
 	Stack,
 	Text,
+	useColorMode,
 	useDisclosure,
 } from '@chakra-ui/react';
 import { AgeRating, AnimeSubtype, MangaSubtype, Status } from '@koi/controller';
@@ -63,6 +64,7 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 	youtubeVideoId,
 }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { colorMode } = useColorMode();
 
 	return (
 		<>
@@ -99,14 +101,18 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 							transform="translate(-50%, -50%)"
 						>
 							<NextImage src={ytLogo} alt="ytlogo" width="36" />
-							<Text fontSize="xl" fontWeight="bold">
+							<Text fontSize="xl" color="white" fontWeight="bold">
 								Play Trailer
 							</Text>
 						</HStack>
 					</Box>
 				)}
 
-				<Box bg="gray.700" p={3} borderRadius={6}>
+				<Box
+					bg={colorMode === 'dark' ? 'gray.700' : 'white'}
+					p={3}
+					borderRadius={6}
+				>
 					<Text
 						fontSize="lg"
 						fontWeight="bold"

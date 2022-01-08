@@ -22,7 +22,8 @@ export const Resource: React.FC<ResourceProps> = ({
 }) => {
 	return (
 		<Stack
-			bg="gray.700"
+			bg="pink.900"
+			color="white"
 			borderRadius={6}
 			alignItems="center"
 			justifyContent="space-between"

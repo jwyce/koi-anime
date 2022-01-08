@@ -39,15 +39,17 @@ export const MangaDetail: NextPage = ({}) => {
 				title={`${data.manga?.englishTitle} - Koi Anime`}
 				description="A short description goes here."
 			/>
-			<Box mt={-8} bg="black" opacity={0.5}>
-				<Image
-					src={data?.manga?.coverLinkOriginal}
-					alt="cover"
-					fit="cover"
-					h={350}
-					w="100%"
-					fallbackSrc="https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png"
-				/>
+			<Box bg="black">
+				<Box mt={-8} opacity={0.7}>
+					<Image
+						src={data?.manga?.coverLinkOriginal}
+						alt="cover"
+						fit="cover"
+						h={350}
+						w="100%"
+						fallbackSrc="https://kitsu.io/images/default_cover-22e5f56b17aeced6dc7f69c8d422a1ab.png"
+					/>
+				</Box>
 			</Box>
 			<Box w={1200} display="flex" mx="auto">
 				<Box flex={0.6} h="100%" pos="sticky" mt="-24" top="24">

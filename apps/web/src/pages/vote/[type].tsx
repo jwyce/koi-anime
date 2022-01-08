@@ -15,6 +15,7 @@ import {
 	Select,
 	Stack,
 	Text,
+	useColorMode,
 } from '@chakra-ui/react';
 import {
 	ResourceType,
@@ -25,6 +26,7 @@ import {
 import type { NextPage } from 'next';
 import { NetworkStatus } from '@apollo/client';
 export const Vote: NextPage = ({}) => {
+	const { colorMode } = useColorMode();
 	const router = useRouter();
 	const { type } = router.query;
 	const typeAsEnum = (type as string)?.toUpperCase() as ResourceType;
@@ -135,7 +137,7 @@ export const Vote: NextPage = ({}) => {
 						) : (
 							<Stack
 								p={10}
-								bg="gray.700"
+								bg={colorMode === 'dark' ? 'gray.700' : 'white'}
 								align="center"
 								justify="center"
 								spacing={1}

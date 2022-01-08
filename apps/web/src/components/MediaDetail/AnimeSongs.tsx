@@ -8,6 +8,7 @@ import {
 	HStack,
 	SimpleGrid,
 	Text,
+	useColorMode,
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
@@ -26,6 +27,7 @@ interface AnimeSongsProps {
 }
 
 export const AnimeSongs: React.FC<AnimeSongsProps> = ({ animeId, songs }) => {
+	const { colorMode } = useColorMode();
 	const { data: opData } = useOpeningsQuery({
 		variables: { id: animeId },
 		skip: isServer(),
@@ -34,11 +36,6 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ animeId, songs }) => {
 		variables: { id: animeId },
 		skip: isServer(),
 	});
-
-	if (opData && edData) {
-		console.log('op', opData.openingsForAnime);
-		console.log('ed', edData.endingsForAnime);
-	}
 
 	return (
 		<Box mb={6}>
@@ -50,7 +47,12 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ animeId, songs }) => {
 				{songs
 					.filter((x) => x.songType === SongType.Op)
 					.map((x, i) => (
-						<Box borderRadius={3} bg="gray.900" p={2} key={`${x.name}-${i}`}>
+						<Box
+							borderRadius={3}
+							bg={colorMode === 'dark' ? 'gray.900' : 'white'}
+							p={2}
+							key={`${x.name}-${i}`}
+						>
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
 									<HStack>
@@ -85,7 +87,12 @@ export const AnimeSongs: React.FC<AnimeSongsProps> = ({ animeId, songs }) => {
 				{songs
 					.filter((x) => x.songType === SongType.Ed)
 					.map((x, i) => (
-						<Box borderRadius={3} bg="gray.900" p={2} key={`${x.name}-${i}`}>
+						<Box
+							borderRadius={3}
+							bg={colorMode === 'dark' ? 'gray.900' : 'white'}
+							p={2}
+							key={`${x.name}-${i}`}
+						>
 							<Wrap spacing={3} letterSpacing={4}>
 								<WrapItem>
 									<HStack justify="flex-start">

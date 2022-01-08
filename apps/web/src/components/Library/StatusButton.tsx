@@ -34,7 +34,7 @@ export const StatusButton: React.FC<StatusButtonProps> = ({
 			_hover={{ bg: 'gray.300' }}
 			onClick={() => filterCallback({ status })}
 		>
-			<HStack align="center" justify="space-between">
+			<HStack align="center" justify="space-between" color="white">
 				<HStack>
 					<Text fontWeight={100}>{icon}</Text>
 					<Text fontWeight={700} textShadow="2px 2px #252525c5">

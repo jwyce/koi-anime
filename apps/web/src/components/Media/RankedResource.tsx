@@ -39,19 +39,21 @@ export const RankedResource: React.FC<PosterProps> = ({
 							left: 0,
 							opacity:
 								type === ResourceType.EdSong || type === ResourceType.OpSong
-									? 0.69
+									? 0.5
 									: 0,
 						}}
 						whileHover={{
-							opacity:
-								type === ResourceType.EdSong || type === ResourceType.OpSong
-									? 0.8
-									: 0.69,
+							opacity: 0.69,
 						}}
 						transition={{ duration: 0.3 }}
 					>
 						<Stack align="center" justify="center" w="100%" h="100%" px={3}>
-							<Text fontSize="xl" fontWeight={700} textAlign="center">
+							<Text
+								fontSize="xl"
+								color="white"
+								fontWeight={700}
+								textAlign="center"
+							>
 								{name}
 							</Text>
 						</Stack>

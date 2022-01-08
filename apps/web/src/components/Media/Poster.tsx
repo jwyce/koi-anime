@@ -53,7 +53,7 @@ export const Poster: React.FC<PosterProps> = ({
 							left: 0,
 							opacity: 0,
 						}}
-						whileHover={{ opacity: 0.69 }}
+						whileHover={{ opacity: 0.42 }}
 						transition={{ duration: 0.3 }}
 					></motion.div>
 					<Image

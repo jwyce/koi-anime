@@ -6,6 +6,7 @@ import { AiFillGithub } from 'react-icons/ai';
 import { SiBuymeacoffee } from 'react-icons/si';
 
 import {
+	Alert,
 	Avatar,
 	Box,
 	Button,
@@ -97,7 +98,7 @@ const Home: NextPage = () => {
 					>
 						<path
 							d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-							fill={colorMode === 'dark' ? '#1a202c' : '#fff'}
+							fill={colorMode === 'dark' ? '#1a202c' : '#edf2f7'}
 						></path>
 					</svg>
 				</div>
@@ -105,44 +106,71 @@ const Home: NextPage = () => {
 
 			<Stack spacing="10">
 				<HStack align="center" justify="center">
-					<Stack align="center" p={5}>
-						<Text fontSize="2xl" fontWeight="bolder">
-							Download the app
-						</Text>
-						<Wrap>
-							<WrapItem>
-								<Link href="https://jwyce.github.io/portfolio/">
-									<Image
-										src={appStore}
-										alt="app store"
-										width="200em"
-										height="80em"
-									/>
-								</Link>
-							</WrapItem>
-							<WrapItem>
-								<Image
-									src={googlePlay}
-									alt="google play"
-									width="220em"
-									height="80em"
-								/>
-							</WrapItem>
-						</Wrap>
-						{data?.me ? (
-							<NextLink href="/browse/anime">
-								<Button size="lg" leftIcon={<IoSearch size={24} />}>
-									Browse anime
-								</Button>
-							</NextLink>
-						) : (
-							<NextLink href="/register">
-								<Button size="lg" leftIcon={<IoLogIn size={24} />}>
-									Create account
-								</Button>
-							</NextLink>
-						)}
-					</Stack>
+					<Alert
+						colorScheme="pink"
+						variant="left-accent"
+						borderRadius={6}
+						p={5}
+						w="30rem"
+					>
+						<Stack align="center">
+							<Text fontSize="2xl" fontWeight="bolder">
+								{/* Get the app */}
+								App coming soon...
+							</Text>
+							<Wrap>
+								<WrapItem>
+									<NextLink href="/">
+										<a>
+											<Image
+												src={appStore}
+												alt="app store"
+												width="200em"
+												height="80em"
+											/>
+										</a>
+									</NextLink>
+								</WrapItem>
+								<WrapItem>
+									<NextLink href="/">
+										<a>
+											<Image
+												src={googlePlay}
+												alt="google play"
+												width="220em"
+												height="80em"
+											/>
+										</a>
+									</NextLink>
+								</WrapItem>
+							</Wrap>
+							{data?.me ? (
+								<NextLink href="/browse/anime">
+									<Button
+										size="lg"
+										bg="black"
+										color="white"
+										_hover={{ bg: 'black' }}
+										leftIcon={<IoSearch size={24} />}
+									>
+										Browse anime
+									</Button>
+								</NextLink>
+							) : (
+								<NextLink href="/register">
+									<Button
+										size="lg"
+										bg="black"
+										color="white"
+										_hover={{ bg: 'black' }}
+										leftIcon={<IoLogIn size={24} />}
+									>
+										Create account
+									</Button>
+								</NextLink>
+							)}
+						</Stack>
+					</Alert>
 					<Box clipPath="ellipse(600px 540px at top)" userSelect="none">
 						<Image src={mascot} alt="yui-rin" width="900em" height="538em" />
 					</Box>

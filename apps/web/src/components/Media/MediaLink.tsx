@@ -18,6 +18,7 @@ export const MediaLink: React.FC<MediaLinkProps> = ({
 	return (
 		<Stack
 			bg="gray.700"
+			color="white"
 			borderRadius={6}
 			alignItems="center"
 			justifyContent="space-between"
@@ -51,7 +52,7 @@ export const MediaLink: React.FC<MediaLinkProps> = ({
 				</NextLink>
 			</Box>
 
-			<Text fontSize="xx-small" textAlign="center" px={1}>
+			<Text fontSize="xx-small" fontWeight={500} textAlign="center" px={1}>
 				{name}
 			</Text>
 		</Stack>

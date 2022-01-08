@@ -57,7 +57,7 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 			{rank && <ApprovalText textApproval={rank.approval} />}
 			{state === 'hidden' && (
 				<>
-					{description.split('\n').map((x, i) => (
+					{description?.split('\n').map((x, i) => (
 						<React.Fragment key={i}>
 							{x === '' ? <br /> : <Text>{x}</Text>}
 						</React.Fragment>
@@ -66,7 +66,7 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 			)}
 			{state === 'read-less' && (
 				<>
-					{description.split('\n').map((x, i) => (
+					{description?.split('\n').map((x, i) => (
 						<React.Fragment key={i}>
 							{x === '' ? <br /> : <Text>{x}</Text>}
 						</React.Fragment>

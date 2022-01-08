@@ -2,7 +2,15 @@ import NextLink from 'next/link';
 import React from 'react';
 import { Waypoint } from 'react-waypoint';
 
-import { Box, Button, Grid, Heading, Skeleton, Stack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Grid,
+	Heading,
+	Skeleton,
+	Stack,
+	useColorMode,
+} from '@chakra-ui/react';
 import {
 	Direction,
 	getPreferredName,
@@ -31,6 +39,7 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 	status,
 	direction,
 }) => {
+	const { colorMode } = useColorMode();
 	const { data, loading, fetchMore, variables } = useUserAnimeListQuery({
 		variables: {
 			options: {
@@ -52,7 +61,11 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 		<Box pb={10}>
 			<Box pt={3}>
 				{data.userList.items.length === 0 ? (
-					<Box bg="gray.700" p={5} borderRadius={3}>
+					<Box
+						bg={colorMode === 'dark' ? 'gray.700' : 'white'}
+						p={5}
+						borderRadius={3}
+					>
 						{title ? (
 							<Heading textAlign="center" fontSize="lg" color="gray.500">
 								Couldn't find any library entries with your search query.
@@ -77,7 +90,7 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 							{data.userList.items.map((x) => (
 								<React.Fragment key={x.anime?.id}>
 									{x.anime && (
-										<Stack bg="gray.700" spacing={0} borderRadius={6}>
+										<Stack bg="pink.900" spacing={0} borderRadius={6}>
 											<Poster
 												url={`/anime/${x.anime.slug}`}
 												title={getPreferredName(
