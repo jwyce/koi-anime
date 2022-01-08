@@ -1,0 +1,11 @@
+query GetUserTop5($type: ResourceType!, $username: String!) {
+	getUserTop5(type: $type, username: $username) {
+		slug
+		name
+		rank
+		approval
+		imageUrl
+		type
+		animeSlug
+	}
+}

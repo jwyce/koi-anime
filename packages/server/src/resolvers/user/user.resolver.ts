@@ -60,39 +60,43 @@ export class UserResolver {
 	}
 
 	@Query(() => Int)
-	@UseMiddleware(isAuth)
-	async userLevel(@Ctx() { req }: MyContext) {
+	async userLevel(@Arg('username') username: string) {
 		let level = 0;
-		const list = await List.find({ where: { userID: req.session.userId } });
+		const user = await User.findOne({ where: { username } });
+		if (!user) {
+			throw new Error('user does not exist');
+		}
+
+		const list = await List.find({ where: { userID: user.id } });
 		const animeCount = list.filter((x) => x.mediaType === Media.ANIME).length;
 		const mangaCount = list.filter((x) => x.mediaType === Media.MANGA).length;
 		const voteCount = await Vote.count({
-			where: { userID: req.session.userId },
+			where: { userID: user.id },
 		});
 
-		if (animeCount > 1) level++;
-		if (animeCount > 10) level++;
-		if (animeCount > 50) level++;
-		if (animeCount > 100) level++;
-		if (animeCount > 250) level++;
-		if (animeCount > 500) level++;
-		if (animeCount > 1000) level++;
+		if (animeCount >= 1) level++;
+		if (animeCount >= 10) level++;
+		if (animeCount >= 50) level++;
+		if (animeCount >= 100) level++;
+		if (animeCount >= 250) level++;
+		if (animeCount >= 500) level++;
+		if (animeCount >= 1000) level++;
 
-		if (mangaCount > 1) level++;
-		if (mangaCount > 10) level++;
-		if (mangaCount > 50) level++;
-		if (mangaCount > 100) level++;
-		if (mangaCount > 250) level++;
-		if (mangaCount > 500) level++;
-		if (mangaCount > 1000) level++;
+		if (mangaCount >= 1) level++;
+		if (mangaCount >= 10) level++;
+		if (mangaCount >= 50) level++;
+		if (mangaCount >= 100) level++;
+		if (mangaCount >= 250) level++;
+		if (mangaCount >= 500) level++;
+		if (mangaCount >= 1000) level++;
 
-		if (voteCount > 10) level++;
-		if (voteCount > 100) level++;
-		if (voteCount > 1000) level++;
-		if (voteCount > 2500) level++;
-		if (voteCount > 5000) level++;
-		if (voteCount > 10000) level++;
-		if (voteCount > 25000) level++;
+		if (voteCount >= 10) level++;
+		if (voteCount >= 100) level++;
+		if (voteCount >= 1000) level++;
+		if (voteCount >= 2500) level++;
+		if (voteCount >= 5000) level++;
+		if (voteCount >= 10000) level++;
+		if (voteCount >= 25000) level++;
 
 		return level;
 	}

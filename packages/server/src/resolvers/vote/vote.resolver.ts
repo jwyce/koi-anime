@@ -71,13 +71,16 @@ export class VoteResolver {
 	}
 
 	@Query(() => [RankedResource])
-	@UseMiddleware(isAuth)
 	async getUserTop5(
 		@Arg('type', () => ResourceType) type: ResourceType,
-		@Ctx() { req }: MyContext
+		@Arg('username') username: string
 	): Promise<RankedResource[]> {
-		const user = await User.findOne({ where: { id: req.session.userId } });
-		const votes = await GetTop5ForUser(type, req.session.userId);
+		const user = await User.findOne({ where: { username } });
+		if (!user) {
+			throw new Error('User does not exist');
+		}
+
+		const votes = await GetTop5ForUser(type, user.id);
 		let resources: RankedResource[] = [];
 
 		if (type === ResourceType.ANIME) {

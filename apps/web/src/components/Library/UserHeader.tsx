@@ -12,7 +12,9 @@ interface UserHeaderProps {
 }
 
 export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
-	const { data, loading } = useUserLevelQuery();
+	const { data, loading } = useUserLevelQuery({
+		variables: { username: user.username },
+	});
 	if (loading || !data) {
 		return <Loader size="xl" />;
 	}

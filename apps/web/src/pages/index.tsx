@@ -8,6 +8,7 @@ import { SiBuymeacoffee } from 'react-icons/si';
 import {
 	Alert,
 	Avatar,
+	Badge,
 	Box,
 	Button,
 	Divider,
@@ -22,6 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { useMeQuery } from '@koi/controller';
 
+import fire from '../assets/images/fire.svg';
 import appStore from '../assets/images/app-store-badge.svg';
 import googlePlay from '../assets/images/google-play-badge.svg';
 import logo from '../assets/images/koi-icon.svg';
@@ -61,10 +63,15 @@ const Home: NextPage = () => {
 						<Heading as="h1" fontSize="6xl" color="white">
 							Koi Anime List
 						</Heading>
-						<Heading as="h6" fontSize="medium" color="white">
-							v0.0.1
-						</Heading>
-						<Text fontSize="lg" color="white">
+						<HStack spacing={2}>
+							<Heading as="h6" fontSize="lg" color="white">
+								v0.1.0
+							</Heading>
+							<Badge colorScheme="purple" fontSize="lg" ml={2}>
+								PREVIEW
+							</Badge>
+						</HStack>
+						<Text fontSize="lg" color="white" fontWeight={500}>
 							Simple anime and manga tracker with a unique and accurate rating
 							system
 						</Text>
@@ -107,17 +114,20 @@ const Home: NextPage = () => {
 			<Stack spacing="10">
 				<HStack align="center" justify="center">
 					<Alert
-						colorScheme="pink"
+						colorScheme="purple"
 						variant="left-accent"
 						borderRadius={6}
 						p={5}
 						w="30rem"
 					>
 						<Stack align="center">
-							<Text fontSize="2xl" fontWeight="bolder">
-								{/* Get the app */}
-								App coming soon...
-							</Text>
+							<HStack spacing={2}>
+								<Image src={fire} alt="fire" height="25em" width="25em" />
+								<Text fontSize="2xl" fontWeight="bolder">
+									{/* Get the app */}
+									App coming soon...
+								</Text>
+							</HStack>
 							<Wrap>
 								<WrapItem>
 									<NextLink href="/">

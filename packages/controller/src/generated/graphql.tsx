@@ -411,6 +411,7 @@ export type QueryGetTopRatedArgs = {
 
 export type QueryGetUserTop5Args = {
   type: ResourceType;
+  username: Scalars['String'];
 };
 
 
@@ -455,6 +456,11 @@ export type QuerySongsForAnimeArgs = {
 
 
 export type QueryUserArgs = {
+  username: Scalars['String'];
+};
+
+
+export type QueryUserLevelArgs = {
   username: Scalars['String'];
 };
 
@@ -839,7 +845,9 @@ export type UserQueryVariables = Exact<{
 
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } };
 
-export type UserLevelQueryVariables = Exact<{ [key: string]: never; }>;
+export type UserLevelQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
 
 
 export type UserLevelQuery = { __typename?: 'Query', userLevel: number };
@@ -851,13 +859,6 @@ export type GetMatchupQueryVariables = Exact<{
 
 export type GetMatchupQuery = { __typename?: 'Query', getMatchup?: { __typename?: 'Matchup', first: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType }, second: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType } } | null | undefined };
 
-export type GetMyTop5QueryVariables = Exact<{
-  type: ResourceType;
-}>;
-
-
-export type GetMyTop5Query = { __typename?: 'Query', getUserTop5: Array<{ __typename?: 'RankedResource', slug: string, name: string, rank: number, approval: string, imageUrl: string, type: ResourceType, animeSlug?: string | null | undefined }> };
-
 export type GetGlobalTopRatedQueryVariables = Exact<{
   type: ResourceType;
   limit: Scalars['Int'];
@@ -866,6 +867,14 @@ export type GetGlobalTopRatedQueryVariables = Exact<{
 
 
 export type GetGlobalTopRatedQuery = { __typename?: 'Query', getTopRated: { __typename?: 'PaginatedRankedResourceResponse', hasMore: boolean, nextCursor: number, items: Array<{ __typename?: 'RankedResource', slug: string, name: string, rank: number, approval: string, imageUrl: string, type: ResourceType, animeSlug?: string | null | undefined }> } };
+
+export type GetUserTop5QueryVariables = Exact<{
+  type: ResourceType;
+  username: Scalars['String'];
+}>;
+
+
+export type GetUserTop5Query = { __typename?: 'Query', getUserTop5: Array<{ __typename?: 'RankedResource', slug: string, name: string, rank: number, approval: string, imageUrl: string, type: ResourceType, animeSlug?: string | null | undefined }> };
 
 export const DefaultAnimeFragmentDoc = gql`
     fragment DefaultAnime on Anime {
@@ -2113,8 +2122,8 @@ export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const UserLevelDocument = gql`
-    query UserLevel {
-  userLevel
+    query UserLevel($username: String!) {
+  userLevel(username: $username)
 }
     `;
 
@@ -2130,10 +2139,11 @@ export const UserLevelDocument = gql`
  * @example
  * const { data, loading, error } = useUserLevelQuery({
  *   variables: {
+ *      username: // value for 'username'
  *   },
  * });
  */
-export function useUserLevelQuery(baseOptions?: Apollo.QueryHookOptions<UserLevelQuery, UserLevelQueryVariables>) {
+export function useUserLevelQuery(baseOptions: Apollo.QueryHookOptions<UserLevelQuery, UserLevelQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<UserLevelQuery, UserLevelQueryVariables>(UserLevelDocument, options);
       }
@@ -2184,47 +2194,6 @@ export function useGetMatchupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetMatchupQueryHookResult = ReturnType<typeof useGetMatchupQuery>;
 export type GetMatchupLazyQueryHookResult = ReturnType<typeof useGetMatchupLazyQuery>;
 export type GetMatchupQueryResult = Apollo.QueryResult<GetMatchupQuery, GetMatchupQueryVariables>;
-export const GetMyTop5Document = gql`
-    query GetMyTop5($type: ResourceType!) {
-  getUserTop5(type: $type) {
-    slug
-    name
-    rank
-    approval
-    imageUrl
-    type
-    animeSlug
-  }
-}
-    `;
-
-/**
- * __useGetMyTop5Query__
- *
- * To run a query within a React component, call `useGetMyTop5Query` and pass it any options that fit your needs.
- * When your component renders, `useGetMyTop5Query` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMyTop5Query({
- *   variables: {
- *      type: // value for 'type'
- *   },
- * });
- */
-export function useGetMyTop5Query(baseOptions: Apollo.QueryHookOptions<GetMyTop5Query, GetMyTop5QueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMyTop5Query, GetMyTop5QueryVariables>(GetMyTop5Document, options);
-      }
-export function useGetMyTop5LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyTop5Query, GetMyTop5QueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMyTop5Query, GetMyTop5QueryVariables>(GetMyTop5Document, options);
-        }
-export type GetMyTop5QueryHookResult = ReturnType<typeof useGetMyTop5Query>;
-export type GetMyTop5LazyQueryHookResult = ReturnType<typeof useGetMyTop5LazyQuery>;
-export type GetMyTop5QueryResult = Apollo.QueryResult<GetMyTop5Query, GetMyTop5QueryVariables>;
 export const GetGlobalTopRatedDocument = gql`
     query GetGlobalTopRated($type: ResourceType!, $limit: Int!, $offset: Int!) {
   getTopRated(type: $type, limit: $limit, offset: $offset) {
@@ -2272,3 +2241,45 @@ export function useGetGlobalTopRatedLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetGlobalTopRatedQueryHookResult = ReturnType<typeof useGetGlobalTopRatedQuery>;
 export type GetGlobalTopRatedLazyQueryHookResult = ReturnType<typeof useGetGlobalTopRatedLazyQuery>;
 export type GetGlobalTopRatedQueryResult = Apollo.QueryResult<GetGlobalTopRatedQuery, GetGlobalTopRatedQueryVariables>;
+export const GetUserTop5Document = gql`
+    query GetUserTop5($type: ResourceType!, $username: String!) {
+  getUserTop5(type: $type, username: $username) {
+    slug
+    name
+    rank
+    approval
+    imageUrl
+    type
+    animeSlug
+  }
+}
+    `;
+
+/**
+ * __useGetUserTop5Query__
+ *
+ * To run a query within a React component, call `useGetUserTop5Query` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserTop5Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserTop5Query({
+ *   variables: {
+ *      type: // value for 'type'
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useGetUserTop5Query(baseOptions: Apollo.QueryHookOptions<GetUserTop5Query, GetUserTop5QueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserTop5Query, GetUserTop5QueryVariables>(GetUserTop5Document, options);
+      }
+export function useGetUserTop5LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserTop5Query, GetUserTop5QueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserTop5Query, GetUserTop5QueryVariables>(GetUserTop5Document, options);
+        }
+export type GetUserTop5QueryHookResult = ReturnType<typeof useGetUserTop5Query>;
+export type GetUserTop5LazyQueryHookResult = ReturnType<typeof useGetUserTop5LazyQuery>;
+export type GetUserTop5QueryResult = Apollo.QueryResult<GetUserTop5Query, GetUserTop5QueryVariables>;
