@@ -89,6 +89,7 @@ export class UserResolver {
 		if (voteCount > 10) level++;
 		if (voteCount > 100) level++;
 		if (voteCount > 1000) level++;
+		if (voteCount > 2500) level++;
 		if (voteCount > 5000) level++;
 		if (voteCount > 10000) level++;
 		if (voteCount > 25000) level++;
