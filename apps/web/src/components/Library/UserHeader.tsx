@@ -2,13 +2,22 @@ import React from 'react';
 
 import { profileColor, profileIcon } from '@/utils/profilePreferences';
 import { Avatar, Box, Heading, HStack, Stack, Text } from '@chakra-ui/react';
-import { PublicUserFragment } from '@koi/controller';
+import { PublicUserFragment, useUserLevelQuery } from '@koi/controller';
+
+import { Loader } from '../UI/Loader';
+import { userLevelToTextColor } from '@/utils/userLevelToTextColor';
 
 interface UserHeaderProps {
 	user: PublicUserFragment;
 }
 
 export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
+	const { data, loading } = useUserLevelQuery();
+	if (loading || !data) {
+		return <Loader size="xl" />;
+	}
+
+	const { color, text } = userLevelToTextColor(data.userLevel);
 	return (
 		<Box>
 			<HStack spacing={10}>
@@ -20,8 +29,8 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
 				/>
 				<Stack spacing={0}>
 					<Heading>{user.username}</Heading>
-					<Text fontSize="lg" color="teal.200" fontWeight={500}>
-						Level 1: Newbie
+					<Text fontSize="lg" color={color} fontWeight={500}>
+						Level {data.userLevel}: {text}
 					</Text>
 				</Stack>
 			</HStack>

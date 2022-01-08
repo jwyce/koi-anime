@@ -360,6 +360,7 @@ export type Query = {
   openingsForAnime: Array<Song>;
   songsForAnime: Array<Song>;
   user: User;
+  userLevel: Scalars['Int'];
   userList: PaginatedListResponse;
   userListStatusCounts: Array<ListStatusCount>;
   users: Array<User>;
@@ -837,6 +838,11 @@ export type UserQueryVariables = Exact<{
 
 
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, username: string, profileIcon: ProfileIcon, profileColor: ProfileColor, titlePreference: TitlePreference } };
+
+export type UserLevelQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserLevelQuery = { __typename?: 'Query', userLevel: number };
 
 export type GetMatchupQueryVariables = Exact<{
   type: ResourceType;
@@ -2106,6 +2112,38 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserLevelDocument = gql`
+    query UserLevel {
+  userLevel
+}
+    `;
+
+/**
+ * __useUserLevelQuery__
+ *
+ * To run a query within a React component, call `useUserLevelQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserLevelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserLevelQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserLevelQuery(baseOptions?: Apollo.QueryHookOptions<UserLevelQuery, UserLevelQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserLevelQuery, UserLevelQueryVariables>(UserLevelDocument, options);
+      }
+export function useUserLevelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserLevelQuery, UserLevelQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserLevelQuery, UserLevelQueryVariables>(UserLevelDocument, options);
+        }
+export type UserLevelQueryHookResult = ReturnType<typeof useUserLevelQuery>;
+export type UserLevelLazyQueryHookResult = ReturnType<typeof useUserLevelLazyQuery>;
+export type UserLevelQueryResult = Apollo.QueryResult<UserLevelQuery, UserLevelQueryVariables>;
 export const GetMatchupDocument = gql`
     query GetMatchup($type: ResourceType!) {
   getMatchup(type: $type) {

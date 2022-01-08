@@ -3,6 +3,7 @@ import {
 	Arg,
 	Ctx,
 	FieldResolver,
+	Int,
 	Mutation,
 	Query,
 	Resolver,
@@ -14,12 +15,15 @@ import { v4 } from 'uuid';
 
 import { registerSchema, resetPasswordSchema } from '@koi/controller';
 
+import { List } from '../../entities/List';
+import { Vote } from '../../entities/Vote';
 import { User } from '../../entities/User';
 import {
 	CONFIRM_USER_PREFIX,
 	COOKIE_NAME,
 	FORGET_PASSWORD_PREFIX,
 } from '../../helpers/constants';
+import { Media } from '../../helpers/enums';
 import { isAccountLocked } from '../../middleware/isAccountLocked';
 import { isAuth } from '../../middleware/isAuth';
 import { rateLimit } from '../../middleware/rateLimit';
@@ -28,9 +32,9 @@ import { accountLockout } from '../../utils/accountLockout';
 import { randomUserProfileTheme } from '../../utils/randomUserProfileTheme';
 import { sendEmail } from '../../utils/sendEmail';
 import { validateSchema } from '../../utils/validateSchema';
+import { PreferencesInput } from './PreferencesInput';
 import { RegisterInput } from './RegisterInput';
 import { UserResponse } from './UserResponse';
-import { PreferencesInput } from './PreferencesInput';
 
 @Resolver(User)
 export class UserResolver {
@@ -53,6 +57,43 @@ export class UserResolver {
 	@Query(() => User)
 	user(@Arg('username') username: string) {
 		return User.findOne({ where: { username } });
+	}
+
+	@Query(() => Int)
+	@UseMiddleware(isAuth)
+	async userLevel(@Ctx() { req }: MyContext) {
+		let level = 0;
+		const list = await List.find({ where: { userID: req.session.userId } });
+		const animeCount = list.filter((x) => x.mediaType === Media.ANIME).length;
+		const mangaCount = list.filter((x) => x.mediaType === Media.MANGA).length;
+		const voteCount = await Vote.count({
+			where: { userID: req.session.userId },
+		});
+
+		if (animeCount > 1) level++;
+		if (animeCount > 10) level++;
+		if (animeCount > 50) level++;
+		if (animeCount > 100) level++;
+		if (animeCount > 250) level++;
+		if (animeCount > 500) level++;
+		if (animeCount > 1000) level++;
+
+		if (mangaCount > 1) level++;
+		if (mangaCount > 10) level++;
+		if (mangaCount > 50) level++;
+		if (mangaCount > 100) level++;
+		if (mangaCount > 250) level++;
+		if (mangaCount > 500) level++;
+		if (mangaCount > 1000) level++;
+
+		if (voteCount > 10) level++;
+		if (voteCount > 100) level++;
+		if (voteCount > 1000) level++;
+		if (voteCount > 5000) level++;
+		if (voteCount > 10000) level++;
+		if (voteCount > 25000) level++;
+
+		return level;
 	}
 
 	@Mutation(() => Boolean)
