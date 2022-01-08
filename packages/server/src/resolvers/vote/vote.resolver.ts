@@ -1,4 +1,3 @@
-import { ListStatus } from './../../helpers/enums';
 import {
 	Arg,
 	Ctx,
@@ -17,10 +16,10 @@ import { Manga } from '../../entities/Manga';
 import { Song } from '../../entities/Song';
 import { User } from '../../entities/User';
 import { Vote } from '../../entities/Vote';
-import { Media, ResourceType, SongType } from '../../helpers/enums';
+import { ListStatus, Media, ResourceType, SongType } from '../../helpers/enums';
 import { isAuth } from '../../middleware/isAuth';
 import { rateLimit } from '../../middleware/rateLimit';
-import { GetTopRatedResouces } from '../../repo/TopRatedRepo';
+import { GetTop5ForUser, GetTopRatedResouces } from '../../repo/TopRatedRepo';
 import { MyContext } from '../../typings/MyContext';
 import { getPreferredName } from '../../utils/getPreferredName';
 import { getRandomMatchup } from '../../utils/getRandomMatchup';
@@ -69,6 +68,123 @@ export class VoteResolver {
 				.execute();
 		}
 		return true;
+	}
+
+	@Query(() => [RankedResource])
+	@UseMiddleware(isAuth)
+	async getUserTop5(
+		@Arg('type', () => ResourceType) type: ResourceType,
+		@Ctx() { req }: MyContext
+	): Promise<RankedResource[]> {
+		const user = await User.findOne({ where: { id: req.session.userId } });
+		const votes = await GetTop5ForUser(type, req.session.userId);
+		let resources: RankedResource[] = [];
+
+		if (type === ResourceType.ANIME) {
+			const anime = await Anime.find({
+				where: { slug: In(votes.map((x) => x.slug)) },
+			});
+			votes.forEach((x) => {
+				const animeInfo = anime.find((y) => x.slug === y.slug);
+				if (animeInfo) {
+					resources.push({
+						name: getPreferredName(
+							user ?? null,
+							animeInfo.englishTitle,
+							animeInfo.japaneseTitle,
+							animeInfo.romajiTitle,
+							animeInfo.canonicalTitle
+						),
+						imageUrl: animeInfo.posterLinkSmall,
+						slug: x.slug,
+						type,
+						rank: x.approval_rank,
+						approval: x.approval,
+					});
+				}
+			});
+		} else if (type === ResourceType.MANGA) {
+			const manga = await Manga.find({
+				where: { slug: In(votes.map((x) => x.slug)) },
+			});
+			votes.forEach((x) => {
+				const mangaInfo = manga.find((y) => x.slug === y.slug);
+				if (mangaInfo) {
+					resources.push({
+						name: getPreferredName(
+							user ?? null,
+							mangaInfo.englishTitle,
+							mangaInfo.japaneseTitle,
+							mangaInfo.romajiTitle,
+							mangaInfo.canonicalTitle
+						),
+						imageUrl: mangaInfo.posterLinkSmall,
+						slug: x.slug,
+						type,
+						rank: x.approval_rank,
+						approval: x.approval,
+					});
+				}
+			});
+		} else if (type === ResourceType.ED_SONG || type === ResourceType.OP_SONG) {
+			const songs = await Song.find({
+				where: {
+					slug: In(votes.map((x) => x.slug)),
+					songType: ResourceType.OP_SONG ? SongType.OP : SongType.ED,
+				},
+			});
+			const anime = await Anime.find({
+				where: {
+					id: In(songs.map((y) => y.animeID)),
+				},
+			});
+			votes.forEach((x) => {
+				const songInfo = songs.find((y) => x.slug === y.slug);
+				const animeInfo = anime.find((y) => songInfo?.animeID === y.id);
+				if (animeInfo && songInfo) {
+					resources.push({
+						name: songInfo?.fullTitle ?? '',
+						imageUrl: animeInfo.posterLinkSmall,
+						slug: x.slug,
+						type,
+						rank: x.approval_rank,
+						approval: x.approval,
+						animeSlug: animeInfo.slug,
+					});
+				}
+			});
+		} else if (
+			type === ResourceType.F_CHARACTER ||
+			type === ResourceType.M_CHARACTER
+		) {
+			const characters = await Character.find({
+				where: {
+					slug: In(votes.map((x) => x.slug)),
+					gender: type === ResourceType.F_CHARACTER ? 'female' : 'male',
+				},
+			});
+			votes.forEach((x) => {
+				const characterInfo = characters.find((y) => x.slug === y.slug);
+				if (characterInfo) {
+					resources.push({
+						name: getPreferredName(
+							user ?? null,
+							characterInfo.englishName,
+							characterInfo.japaneseName,
+							characterInfo.canonicalName,
+							characterInfo.canonicalName
+						),
+						imageUrl: characterInfo.imageOriginal,
+						slug: x.slug,
+						type,
+						rank: x.approval_rank,
+						approval: x.approval,
+					});
+				}
+			});
+		}
+
+		return resources.slice(0, 5);
 	}
 
 	@Query(() => PaginatedRankedResponse)

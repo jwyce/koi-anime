@@ -1,0 +1,11 @@
+query GetMyTop5($type: ResourceType!) {
+	getUserTop5(type: $type) {
+		slug
+		name
+		rank
+		approval
+		imageUrl
+		type
+		animeSlug
+	}
+}

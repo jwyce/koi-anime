@@ -5,12 +5,14 @@ import {
 	ListStatus,
 	Media,
 	PublicUserFragment,
+	ResourceType,
 	SortBy,
 } from '@koi/controller';
 import React, { useCallback } from 'react';
 import { AnimeList } from './AnimeList';
 import { FilterPanel } from './FilterPanel';
 import { MangaList } from './MangaList';
+import { MyTop5 } from './MyTop5';
 import { SearchBar } from './SearchBar';
 
 interface UserLibraryProps {
@@ -95,6 +97,18 @@ export const UserLibrary: React.FC<UserLibraryProps> = ({ user }) => {
 								status={status}
 								direction={direction}
 							/>
+						</>
+					)}
+				</>
+				<>
+					{media === 'top5' && (
+						<>
+							<MyTop5 type={ResourceType.Anime} title="Top 5 Anime" />
+							<MyTop5 type={ResourceType.Manga} title="Top 5 Manga" />
+							<MyTop5 type={ResourceType.OpSong} title="Top 5 Openings" />
+							<MyTop5 type={ResourceType.EdSong} title="Top 5 Endings" />
+							<MyTop5 type={ResourceType.FCharacter} title="Top 5 Girls" />
+							<MyTop5 type={ResourceType.MCharacter} title="Top 5 Boys" />
 						</>
 					)}
 				</>

@@ -21,7 +21,7 @@ import { ResourceType, useGetGlobalTopRatedQuery } from '@koi/controller';
 
 import type { NextPage } from 'next';
 
-const urlPathFromResource = (resource: ResourceType) => {
+export const urlPathFromResource = (resource: ResourceType) => {
 	switch (resource) {
 		case ResourceType.Anime:
 		case ResourceType.OpSong:

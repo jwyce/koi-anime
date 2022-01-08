@@ -15,7 +15,7 @@ export const GetRatedResource = async (type: ResourceType, slug: string) => {
 	const resource: RankedResource[] = await entityManager.query(
 		`
     select
-       "votedFor"                                         resource,
+       "votedFor"                                         slug,
        likes,
        COALESCE(dislikes, 0)                              dislikes,
        L.rank,
@@ -37,6 +37,36 @@ export const GetRatedResource = async (type: ResourceType, slug: string) => {
 		[type, slug]
 	);
 	return resource[0];
+};
+
+export const GetTop5ForUser = async (
+	type: ResourceType | null,
+	userId: number
+) => {
+	const entityManager = getManager();
+	const votes: RankedResource[] = await entityManager.query(
+		`select 
+       "votedFor"                                         slug,
+       likes,
+       COALESCE(dislikes, 0)                              dislikes,
+       L.rank,
+       concat(to_char((likes / (likes::numeric + coalesce(dislikes, 0)))*100, '999.9'), '%') approval,
+      rank() over (order by (likes / (likes::numeric + coalesce(dislikes, 0)))*100 desc) approval_rank
+
+      from (select "userID", "votedFor", sum(count) likes, RANK() OVER(ORDER BY SUM(count) DESC) rank
+      from vote
+      where "resourceType" = $1 and "userID" = $2
+      group by "userID", "votedFor"
+      order by likes desc) L left join (
+    select "userID", "votedAgainst", sum(count) dislikes, RANK() OVER(ORDER BY SUM(count) DESC) rank
+      from vote
+      where "resourceType" = $1 and "userID" = $2
+      group by "userID", "votedAgainst"
+      order by dislikes desc
+    ) D on L."votedFor" = D."votedAgainst";`,
+		[type, userId]
+	);
+	return votes;
 };
 
 export const GetTopRatedResouces = async (

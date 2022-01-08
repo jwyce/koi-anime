@@ -350,6 +350,7 @@ export type Query = {
   femalesForAnime: Array<Character>;
   getMatchup?: Maybe<Matchup>;
   getTopRated: PaginatedRankedResourceResponse;
+  getUserTop5: Array<RankedResource>;
   kitsuSearchAnime: PaginatedAnimeResponse;
   kitsuSearchManga: PaginatedMangaResponse;
   malesForAnime: Array<Character>;
@@ -403,6 +404,11 @@ export type QueryGetMatchupArgs = {
 export type QueryGetTopRatedArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
+  type: ResourceType;
+};
+
+
+export type QueryGetUserTop5Args = {
   type: ResourceType;
 };
 
@@ -838,6 +844,13 @@ export type GetMatchupQueryVariables = Exact<{
 
 
 export type GetMatchupQuery = { __typename?: 'Query', getMatchup?: { __typename?: 'Matchup', first: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType }, second: { __typename?: 'Resource', slug: string, imageUrl: string, name: string, type: ResourceType } } | null | undefined };
+
+export type GetMyTop5QueryVariables = Exact<{
+  type: ResourceType;
+}>;
+
+
+export type GetMyTop5Query = { __typename?: 'Query', getUserTop5: Array<{ __typename?: 'RankedResource', slug: string, name: string, rank: number, approval: string, imageUrl: string, type: ResourceType, animeSlug?: string | null | undefined }> };
 
 export type GetGlobalTopRatedQueryVariables = Exact<{
   type: ResourceType;
@@ -2133,6 +2146,47 @@ export function useGetMatchupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetMatchupQueryHookResult = ReturnType<typeof useGetMatchupQuery>;
 export type GetMatchupLazyQueryHookResult = ReturnType<typeof useGetMatchupLazyQuery>;
 export type GetMatchupQueryResult = Apollo.QueryResult<GetMatchupQuery, GetMatchupQueryVariables>;
+export const GetMyTop5Document = gql`
+    query GetMyTop5($type: ResourceType!) {
+  getUserTop5(type: $type) {
+    slug
+    name
+    rank
+    approval
+    imageUrl
+    type
+    animeSlug
+  }
+}
+    `;
+
+/**
+ * __useGetMyTop5Query__
+ *
+ * To run a query within a React component, call `useGetMyTop5Query` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyTop5Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyTop5Query({
+ *   variables: {
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetMyTop5Query(baseOptions: Apollo.QueryHookOptions<GetMyTop5Query, GetMyTop5QueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyTop5Query, GetMyTop5QueryVariables>(GetMyTop5Document, options);
+      }
+export function useGetMyTop5LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyTop5Query, GetMyTop5QueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyTop5Query, GetMyTop5QueryVariables>(GetMyTop5Document, options);
+        }
+export type GetMyTop5QueryHookResult = ReturnType<typeof useGetMyTop5Query>;
+export type GetMyTop5LazyQueryHookResult = ReturnType<typeof useGetMyTop5LazyQuery>;
+export type GetMyTop5QueryResult = Apollo.QueryResult<GetMyTop5Query, GetMyTop5QueryVariables>;
 export const GetGlobalTopRatedDocument = gql`
     query GetGlobalTopRated($type: ResourceType!, $limit: Int!, $offset: Int!) {
   getTopRated(type: $type, limit: $limit, offset: $offset) {
