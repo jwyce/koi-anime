@@ -1,4 +1,4 @@
-# Koi Anime List (🚧 WIP 🚧)
+# Koi Anime List (🚧WIP🚧)
 Here to answer the eternal question - which anime, manga, character, and song is objectively most popular?
 
 ## Why?
