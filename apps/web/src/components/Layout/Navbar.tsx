@@ -94,15 +94,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 					</NextLink>
 					<Spacer mr={2} />
 				</Flex>
-				<Flex display={['flex', 'flex', 'none']}>
-					<IconButton
-						aria-label="hamburger"
-						icon={<HamburgerIcon />}
-						mr={2}
-						size="lg"
-						onClick={onOpen}
-					/>
-				</Flex>
 				<Menu>
 					<Tooltip label={data.me.username}>
 						<MenuButton>
@@ -152,6 +143,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 				p={1}
 			>
 				<Flex flex={1} m="auto" align="center" pl={5} pr={5}>
+					<Flex display={['flex', 'flex', 'none']}>
+						<IconButton
+							aria-label="hamburger"
+							icon={<HamburgerIcon />}
+							mr={2}
+							size="lg"
+							onClick={onOpen}
+						/>
+					</Flex>
 					<NextLink href="/">
 						<a>
 							<Link style={{ textDecoration: 'none' }}>
