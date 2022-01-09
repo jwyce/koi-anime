@@ -27,7 +27,7 @@ Setup
 - [x] add getting started section to README
 - [x] build user library page
 - [x] build voting page
-- [ ] build top rated page
+- [x] build top rated page
 - [ ] make web responsive + fix light mode
 - [ ] create email templates
 - [ ] deploy backend containers to vultr or digitalocean
