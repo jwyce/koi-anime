@@ -5,7 +5,7 @@ import React from 'react';
 import { IoLogIn, IoLogOut, IoSettings } from 'react-icons/io5';
 
 import { useApolloClient } from '@apollo/client';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, HamburgerIcon } from '@chakra-ui/icons';
 import {
 	Avatar,
 	Box,
@@ -20,16 +20,20 @@ import {
 	Spacer,
 	Tooltip,
 	Text,
+	IconButton,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useLogoutMutation, useMeQuery } from '@koi/controller';
 
 import logo from '../../assets/images/koi-icon.svg';
 import { isServer } from '../../utils/isServer';
 import { profileIcon, profileColor } from '../../utils/profilePreferences';
+import { MobileHamburger } from './MobileHamburger';
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [logout] = useLogoutMutation();
 	const apolloClient = useApolloClient();
 	const router = useRouter();
@@ -50,44 +54,55 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 		// user is logged in
 		body = (
 			<Flex align="center">
-				<NextLink href={`/users/${data.me.username}/library`}>
-					<a>
-						<Button>My Library</Button>
-					</a>
-				</NextLink>
-				<Spacer mr={2} />
-				<NextLink href="/vote/anime">
-					<a>
-						<Button>Vote</Button>
-					</a>
-				</NextLink>
-				<Spacer mr={2} />
-				<Menu>
-					<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-						Browse
-					</MenuButton>
-					<MenuList>
-						<MenuItem>
-							<NextLink href="/browse/anime">
-								<a style={{ width: '100%' }}>Anime</a>
-							</NextLink>
-						</MenuItem>
-						<MenuItem>
-							<NextLink href="/browse/manga">
-								<a style={{ width: '100%' }}>Manga</a>
-							</NextLink>
-						</MenuItem>
-					</MenuList>
-				</Menu>
-				<Spacer mr={2} />
-				<NextLink href={`/top-rated/anime`}>
-					<a>
-						<Button>
-							<Text fontWeight={100}>🏆</Text> Top Rated
-						</Button>
-					</a>
-				</NextLink>
-				<Spacer mr={2} />
+				<Flex display={['none', 'none', 'flex']}>
+					<NextLink href={`/users/${data.me.username}/library`}>
+						<a>
+							<Button>My Library</Button>
+						</a>
+					</NextLink>
+					<Spacer mr={2} />
+					<NextLink href="/vote/anime">
+						<a>
+							<Button>Vote</Button>
+						</a>
+					</NextLink>
+					<Spacer mr={2} />
+					<Menu>
+						<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+							Browse
+						</MenuButton>
+						<MenuList>
+							<MenuItem>
+								<NextLink href="/browse/anime">
+									<a style={{ width: '100%' }}>Anime</a>
+								</NextLink>
+							</MenuItem>
+							<MenuItem>
+								<NextLink href="/browse/manga">
+									<a style={{ width: '100%' }}>Manga</a>
+								</NextLink>
+							</MenuItem>
+						</MenuList>
+					</Menu>
+					<Spacer mr={2} />
+					<NextLink href={`/top-rated/anime`}>
+						<a>
+							<Button>
+								<Text fontWeight={100}>🏆</Text> Top Rated
+							</Button>
+						</a>
+					</NextLink>
+					<Spacer mr={2} />
+				</Flex>
+				<Flex display={['flex', 'flex', 'none']}>
+					<IconButton
+						aria-label="hamburger"
+						icon={<HamburgerIcon />}
+						mr={2}
+						size="lg"
+						onClick={onOpen}
+					/>
+				</Flex>
 				<Menu>
 					<Tooltip label={data.me.username}>
 						<MenuButton>
@@ -123,22 +138,35 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 	}
 
 	return (
-		<Flex position="sticky" top={0} zIndex={9999} bg="primary.light" p={1}>
-			<Flex flex={1} m="auto" align="center" pl={5} pr={5}>
-				<NextLink href="/">
-					<a>
-						<Link style={{ textDecoration: 'none' }}>
-							<Flex flex={1} alignItems="center" justifyContent="flex-start">
-								<Image src={logo} alt="logo" height="40px" width="40px" />
-								<Heading as="h2" size="md" ml={2} color="white">
-									Koi Anime
-								</Heading>
-							</Flex>
-						</Link>
-					</a>
-				</NextLink>
-				<Box ml={'auto'}>{body}</Box>
+		<>
+			<MobileHamburger
+				isOpen={isOpen}
+				onClose={onClose}
+				username={data?.me?.username ?? ''}
+			/>
+			<Flex
+				position="sticky"
+				top={0}
+				zIndex={isOpen ? 500 : 9999}
+				bg="primary.light"
+				p={1}
+			>
+				<Flex flex={1} m="auto" align="center" pl={5} pr={5}>
+					<NextLink href="/">
+						<a>
+							<Link style={{ textDecoration: 'none' }}>
+								<Flex flex={1} alignItems="center" justifyContent="flex-start">
+									<Image src={logo} alt="logo" height="40px" width="40px" />
+									<Heading as="h2" size="md" ml={2} color="white">
+										Koi Anime
+									</Heading>
+								</Flex>
+							</Link>
+						</a>
+					</NextLink>
+					<Box ml={'auto'}>{body}</Box>
+				</Flex>
 			</Flex>
-		</Flex>
+		</>
 	);
 };

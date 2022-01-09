@@ -57,10 +57,21 @@ const Home: NextPage = () => {
 			/>
 
 			<div style={{ backgroundImage: `url(${hero.src})` }}>
-				<HStack pt={20} pb={20} justify="center">
+				<Stack
+					pt={20}
+					pb={20}
+					justify="center"
+					align="center"
+					direction={['column', 'column', 'row', 'row']}
+					px={2}
+				>
 					<Image src={logo} alt="logo" height="150em" width="150em" />
-					<Stack pl={10} align="center">
-						<Heading as="h1" fontSize="6xl" color="white">
+					<Stack pl={[0, 0, 0, 10]} align="center">
+						<Heading
+							as="h1"
+							fontSize={['3xl', '6xl', '6xl', '6xl']}
+							color="white"
+						>
 							Koi Anime List
 						</Heading>
 						<HStack spacing={2}>
@@ -71,12 +82,17 @@ const Home: NextPage = () => {
 								PREVIEW
 							</Badge>
 						</HStack>
-						<Text fontSize="lg" color="white" fontWeight={500}>
+						<Text
+							fontSize="lg"
+							color="white"
+							fontWeight={500}
+							textAlign="center"
+						>
 							Simple anime and manga tracker with a unique and accurate rating
 							system
 						</Text>
 					</Stack>
-				</HStack>
+				</Stack>
 			</div>
 
 			<section style={{ position: 'relative' }}>
@@ -111,24 +127,29 @@ const Home: NextPage = () => {
 				</div>
 			</section>
 
-			<Stack spacing="10">
-				<HStack align="center" justify="center">
+			<Stack spacing="10" px={2}>
+				<Stack
+					align="center"
+					justify="center"
+					direction={['column', 'column', 'column', 'row']}
+					p={[5, 3, 3, 0]}
+				>
 					<Alert
 						colorScheme="purple"
 						variant="left-accent"
 						borderRadius={6}
 						p={5}
-						w="30rem"
+						w={['20em', '30rem']}
 					>
 						<Stack align="center">
 							<HStack spacing={2}>
 								<Image src={fire} alt="fire" height="25em" width="25em" />
-								<Text fontSize="2xl" fontWeight="bolder">
+								<Text fontSize={['lg', '3xl']} fontWeight="bolder">
 									{/* Get the app */}
 									App coming soon...
 								</Text>
 							</HStack>
-							<Wrap>
+							<Wrap justify="center" w={['12em', '100%']}>
 								<WrapItem>
 									<NextLink href="/">
 										<a>
@@ -184,9 +205,9 @@ const Home: NextPage = () => {
 					<Box clipPath="ellipse(600px 540px at top)" userSelect="none">
 						<Image src={mascot} alt="yui-rin" width="900em" height="538em" />
 					</Box>
-				</HStack>
+				</Stack>
 
-				<Stack align="center">
+				<Stack align="center" px={[3, 3]} textAlign="center">
 					<Text fontSize="2xl" fontWeight="bolder">
 						Contact
 					</Text>
@@ -194,7 +215,7 @@ const Home: NextPage = () => {
 						See the GitHub project to contribute, considering supporting our
 						work, or send us feeback to improve.
 					</Text>
-					<Wrap>
+					<Wrap justify="center">
 						<WrapItem>
 							<Button
 								leftIcon={<AiFillGithub fontSize={24} />}
@@ -230,7 +251,7 @@ const Home: NextPage = () => {
 					<Text fontSize="2xl" fontWeight="bolder">
 						Contributors
 					</Text>
-					<Text fontSize="lg">
+					<Text fontSize="lg" textAlign="center">
 						This project exists thanks to all the people who contribute:
 					</Text>
 					<Wrap>

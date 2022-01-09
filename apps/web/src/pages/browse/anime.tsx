@@ -5,11 +5,11 @@ import { Waypoint } from 'react-waypoint';
 
 import {
 	Box,
-	Grid,
 	Heading,
 	Input,
 	InputGroup,
 	InputLeftElement,
+	SimpleGrid,
 	Skeleton,
 	Stack,
 } from '@chakra-ui/react';
@@ -60,7 +60,7 @@ export const BrowseAnime: NextPage = ({}) => {
 				description="A short description goes here."
 			/>
 			<Stack alignItems="center">
-				<Box w={1000} pb={5}>
+				<Box w={[300, 420, 700, 1000]} pb={5}>
 					<Box textAlign="left" w="100%">
 						<Heading pb={1}>Explore Anime</Heading>
 						<InputGroup pb={6}>
@@ -85,7 +85,7 @@ export const BrowseAnime: NextPage = ({}) => {
 						<Loader size="xl" />
 					) : (
 						<Box pb={5}>
-							<Grid templateColumns="repeat(5, 1fr)" gap={3}>
+							<SimpleGrid columns={[2, 2, 4, 5]} gap={3}>
 								{data.kitsuSearchAnime.items.map((x) => (
 									<Poster
 										key={x.id}
@@ -103,14 +103,19 @@ export const BrowseAnime: NextPage = ({}) => {
 										date={x.startDate.substring(0, x.startDate.indexOf('-'))}
 									/>
 								))}
-							</Grid>
+							</SimpleGrid>
 							{data.kitsuSearchAnime.hasMore && (
 								<>
-									<Grid templateColumns="repeat(5, 1fr)" gap={3} pt={3}>
+									<SimpleGrid columns={[2, 2, 4, 5]} gap={3} pt={3}>
 										{[...Array(5)].map((_x, i) => (
-											<Skeleton key={i} h="64" w={190} borderRadius={6} />
+											<Skeleton
+												key={i}
+												h="64"
+												w={[144, 200, 166, 190]}
+												borderRadius={6}
+											/>
 										))}
-									</Grid>
+									</SimpleGrid>
 									<Waypoint
 										onEnter={() => {
 											console.log('fetching more...');
