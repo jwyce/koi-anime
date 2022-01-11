@@ -1,0 +1,10 @@
+{
+	"private": true,
+	"scripts": {
+		"build:server": "lerna run build --scope={@koi/controller,@koi/server}"
+	},
+	"workspaces": ["packages/*"],
+	"devDependencies": {
+		"lerna": "^4.0.0"
+	}
+}

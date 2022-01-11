@@ -16,6 +16,7 @@
 		"@graphql-codegen/typescript-operations": "^2.2.0",
 		"@graphql-codegen/typescript-react-apollo": "^3.2.1",
 		"@types/node": "^16.10.2",
+		"@types/react": "^17.0.38",
 		"faker": "^5.5.3",
 		"jest": "^27.2.4",
 		"rimraf": "^3.0.2",
@@ -27,6 +28,7 @@
 		"src"
 	],
 	"dependencies": {
+		"@apollo/client": "^3.5.7",
 		"graphql": "^16.0.1",
 		"react": "^17.0.2",
 		"yup": "^0.32.9"

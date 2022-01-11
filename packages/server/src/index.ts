@@ -120,10 +120,6 @@ const main = async () => {
 		],
 	});
 
-	app.get('/', (_req, res) => {
-		res.send('hello world!');
-	});
-
 	apolloServer.applyMiddleware({
 		app,
 		cors: false,
