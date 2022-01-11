@@ -20,8 +20,8 @@
 		"easbuild:android": "yarn workspace @koi/mobile easbuild:android"
 	},
 	"workspaces": [
-		"apps/*",
-		"packages/*"
+		"packages/*",
+		"apps/*"
 	],
 	"devDependencies": {
 		"expo-yarn-workspaces": "^1.5.0",
