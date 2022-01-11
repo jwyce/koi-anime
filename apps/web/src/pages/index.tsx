@@ -76,7 +76,7 @@ const Home: NextPage = () => {
 						</Heading>
 						<HStack spacing={2}>
 							<Heading as="h6" fontSize="lg" color="white">
-								v0.1.0
+								v0.1.14
 							</Heading>
 							<Badge colorScheme="purple" fontSize="lg" ml={2}>
 								PREVIEW
