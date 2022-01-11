@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"buld": "echo mobile built",
+		"build": "echo mobile built",
 		"start": "expo start",
 		"android": "react-native run-android",
 		"ios": "react-native run-ios",
