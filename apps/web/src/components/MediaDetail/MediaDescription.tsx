@@ -42,7 +42,7 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 				break;
 			}
 		}
-	}, []);
+	}, [splitDesc]);
 
 	return (
 		<>

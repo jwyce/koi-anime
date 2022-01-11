@@ -55,8 +55,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 						fontSize="1.5em"
 						top={1}
 						left={1}
-						children={<IoSearch color="gray.300" />}
-					/>
+					>
+						<IoSearch color="gray.300" />
+					</InputLeftElement>
 					<Input
 						placeholder={`Search ${username}'s Library...`}
 						size="lg"

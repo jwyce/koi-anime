@@ -70,8 +70,9 @@ export const BrowseAnime: NextPage = ({}) => {
 								fontSize="1.5em"
 								top={1}
 								left={1}
-								children={<IoSearch color="gray.300" />}
-							/>
+							>
+								<IoSearch color="gray.300" />
+							</InputLeftElement>
 							<Input
 								placeholder="What are you looking for?"
 								size="lg"

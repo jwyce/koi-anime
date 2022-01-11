@@ -82,6 +82,7 @@ export const MediaDetails: React.FC<MediaDetailsProps> = ({
 							fit="cover"
 							h="16"
 							w="100%"
+							alt="trailer"
 							borderRadius={6}
 						/>
 						<Box

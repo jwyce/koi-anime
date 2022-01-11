@@ -45,7 +45,7 @@ export const AnimeCharacters: React.FC<AnimeCharactersProps> = ({ id }) => {
 			<>
 				{data?.charactersForAnime.length === 0 && (
 					<Text color="gray.500">
-						Looks like we don't have any characters :(
+						Looks like we don&apos;t have any characters :(
 					</Text>
 				)}
 			</>

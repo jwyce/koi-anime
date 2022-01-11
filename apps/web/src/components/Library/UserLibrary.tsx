@@ -54,6 +54,7 @@ export const UserLibrary: React.FC<UserLibraryProps> = ({ user }) => {
 				query,
 			});
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[currentParams]
 	);
 

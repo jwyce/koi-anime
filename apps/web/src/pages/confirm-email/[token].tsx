@@ -57,6 +57,7 @@ export const ConfirmEmail: NextPage = ({}) => {
 		if (router.query.token?.length ?? -1 > 0) {
 			confirmEmail();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query]);
 
 	return (

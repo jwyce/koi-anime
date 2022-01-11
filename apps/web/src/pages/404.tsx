@@ -30,7 +30,7 @@ export const FourOhFour: NextPage = ({}) => {
 						</Heading>
 					</HStack>
 					<Text fontSize="sm" opacity={0.6}>
-						Sorry the requested page unfortunately couldn't be found.
+						Sorry the requested page unfortunately couldn&apos;t be found.
 					</Text>
 					<NextLink href="/">
 						<Button leftIcon={<AiFillHome size={24} />} colorScheme="teal">

@@ -68,7 +68,7 @@ export const MangaList: React.FC<MangaListProps> = ({
 					>
 						{title ? (
 							<Heading textAlign="center" fontSize="lg" color="gray.500">
-								Couldn't find any library entries with your search query.
+								Couldn&apos;t find any library entries with your search query.
 							</Heading>
 						) : (
 							<Stack align="center" justify="space-between" spacing={5}>

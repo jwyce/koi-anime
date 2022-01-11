@@ -43,7 +43,7 @@ export const Settings: NextPage = ({}) => {
 					color="white"
 				/>
 				<Heading as="h2" fontSize="3xl">
-					{data.me?.username}'s Preferences
+					{data.me?.username}&apos;s Preferences
 				</Heading>
 			</HStack>
 

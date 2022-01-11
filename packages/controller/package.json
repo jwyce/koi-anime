@@ -28,7 +28,7 @@
 		"src"
 	],
 	"dependencies": {
-		"@apollo/client": "^3.5.7",
+		"@apollo/client": "^3.4.16",
 		"graphql": "^16.0.1",
 		"react": "^17.0.2",
 		"yup": "^0.32.9"

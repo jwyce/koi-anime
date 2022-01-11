@@ -37,7 +37,7 @@ export const UserTop5: React.FC<Top5Props> = ({ type, title, username }) => {
 						borderRadius={3}
 					>
 						<Heading fontSize="lg" color="gray.500">
-							Hmm, there doesn't seem to be anything here yet.
+							Hmm, there doesn&apos;t seem to be anything here yet.
 						</Heading>
 					</Box>
 				) : (
