@@ -76,7 +76,7 @@ const Home: NextPage = () => {
 						</Heading>
 						<HStack spacing={2}>
 							<Heading as="h6" fontSize="lg" color="white">
-								v0.1.14
+								v0.1.15
 							</Heading>
 							<Badge colorScheme="purple" fontSize="lg" ml={2}>
 								PREVIEW
@@ -231,6 +231,9 @@ const Home: NextPage = () => {
 							<Button
 								leftIcon={<SiBuymeacoffee fontSize={24} />}
 								colorScheme="teal"
+								onClick={() =>
+									window.open('https://www.buymeacoffee.com/jwyce', '_blank')
+								}
 							>
 								Buy me a coffee
 							</Button>
