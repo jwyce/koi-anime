@@ -42,7 +42,8 @@ export const MediaDescription: React.FC<MediaDescriptionProps> = ({
 				break;
 			}
 		}
-	}, [splitDesc]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>
