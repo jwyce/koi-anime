@@ -56,7 +56,7 @@ export const AnimeDetail: NextPage = ({}) => {
 			<Box w={1200} display="flex" mx="auto">
 				<Box flex={0.6} h="100%" pos="sticky" mt="-24" top="24">
 					<PosterListControl
-						posterSrc={data.anime?.posterLinkOriginal}
+						posterSrc={data.anime?.posterLinkSmall}
 						rank={data.anime?.rank}
 						type="anime"
 						slug={data.anime?.slug ?? ''}
