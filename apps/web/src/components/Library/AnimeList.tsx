@@ -107,6 +107,7 @@ export const AnimeList: React.FC<AnimeListProps> = ({
 													0,
 													x.anime.startDate.indexOf('-')
 												)}
+												fallback={<Skeleton h={64} w={166} />}
 												topRadiusOnly
 											/>
 											<ProgressStepper
