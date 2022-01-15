@@ -103,6 +103,7 @@ export const BrowseAnime: NextPage = ({}) => {
 										synopsis={x.synopsis}
 										rank={x.rank}
 										date={x.startDate.substring(0, x.startDate.indexOf('-'))}
+										fallback={<Skeleton h={64} w={190} />}
 									/>
 								))}
 							</SimpleGrid>

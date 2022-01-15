@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import NextLink from 'next/link';
 import React, { useState } from 'react';
 
-import { Box, Image, Skeleton } from '@chakra-ui/react';
+import { Box, Image } from '@chakra-ui/react';
 import { ListStatus, Rank, Status } from '@koi/controller';
 
 import { PosterDetails } from './PosterDetails';
@@ -17,6 +17,7 @@ interface PosterProps {
 	listStatus?: ListStatus;
 	url: string;
 	topRadiusOnly?: boolean;
+	fallback: React.ReactElement;
 }
 
 export const Poster: React.FC<PosterProps> = ({
@@ -28,6 +29,7 @@ export const Poster: React.FC<PosterProps> = ({
 	status,
 	listStatus,
 	url,
+	fallback,
 	topRadiusOnly = false,
 }) => {
 	const [hovering, setHovering] = useState(false);
@@ -62,7 +64,7 @@ export const Poster: React.FC<PosterProps> = ({
 						w={200}
 						borderRadius={topRadiusOnly ? undefined : 6}
 						borderTopRadius={topRadiusOnly ? 6 : undefined}
-						fallback={<Skeleton h={64} w={190} />}
+						fallback={fallback}
 					/>
 				</a>
 			</NextLink>

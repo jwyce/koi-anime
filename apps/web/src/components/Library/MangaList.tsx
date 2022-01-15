@@ -106,6 +106,7 @@ export const MangaList: React.FC<MangaListProps> = ({
 													0,
 													x.manga.startDate.indexOf('-')
 												)}
+												fallback={<Skeleton h={64} w={166} />}
 												topRadiusOnly
 											/>
 											<ProgressStepper
