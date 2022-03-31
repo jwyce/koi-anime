@@ -2,8 +2,7 @@
 Here to answer the eternal question - which anime, manga, character, and song is objectively most popular?
 
 ## Why?
-Ever wanted a simplistic web app with a modern design to store and track your anime and manga progress without the bloat of the social aspect? Me too! Additionally all other anime trackers choose to have users rate media on a 5 or 10 star scale. Koi Anime goes against the grain and only allows users to vote for their favorites from their list in random matchups. This allows the app to generate user-level and global rankings for anime, manga, female characters, male characters, opening themes, and ending themes. Now we will finally have an answer to some of the world's most pressing questions like "who is true best girl?" 😂 
-
+Ever wanted a simplistic web app with a modern design to store and track your anime and manga progress without the bloat of the social aspect? Me too! Additionally all other anime trackers choose to have users rate media on a 5 or 10 star scale. Koi Anime goes against the grain and only allows users to vote for their favorites from their list in random matchups. This allows the app to generate user-level and global rankings for anime, manga, female characters, male characters, opening themes, and ending themes.
 ## Getting Started
 Prerequisite:
 
